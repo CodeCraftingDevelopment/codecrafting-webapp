@@ -1,0 +1,23 @@
+# Utilise une image légère de Node.js
+FROM node:22-alpine
+
+# Définit le dossier de travail
+WORKDIR /app
+
+# Copie les fichiers de dépendances
+COPY package*.json ./
+
+# Installe les dépendances (avec cache)
+RUN npm install
+
+# Copie le reste du code source
+COPY . .
+
+# Définit l'environnement en mode développement
+ENV NODE_ENV=development
+
+# Expose le port utilisé par Next.js en dev
+EXPOSE 3000
+
+# Commande de démarrage avec hot reload
+CMD ["npm", "run", "dev"]

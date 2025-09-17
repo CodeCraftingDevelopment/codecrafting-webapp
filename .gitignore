@@ -39,8 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/.idea/.gitignore
-/.idea/codecrafting-webapp.iml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/vcs.xml
+
+# Customs
+/.idea/

@@ -1,0 +1,15 @@
+services:
+  nextjs:
+    image: codecrafting-webapp # Nom de l'image créée
+    build:
+      context: .  # Dossier racine du projet
+      dockerfile: Dockerfile
+    container_name: codecrafting-webapp
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped # Redémarrage automatique sauf si arrêt manuel
