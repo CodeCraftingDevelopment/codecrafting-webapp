@@ -1,6 +1,5 @@
 services:
   nextjs:
-    image: codecrafting-webapp # Nom de l'image créée
     build:
       context: .  # Dossier racine du projet
       dockerfile: Dockerfile
