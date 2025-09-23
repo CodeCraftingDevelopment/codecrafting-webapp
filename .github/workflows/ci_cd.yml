@@ -2,11 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches:
-      - master
+    branches: [master, develop]
   pull_request:
-    branches:
-      - master
+    branches: [master, develop]
   workflow_dispatch:
 
 permissions:
@@ -32,8 +30,40 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/develop' }}
+            type=raw,value=production,enable=${{ github.ref == 'refs/heads/master' }}
+            type=sha,format=long
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/master'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,19 +71,16 @@ jobs:
           tag_name: v1.0.0
           release_name: Release v1.0.0
           body: |
-            Description de la release.
+            Nouvelle version de production.
           draft: false
           prerelease: false
 
-      - name: Connexion à GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build de l’image Docker
-        run: docker build -t ghcr.io/${GITHUB_REPOSITORY,,}:latest .
-
-      - name: Push de l’image Docker
-        run: docker push ghcr.io/${GITHUB_REPOSITORY,,}:latest
+      - name: Notify Slack (Staging)
+        if: github.ref == 'refs/heads/develop'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#36a64f'
+          SLACK_TITLE: 'Nouveau déploiement en staging'
+          SLACK_MESSAGE: 'Commit: ${{ github.sha }}'
+          MSG_MINIMAL: true
