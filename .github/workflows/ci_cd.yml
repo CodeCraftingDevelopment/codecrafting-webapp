@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build de l’image Docker
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+        run: docker build -t ghcr.io/${GITHUB_REPOSITORY,,}:latest .
 
       - name: Push de l’image Docker
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: docker push ghcr.io/${GITHUB_REPOSITORY,,}:latest
