@@ -14,9 +14,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'
     steps:
       - uses: actions/checkout@v3
-
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -29,12 +29,35 @@ jobs:
       - name: Build
         run: npm run build
 
-  deploy:
+  versioning:
+    name: Génération du numéro de version
+    runs-on: ubuntu-latest
+    run: |
+      # Récupérer la version depuis package.json
+      VERSION=$(node -p "require('./package.json').version")
+      
+      # Hash court du commit (7 premiers caractères)
+      COMMIT_HASH="${GITHUB_SHA:0:7}"
+      
+      # Version instable
+      UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
+      
+      # Afficher les infos
+      echo "Version: $VERSION"
+      echo "Hash: $COMMIT_HASH"
+      echo "Version instable: $UNSTABLE_VERSION"
+      
+      # Exporter pour les étapes suivantes
+      echo "version=$VERSION" >> $GITHUB_OUTPUT
+      echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+      echo "unstable_version=$UNSTABLE_VERSION" >> $GITHUB_OUTPUT
+
+  docker-image:
+    name: Génération de l'image Docker
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -43,14 +66,12 @@ jobs:
           tags: |
             type=raw,value=staging,enable=${{ github.ref == 'refs/heads/develop' }}
             type=raw,value=production,enable=${{ github.ref == 'refs/heads/master' }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -59,33 +80,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Delete existing release if it exists
-        if: github.ref == 'refs/heads/master'
-        run: |
-          # Installer GitHub CLI si ce n'est pas déjà fait
-          if ! command -v gh &> /dev/null; then
-            echo "Installing GitHub CLI..."
-            type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
-            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-            && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-            && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-            && sudo apt update \
-            && sudo apt install gh -y
-          fi
 
-          # Vérifier si la release existe
-          if gh release view v1.0.0 --json url &>/dev/null; then
-            echo "Deleting existing release v1.0.0..."
-            gh release delete v1.0.0 -y || true
-            git tag -d v1.0.0 || true
-            git push origin :refs/tags/v1.0.0 || true
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create GitHub Release
-        if: github.ref == 'refs/heads/master'
-        uses: actions/create-release@v1
+  generate-version-staging:
+    name: Création de la version de staging
+    needs: [docker-image, versioning]
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -98,54 +100,115 @@ jobs:
           draft: false
           prerelease: false
 
-  clean:
-    needs: deploy
+
+  generate-version-production:
+    name: Création de la version de staging
+    needs: [docker-image, versioning]
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up GitHub CLI
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
-
-      - name: Clean up old images
-        run: |
-          # Afficher les informations de débogage
-          echo "Repository: ${{ github.repository }}"
-          echo "Repository Owner: ${{ github.repository_owner }}"
-          echo "Repository Name: ${{ github.event.repository.name }}"
-          
-          # Définir l'environnement en fonction de la branche
-          if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-            ENV=staging
-          else
-            ENV=production
-          fi
-          echo "Environment: $ENV"
-          
-          # Obtenir la liste des images existantes
-          IMAGES=$(gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/users/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/versions" \
-            --jq ".[] | select(any(.metadata.container.tags[]; . == \"$ENV\")) | .id" | sort -r | tail -n +2)
-          
-          # Afficher le nombre d'images trouvées
-          echo "Found $(echo "$IMAGES" | wc -l) images to clean up"
-          
-          # Supprimer les anciennes images
-          for id in $IMAGES; do
-            echo "Deleting image ID: $id"
-            gh api --method DELETE \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/users/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/versions/$id" || true
-          done
+      - uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
+          body: |
+            Nouvelle version de production.
+            - SHA: ${{ github.sha }}
+            - Date: $(date)
+          draft: false
+          prerelease: true
+
+
+
+#      - name: Delete existing release if it exists
+#        if: github.ref == 'refs/heads/master'
+#        run: |
+#
+#          if ! command -v gh &> /dev/null; then
+#            echo "Installing GitHub CLI..."
+#            type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+#            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+#            && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+#            && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+#            && sudo apt update \
+#            && sudo apt install gh -y
+#          fi
+#
+#          # Vérifier si la release existe
+#          if gh release view v1.0.0 --json url &>/dev/null; then
+#            echo "Deleting existing release v1.0.0..."
+#            gh release delete v1.0.0 -y || true
+#            git tag -d v1.0.0 || true
+#            git push origin :refs/tags/v1.0.0 || true
+#          fi
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Create GitHub Release
+#        if: github.ref == 'refs/heads/master'
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: v1.0.0
+#          release_name: Release v1.0.0
+#          body: |
+#            Nouvelle version de production.
+#            - SHA: ${{ github.sha }}
+#            - Date: $(date)
+#          draft: false
+#          prerelease: false
+#
+#  clean:
+#    needs: deploy
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up GitHub CLI
+#        uses: actions/setup-go@v4
+#        with:
+#          go-version: '1.21'
+#
+#      - name: Install GitHub CLI
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y gh
+#
+#      - name: Clean up old images
+#        run: |
+#          # Afficher les informations de débogage
+#          echo "Repository: ${{ github.repository }}"
+#          echo "Repository Owner: ${{ github.repository_owner }}"
+#          echo "Repository Name: ${{ github.event.repository.name }}"
+#
+#          # Définir l'environnement en fonction de la branche
+#          if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+#            ENV=staging
+#          else
+#            ENV=production
+#          fi
+#          echo "Environment: $ENV"
+#
+#          # Obtenir la liste des images existantes
+#          IMAGES=$(gh api \
+#            -H "Accept: application/vnd.github+json" \
+#            -H "X-GitHub-Api-Version: 2022-11-28" \
+#            "/users/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/versions" \
+#            --jq ".[] | select(any(.metadata.container.tags[]; . == \"$ENV\")) | .id" | sort -r | tail -n +2)
+#
+#          # Afficher le nombre d'images trouvées
+#          echo "Found $(echo "$IMAGES" | wc -l) images to clean up"
+#
+#          # Supprimer les anciennes images
+#          for id in $IMAGES; do
+#            echo "Deleting image ID: $id"
+#            gh api --method DELETE \
+#              -H "Accept: application/vnd.github+json" \
+#              -H "X-GitHub-Api-Version: 2022-11-28" \
+#              "/users/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/versions/$id" || true
+#          done
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
