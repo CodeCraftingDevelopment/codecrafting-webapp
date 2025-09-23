@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   build:
+    name: Compilation du projet
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,10 +23,10 @@ jobs:
           node-version: '22.x'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Installation des dépendances
         run: npm ci
 
-      - name: Build
+      - name: Compilation des sources
         run: npm run build
 
   versioning:
@@ -41,13 +42,13 @@ jobs:
           # Hash court du commit (7 premiers caractères)
           COMMIT_HASH="${GITHUB_SHA:0:7}"
           
-          # Version instable
+          # Version unstable
           UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
           
           # Afficher les infos
           echo "Version: $VERSION"
           echo "Hash: $COMMIT_HASH"
-          echo "Version instable: $UNSTABLE_VERSION"
+          echo "Version unstable: $UNSTABLE_VERSION"
           
           # Exporter pour les étapes suivantes
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -84,43 +85,88 @@ jobs:
 
 
   generate-version-staging:
-    name: Création de la version de staging
+    name: Création de la version de Pre-production
     needs: [docker-image, versioning]
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/create-release@v1
+      - name: Afficher les informations de version
+        run: |
+          echo "Version unstable: ${{ needs.versioning.outputs.unstable_version }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ needs.versioning.outputs.commit_hash }}"
+          
+      - name: Supprimer l'ancienne version pré-production si elle existe
+        run: |
+            # Récupérer les versions de pré-productions
+            gh release list --limit 100 | grep -i "pre-release" | while read -r line; do
+            TAG_NAME=$(echo "$line" | awk '{print $1}')
+            echo "Suppression de la version pré-production: $TAG_NAME"
+            gh release delete "$TAG_NAME" --yes || true
+            git tag -d "$TAG_NAME" || true
+            git push origin ":$TAG_NAME" || true
+            done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Créer la version pré-production
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.0.0
-          release_name: Release v1.0.0
-          body: |
-            Nouvelle version de production.
-            - SHA: ${{ github.sha }}
-            - Date: $(date)
-          draft: false
-          prerelease: false
-
-
-  generate-version-production:
-    name: Création de la version de staging
-    needs: [docker-image, versioning]
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v1.0.0
-          release_name: Release v1.0.0
-          body: |
-            Nouvelle version de production.
+          tag_name: ${{ needs.versioning.outputs.version }}
+          release_name: "Unstable ${{ needs.versioning.outputs.unstable_version }}"
+          body: |            
+            - Version: ${{ needs.versioning.outputs.version }}
+            - Commit: ${{ needs.versioning.outputs.commit_hash }}
+            - Branche: ${{ github.ref_name }}
             - SHA: ${{ github.sha }}
             - Date: $(date)
           draft: false
           prerelease: true
+
+
+  generate-version-production:
+    name: Création de la version de production
+    needs: [docker-image, versioning]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Afficher les informations de version
+        run: |
+          echo "Version release: ${{ needs.versioning.outputs.version }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ needs.versioning.outputs.commit_hash }}"
+
+      - name: Supprimer l'ancienne release de la même version si existante
+        run: |
+          # Vérifier si une version unstable existe déjà
+          if gh release view "${{ needs.versioning.outputs.version }}" &>/dev/null; then
+            echo "Suppression de la version unstable existante..."
+            gh release delete "${{ needs.versioning.outputs.version }}" --yes || true
+            git tag -d "${{ needs.versioning.outputs.version }}" || true
+            git push origin ":${{ needs.versioning.outputs.version }}" || true
+          else
+            echo "Aucune version release de la même version existante à supprimer"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Créer la version release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.versioning.outputs.version }}
+          release_name: "Release ${{ needs.versioning.outputs.version }}"
+          body: |
+            - Version: ${{ needs.versioning.outputs.version }}
+            - Commit: ${{ needs.versioning.outputs.commit_hash }}
+            - Branche: ${{ github.ref_name }}
+            - SHA: ${{ github.sha }}
+            - Date: $(date)
+          draft: false
+          prerelease: false
 
 
 
