@@ -59,6 +59,30 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Delete existing release if it exists
+        if: github.ref == 'refs/heads/master'
+        run: |
+          # Installer GitHub CLI si ce n'est pas déjà fait
+          if ! command -v gh &> /dev/null; then
+            echo "Installing GitHub CLI..."
+            type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+            && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+            && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+            && sudo apt update \
+            && sudo apt install gh -y
+          fi
+
+          # Vérifier si la release existe
+          if gh release view v1.0.0 --json url &>/dev/null; then
+            echo "Deleting existing release v1.0.0..."
+            gh release delete v1.0.0 -y || true
+            git tag -d v1.0.0 || true
+            git push origin :refs/tags/v1.0.0 || true
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create GitHub Release
         if: github.ref == 'refs/heads/master'
         uses: actions/create-release@v1
@@ -69,6 +93,8 @@ jobs:
           release_name: Release v1.0.0
           body: |
             Nouvelle version de production.
+            - SHA: ${{ github.sha }}
+            - Date: $(date)
           draft: false
           prerelease: false
 
