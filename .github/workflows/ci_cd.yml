@@ -32,25 +32,27 @@ jobs:
   versioning:
     name: Génération du numéro de version
     runs-on: ubuntu-latest
-    run: |
-      # Récupérer la version depuis package.json
-      VERSION=$(node -p "require('./package.json').version")
-      
-      # Hash court du commit (7 premiers caractères)
-      COMMIT_HASH="${GITHUB_SHA:0:7}"
-      
-      # Version instable
-      UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
-      
-      # Afficher les infos
-      echo "Version: $VERSION"
-      echo "Hash: $COMMIT_HASH"
-      echo "Version instable: $UNSTABLE_VERSION"
-      
-      # Exporter pour les étapes suivantes
-      echo "version=$VERSION" >> $GITHUB_OUTPUT
-      echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
-      echo "unstable_version=$UNSTABLE_VERSION" >> $GITHUB_OUTPUT
+    steps:
+      - name: Génération du numéro de version
+        run: |
+          # Récupérer la version depuis package.json
+          VERSION=$(node -p "require('./package.json').version")
+          
+          # Hash court du commit (7 premiers caractères)
+          COMMIT_HASH="${GITHUB_SHA:0:7}"
+          
+          # Version instable
+          UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
+          
+          # Afficher les infos
+          echo "Version: $VERSION"
+          echo "Hash: $COMMIT_HASH"
+          echo "Version instable: $UNSTABLE_VERSION"
+          
+          # Exporter pour les étapes suivantes
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          echo "unstable_version=$UNSTABLE_VERSION" >> $GITHUB_OUTPUT
 
   docker-image:
     name: Génération de l'image Docker
