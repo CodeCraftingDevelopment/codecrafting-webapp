@@ -32,9 +32,14 @@ jobs:
   versioning:
     name: Génération du numéro de version
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-outputs.outputs.version }}
+      commit_hash: ${{ steps.set-outputs.outputs.commit_hash }}
+      unstable_version: ${{ steps.set-outputs.outputs.unstable_version }}
     steps:
       - uses: actions/checkout@v3
       - name: Génération du numéro de version
+        id: set-outputs
         run: |
           # Récupérer la version depuis package.json
           VERSION=$(node -p "require('./package.json').version")
