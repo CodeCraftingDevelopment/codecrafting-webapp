@@ -85,7 +85,7 @@ jobs:
 
 
   generate-version-staging:
-    name: Création de la version de Pre-production
+    name: Création de la version de Pré-production
     needs: [docker-image, versioning]
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -114,10 +114,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.versioning.outputs.version }}
+          tag_name: ${{ needs.versioning.outputs.unstable_version }}
           release_name: "Unstable ${{ needs.versioning.outputs.unstable_version }}"
           body: |            
-            - Version: ${{ needs.versioning.outputs.version }}
+            - Version: ${{ needs.versioning.outputs.unstable_version }}
             - Commit: ${{ needs.versioning.outputs.commit_hash }}
             - Branche: ${{ github.ref_name }}
             - SHA: ${{ github.sha }}
