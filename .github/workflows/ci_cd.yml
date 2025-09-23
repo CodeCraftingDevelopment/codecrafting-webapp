@@ -33,6 +33,7 @@ jobs:
     name: Génération du numéro de version
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Génération du numéro de version
         run: |
           # Récupérer la version depuis package.json
