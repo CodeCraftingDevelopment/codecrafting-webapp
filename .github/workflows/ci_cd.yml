@@ -146,14 +146,38 @@ jobs:
 
       - name: Supprimer l'ancienne release de la même version si existante
         run: |
-          # Vérifier si une version unstable existe déjà
-          if gh release view "${{ needs.versioning.outputs.version }}" &>/dev/null; then
-            echo "Suppression de la version unstable existante..."
-            gh release delete "${{ needs.versioning.outputs.version }}" --yes || true
-            git tag -d "${{ needs.versioning.outputs.version }}" || true
-            git push origin ":${{ needs.versioning.outputs.version }}" || true
+          VERSION="${{ needs.versioning.outputs.version }}"
+          REPO="${{ github.repository }}"
+          
+          # Vérifier si une release existe déjà pour cette version
+          response=$(curl -s \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$REPO/releases/tags/$VERSION")
+          
+          release_id=$(echo "$response" | jq -r '.id // empty')
+          
+          if [ -n "$release_id" ]; then
+            echo "Suppression de la release existante pour la version $VERSION (ID: $release_id)"
+          
+            # Supprimer la release
+            curl -s -X DELETE \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/releases/$release_id"
+          
+            # Supprimer le tag (nécessite une requête séparée)
+            curl -s -X DELETE \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/git/refs/tags/$VERSION" || true
+          
+            echo "Release et tag supprimés avec succès"
           else
-            echo "Aucune version release de la même version existante à supprimer"
+            echo "Aucune release existante à supprimer pour la version $VERSION"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
