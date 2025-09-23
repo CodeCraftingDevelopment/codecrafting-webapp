@@ -101,16 +101,17 @@ jobs:
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ needs.versioning.outputs.commit_hash }}"
           
-      - name: Supprimer l'ancienne version pré-production si elle existe
+      - name: Supprimer les versions de pré-productions
         run: |
-            # Récupérer les versions de pré-productions
-            gh release list --limit 100 | grep -i "pre-release" | while read -r line; do
-            TAG_NAME=$(echo "$line" | awk '{print $1}')
-            echo "Suppression de la version pré-production: $TAG_NAME"
-            gh release delete "$TAG_NAME" --yes || true
-            git tag -d "$TAG_NAME" || true
-            git push origin ":$TAG_NAME" || true
-            done
+          # Lister et supprimer toutes les pré-releases
+          gh api -X GET "repos/${{ github.repository }}/releases" \
+            --jq '.[] | select(.prerelease == true) | .id' | \
+            xargs -I{} gh api -X DELETE "repos/${{ github.repository }}/releases/{}"
+          
+          # Supprimer les tags associés
+          gh api -X GET "repos/${{ github.repository }}/releases" \
+            --jq '.[] | select(.prerelease == true) | .tag_name' | \
+            xargs -I{} gh api -X DELETE "repos/${{ github.repository }}/git/refs/tags/{}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
