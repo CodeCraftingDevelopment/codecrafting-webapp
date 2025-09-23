@@ -144,7 +144,7 @@ jobs:
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ needs.versioning.outputs.commit_hash }}"
 
-      - name: Supprimer l'ancienne release de la même version si existante
+      - name: Supprimer l'ancienne release et son tag si existants
         run: |
           VERSION="${{ needs.versioning.outputs.version }}"
           REPO="${{ github.repository }}"
@@ -160,24 +160,51 @@ jobs:
           
           if [ -n "$release_id" ]; then
             echo "Suppression de la release existante pour la version $VERSION (ID: $release_id)"
-          
-            # Supprimer la release
+            
+            # 1. Supprimer la release
+            echo "Suppression de la release..."
             curl -s -X DELETE \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               "https://api.github.com/repos/$REPO/releases/$release_id"
-          
-            # Supprimer le tag (nécessite une requête séparée)
+            
+            # 2. Supprimer le tag associé
+            echo "Suppression du tag $VERSION..."
+            curl -s -X DELETE \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/git/refs/tags/$VERSION" || echo "Impossible de supprimer le tag, peut-être déjà supprimé"
+            
+            # 3. Supprimer également la référence du tag s'il existe encore
+            echo "Vérification de la référence du tag..."
             curl -s -X DELETE \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               "https://api.github.com/repos/$REPO/git/refs/tags/$VERSION" || true
-          
-            echo "Release et tag supprimés avec succès"
+            
+            echo "✅ Release et tag $VERSION supprimés avec succès"
           else
-            echo "Aucune release existante à supprimer pour la version $VERSION"
+            echo "ℹ️ Aucune release existante à supprimer pour la version $VERSION"
+            
+            # Vérifier si le tag existe quand même (au cas où il n'est pas associé à une release)
+            tag_response=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/git/ref/tags/$VERSION")
+              
+            if [ "$tag_response" = "200" ]; then
+              echo "ℹ️ Tag $VERSION trouvé sans release associée, suppression..."
+              curl -s -X DELETE \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$REPO/git/refs/tags/$VERSION"
+              echo "✅ Tag $VERSION supprimé avec succès"
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
