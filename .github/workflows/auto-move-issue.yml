@@ -15,8 +15,8 @@ jobs:
     name: Récupération de l'issue
     runs-on: ubuntu-latest
     outputs:
-      ref_issues: ${{ steps.extract_refs.outputs.ref_issue }}
-      closed_issues: ${{ steps.extract_refs.outputs.closed_issue }}
+      ref_issue: ${{ steps.extract_refs.outputs.ref_issue }}
+      closed_issue: ${{ steps.extract_refs.outputs.closed_issue }}
     steps:
       - uses: actions/checkout@v3
 
