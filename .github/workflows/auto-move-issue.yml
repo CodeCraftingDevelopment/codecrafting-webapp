@@ -5,202 +5,31 @@ on:
     branches:
       - '**'
 
-jobs:
-  move-issue:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
+permissions:
+  contents: write
+  packages: write
 
+jobs:
+
+  check-commit:
+    name: Vérification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
       - name: Extract issue references
-        id: extract_issues
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const commitMessage = process.env.COMMIT_MESSAGE;
-            
-            // Extraire les références d'issues
-            const refs = [...commitMessage.matchAll(/refs\s*#(\d+)/g)]
-              .map(m => ({number: parseInt(m[1]), action: 'in_progress'}));
-            
-            // Extraire les fermetures d'issues
-            const closes = [...commitMessage.matchAll(/(closes|closed|fixes|fixed)\s*#(\d+)/g)]
-              .map(m => ({number: parseInt(m[2]), action: 'done'}));
-            
-            // Fusionner et supprimer les doublons
-            const allIssues = [...refs, ...closes].reduce((acc, issue) => {
-              // Garde la dernière action pour chaque numéro d'issue
-              acc[issue.number] = issue;
-              return acc;
-            }, {});
-            
-            const issues = Object.values(allIssues);
-            console.log('Issues trouvées:', issues);
-            
-            return issues;
-          result-encoding: json
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-
-      - name: Get project information
-        if: steps.extract_issues.outputs.result != '[]'
-        id: get_project
-        uses: actions/github-script@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          script: |
-            try {
-              const { owner, repo } = context.repo;
-              console.log(`Recherche du projet pour ${owner}/${repo}`);
-            
-              // Récupérer le premier projet du dépôt
-              const { data, errors } = await github.graphql(`
-                query getProject($owner: String!, $repo: String!) {
-                  repository(owner: $owner, name: $repo) {
-                    projectsV2(first: 1) {
-                      nodes {
-                        id
-                        title
-                        fields(first: 10) {
-                          nodes {
-                            ... on ProjectV2SingleSelectField {
-                              id
-                              name
-                              options {
-                                id
-                                name
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              `, { owner, repo });
-            
-              if (errors) {
-                console.error('Erreur GraphQL:', JSON.stringify(errors, null, 2));
-                throw new Error('Erreur lors de la récupération du projet');
-              }
-            
-              console.log('Réponse GraphQL:', JSON.stringify(data, null, 2));
-            
-              const project = data?.repository?.projectsV2?.nodes?.[0];
-              if (!project) {
-                throw new Error('Aucun projet trouvé dans ce dépôt');
-              }
-            
-              console.log(`Projet trouvé: ${project.title} (${project.id})`);
-            
-              const statusField = project.fields.nodes.find(f => f.name === 'Status');
-              if (!statusField) {
-                const fieldNames = project.fields.nodes.map(f => f.name).join(', ');
-                throw new Error(`Champ "Status" non trouvé. Champs disponibles: ${fieldNames || 'aucun'}`);
-              }
-            
-              return {
-                projectId: project.id,
-                fieldId: statusField.id,
-                options: statusField.options
-              };
-            } catch (error) {
-              console.error('Erreur détaillée:', error);
-              throw error;
-            }
-          result-encoding: json
-
-      - name: Update issues status
-        if: steps.extract_issues.outputs.result != '[]'
-        uses: actions/github-script@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          script: |
-            try {
-              const issues = JSON.parse('${{ steps.extract_issues.outputs.result }}');
-              const projectInfo = JSON.parse('${{ steps.get_project.outputs.result }}');
-            
-              if (!projectInfo) {
-                throw new Error('Aucune information de projet disponible');
-              }
-            
-              const { projectId, fieldId, options } = projectInfo;
-              console.log('Début de la mise à jour des statuts...');
-            
-              for (const issue of issues) {
-                const status = issue.action === 'done' ? 'Done' : 'In Progress';
-                const option = options.find(o => o.name === status);
-            
-                if (!option) {
-                  console.log(`⚠️ Statut "${status}" non trouvé pour l'issue #${issue.number}`);
-                  continue;
-                }
-            
-                try {
-                  console.log(`Traitement de l'issue #${issue.number}...`);
-            
-                  // Récupérer l'ID de l'item du projet
-                  const { data, errors } = await github.graphql(`
-                    query getItemId($owner: String!, $repo: String!, $issueNumber: Int!) {
-                      repository(owner: $owner, name: $repo) {
-                        issue(number: $issueNumber) {
-                          projectItems(first: 1) {
-                            nodes {
-                              id
-                            }
-                          }
-                        }
-                      }
-                    }
-                  `, {
-                    ...context.repo,
-                    issueNumber: issue.number
-                  });
-            
-                  if (errors) {
-                    console.error('Erreur GraphQL:', JSON.stringify(errors, null, 2));
-                    continue;
-                  }
-            
-                  const itemId = data?.repository?.issue?.projectItems?.nodes?.[0]?.id;
-                  if (!itemId) {
-                    console.log(`⚠️ Item de projet non trouvé pour l'issue #${issue.number}`);
-                    continue;
-                  }
-            
-                  console.log(`Mise à jour de l'issue #${issue.number} vers le statut "${status}"...`);
-            
-                  // Mettre à jour le statut
-                  await github.graphql(`
-                    mutation updateStatus($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
-                      updateProjectV2ItemFieldValue(
-                        input: {
-                          projectId: $projectId,
-                          itemId: $itemId,
-                          fieldId: $fieldId,
-                          value: { singleSelectOptionId: $optionId }
-                        }
-                      ) { clientMutationId }
-                    }
-                  `, {
-                    projectId,
-                    itemId,
-                    fieldId,
-                    optionId: option.id
-                  });
-            
-                  console.log(`✅ Issue #${issue.number} mise à jour en "${status}"`);
-                } catch (error) {
-                  console.error(`❌ Erreur lors de la mise à jour de l'issue #${issue.number}:`, error.message);
-                }
-              }
-            } catch (error) {
-              console.error('❌ Erreur critique:', error);
-              throw error;
-            }
+        id: extract_refs
+        run: |
+          # Récupérer le message du commit
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          
+          # Extraire les numéros d'issues (format: #123)
+          ISSUE_NUMBERS=$(echo "$COMMIT_MSG" | grep -oP '#\K\d+')
+          
+          # Afficher les numéros trouvés
+          echo "Numéros d'issues trouvés: $ISSUE_NUMBERS"
+          
+          # Définir la sortie pour les étapes suivantes
+          echo "issue_numbers=$ISSUE_NUMBERS" >> $GITHUB_OUTPUT
+          
+        
