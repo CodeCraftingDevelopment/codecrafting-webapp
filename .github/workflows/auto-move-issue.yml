@@ -42,6 +42,7 @@ jobs:
           
   move-projects-to-in-progress:
     name: Projet vers "In-Progress"
+    if: ${{ needs.check-commit.outputs.ref_issue != '' }}
     runs-on: ubuntu-latest
     needs: check-commit
     steps:
@@ -49,7 +50,6 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Move issue to "In progress" if found
-        if: ${{ needs.check-commit.outputs.ref_issue != '' }}
         run: |
           curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -59,6 +59,7 @@ jobs:
 
   move-projects-to-done:
     name: Projet vers "Done"
+    if: ${{ needs.check-commit.outputs.closed_issue != '' }}
     runs-on: ubuntu-latest
     needs: check-commit
     steps:
@@ -66,7 +67,6 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Move issue to "Done" if found
-        if: ${{ needs.check-commit.outputs.closed_issue != '' }}
         run: |
           echo "Variable closed_issue :  ${{ needs.check-commit.outputs.closed_issue }}"
           if [ -z "${{ needs.check-commit.outputs.closed_issue }}" ]; then
