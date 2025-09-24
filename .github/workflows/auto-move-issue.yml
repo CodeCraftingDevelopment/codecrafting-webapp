@@ -21,11 +21,22 @@ jobs:
       - name: Find project from commit
         id: extract_project
         run: |
-          # Récupérer l'ID du premier projet
-          response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/projects")
-          echo "response : $response"
+          # Récupérer le premier projet V2
+          PROJECT_ID=
+          $(
+            gh api graphql -f query=
+            'query 
+            {
+              repository(owner: "'${{ github.repository_owner }}'", name: "'${{ github.event.repository.name }}'") 
+              {
+                projectsV2(first: 1) 
+                {
+                    nodes { id }
+                }
+              }
+            }' --jq '.data.repository.projectsV2.nodes[0].id'
+          )
+          echo "ID: $PROJECT_ID"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
