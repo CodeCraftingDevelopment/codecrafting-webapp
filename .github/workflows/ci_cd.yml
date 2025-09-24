@@ -38,6 +38,7 @@ jobs:
       unstable_version: ${{ steps.set-outputs.outputs.unstable_version }}
     steps:
       - uses: actions/checkout@v3
+
       - name: Génération du numéro de version
         id: set-outputs
         run: |
@@ -50,15 +51,20 @@ jobs:
           # Version unstable
           UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
           
+          # Date 
+          CURRENT_DATE=$(date -u +'%Y-%m-%d %H:%M:%S %Z')
+          
           # Afficher les infos
           echo "Version: $VERSION"
           echo "Hash: $COMMIT_HASH"
           echo "Version unstable: $UNSTABLE_VERSION"
+          echo "Date d'exécution : $CURRENT_DATE"
           
           # Exporter pour les étapes suivantes
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
           echo "unstable_version=$UNSTABLE_VERSION" >> $GITHUB_OUTPUT
+          echo "date=$CURRENT_DATE" >> $GITHUB_OUTPUT
 
   docker-image:
     name: Image Docker
@@ -125,7 +131,7 @@ jobs:
             - Version: ${{ needs.versioning.outputs.unstable_version }}
             - Commit: ${{ github.sha }}
             - Branche: ${{ github.ref_name }}
-            - Date: ${{ env.CURRENT_DATE }}
+            - Date: ${{ needs.versioning.outputs.date }}
           draft: false
           prerelease: true
 
@@ -218,6 +224,6 @@ jobs:
             - Version: ${{ needs.versioning.outputs.version }}
             - Commit: ${{ github.sha }}
             - Branche: ${{ github.ref_name }}
-            - Date: ${{ env.CURRENT_DATE }}
+            - Date: ${{ needs.versioning.outputs.date }}
           draft: false
           prerelease: false
