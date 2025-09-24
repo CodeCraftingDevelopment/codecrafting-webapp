@@ -23,13 +23,18 @@ jobs:
           # Récupérer le message du commit
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           
-          # Extraire les numéros d'issues (format: #123)
-          ISSUE_NUMBERS=$(echo "$COMMIT_MSG" | grep -oP '#\K\d+')
+          # Extraire les références d'issues (format: refs #123)
+          REF_ISSUES=$(echo "$COMMIT_MSG" | grep -oP 'refs\s*#\K\d+' | tr '\n' ' ')
           
-          # Afficher les numéros trouvés
-          echo "Numéros d'issues trouvés: $ISSUE_NUMBERS"
+          # Extraire les fermetures d'issues (format: closes #123, fixed #456)
+          CLOSED_ISSUES=$(echo "$COMMIT_MSG" | grep -oP '(?:closes|closed|fixes|fixed)\s*#\K\d+' | tr '\n' ' ')
           
-          # Définir la sortie pour les étapes suivantes
-          echo "issue_numbers=$ISSUE_NUMBERS" >> $GITHUB_OUTPUT
+          # Afficher les résultats
+          echo "Issues référencées: $REF_ISSUES"
+          echo "Issues fermées: $CLOSED_ISSUES"
+          
+          # Définir les sorties
+          echo "ref_issues=$REF_ISSUES" >> $GITHUB_OUTPUT
+          echo "closed_issues=$CLOSED_ISSUES" >> $GITHUB_OUTPUT
           
         
