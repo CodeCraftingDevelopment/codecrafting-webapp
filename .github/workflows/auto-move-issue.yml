@@ -23,7 +23,7 @@ jobs:
       - name: Find project from commit
         id: extract_project
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Essayer avec le token directement
           curl -H "Authorization: Bearer $GITHUB_TOKEN" \
