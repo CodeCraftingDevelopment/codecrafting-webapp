@@ -68,8 +68,9 @@ jobs:
 
       - name: Move issue to "Done" if found
         run: |
-          curl -s \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues" | \
-          jq "map(select(.number == ${{ needs.check-commit.outputs.closed_issue }})) | [.[] | {id, number, title}]"
+          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/CodeCraftingDevelopment/codecrafting-webapp/issues/3" -d '{"state":"closed"}'
+#          curl -s \
+#          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+#          -H "Accept: application/vnd.github.v3+json" \
+#          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues" | \
+#          jq "map(select(.number == ${{ needs.check-commit.outputs.closed_issue }})) | [.[] | {id, number, title}]"
