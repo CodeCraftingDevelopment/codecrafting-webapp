@@ -30,10 +30,9 @@ jobs:
 
       - name: Find project from commit
         id: extract_project
-        run: |
-          
-          echo "$GH_TOKEN" | gh auth login --with-token
-          
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |          
           # Récupérer le premier projet V2
           PROJECT_ID=
           $(
