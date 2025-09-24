@@ -40,3 +40,116 @@ jobs:
           result-encoding: json
         env:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+      - name: Get project information
+        if: steps.extract_issues.outputs.result != '[]'
+        id: get_project
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            
+            // Récupérer le premier projet du dépôt
+            const { data } = await github.graphql(`
+              query getProject($owner: String!, $repo: String!) {
+                repository(owner: $owner, name: $repo) {
+                  projectsV2(first: 1) {
+                    nodes {
+                      id
+                      fields(first: 10) {
+                        nodes {
+                          ... on ProjectV2SingleSelectField {
+                            id
+                            name
+                            options {
+                              id
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { owner, repo });
+            
+            const project = data.repository.projectsV2.nodes[0];
+            if (!project) throw new Error('No project found');
+            
+            const statusField = project.fields.nodes.find(f => f.name === 'Status');
+            if (!statusField) throw new Error('Status field not found');
+            
+            return {
+              projectId: project.id,
+              fieldId: statusField.id,
+              options: statusField.options
+            };
+          result-encoding: json
+
+      - name: Update issues status
+        if: steps.extract_issues.outputs.result != '[]'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issues = JSON.parse('${{ steps.extract_issues.outputs.result }}');
+            const { projectId, fieldId, options } = JSON.parse('${{ steps.get_project.outputs.result }}');
+            
+            for (const issue of issues) {
+              const status = issue.action === 'done' ? 'Done' : 'In Progress';
+              const option = options.find(o => o.name === status);
+            
+              if (!option) {
+                console.log(`Status "${status}" not found for issue #${issue.number}`);
+                continue;
+              }
+            
+              try {
+                // Récupérer l'ID de l'item du projet
+                const { data } = await github.graphql(`
+                  query getItemId($owner: String!, $repo: String!, $issueNumber: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      issue(number: $issueNumber) {
+                        projectItems(first: 1) {
+                          nodes {
+                            id
+                          }
+                        }
+                      }
+                    }
+                  }
+                `, {
+                  ...context.repo,
+                  issueNumber: issue.number
+                });
+            
+                const itemId = data.repository.issue.projectItems.nodes[0]?.id;
+                if (!itemId) {
+                  console.log(`Project item not found for issue #${issue.number}`);
+                  continue;
+                }
+            
+                // Mettre à jour le statut
+                await github.graphql(`
+                  mutation updateStatus($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                    updateProjectV2ItemFieldValue(
+                      input: {
+                        projectId: $projectId,
+                        itemId: $itemId,
+                        fieldId: $fieldId,
+                        value: { singleSelectOptionId: $optionId }
+                      }
+                    ) { clientMutationId }
+                  }
+                `, {
+                  projectId,
+                  itemId,
+                  fieldId,
+                  optionId: option.id
+                });
+            
+                console.log(`✅ Issue #${issue.number} updated to "${status}"`);
+              } catch (error) {
+                console.error(`❌ Error updating issue #${issue.number}:`, error.message);
+              }
+            }
