@@ -50,8 +50,7 @@ jobs:
             }' --jq '.data.repository.projectsV2.nodes[0].id'
           )
           echo "ID: $PROJECT_ID"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
   check-commit:
     name: Vérification des commits
