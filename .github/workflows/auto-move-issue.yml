@@ -79,6 +79,7 @@ jobs:
           $queryProjects = '{ repository(owner: "' + $repoOwner + '", name: "' + $repo.name + '") { projectsV2(first: 50) { nodes { id number title } } } }'
           echo "Query projects: $queryProjects"
           $bodyProjects = @{ query = $queryProjects } | ConvertTo-Json -Compress
+          echo "bodyProjects: $bodyProjects"
           $response = Invoke-RestMethod `
               -Uri "https://api.github.com/graphql" `
               -Method POST `
