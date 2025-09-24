@@ -53,7 +53,7 @@ jobs:
           UNSTABLE_VERSION="${VERSION}-unstable.${COMMIT_HASH}"
           
           # Date 
-          CURRENT_DATE=$(date -u +'%Y-%m-%d %H:%M:%S %Z')
+          CURRENT_DATE=$(date -u +'%d-%m-%Y %H:%M:%S %Z')
           
           # Afficher les infos
           echo "Version: $VERSION"
