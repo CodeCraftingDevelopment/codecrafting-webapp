@@ -50,8 +50,9 @@ jobs:
 
       - name: Move issue to "In progress" if found
         run: |
+          echo "Variable ref_issue :  ${{ needs.check-commit.outputs.ref_issue }}"
           if [ -z "${{ needs.check-commit.outputs.ref_issue }}" ]; then
-            echo "Aucune issue fermée à traiter"
+            echo "Aucune issue à traiter"
             exit 0
           fi
           curl -s \
@@ -70,8 +71,9 @@ jobs:
 
       - name: Move issue to "Done" if found
         run: |
+          echo "Variable closed_issue :  ${{ needs.check-commit.outputs.closed_issue }}"
           if [ -z "${{ needs.check-commit.outputs.closed_issue }}" ]; then
-            echo "Aucune issue fermée à traiter"
+            echo "Aucune issue à traiter"
             exit 0
           fi
           curl -s \
