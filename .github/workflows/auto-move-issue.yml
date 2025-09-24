@@ -26,6 +26,9 @@ jobs:
           $repoOwner = $env:REPO_OWNER
           $projectName = $env:REPO_NAME
           $commitMessage = $env:COMMIT_MESSAGE
+          
+          echo "Project: $projectName"
+          echo "Message commit: $commitMessage"
 
           # -----------------------------
           # 1️⃣ Extraction des issues
@@ -37,11 +40,15 @@ jobs:
           foreach ($match in $regexRefs.Matches($commitMessage)) {
               $issueRefs += [int]$match.Groups[1].Value
           }
+          
+          echo "match refs: $issueRefs"
 
           $regexCloses = [regex] "(closes|closed|fixes|fixed)\s*#(\d+)"
           foreach ($match in $regexCloses.Matches($commitMessage)) {
               $issueCloses += [int]$match.Groups[2].Value
           }
+          
+          echo "match closures: $issueCloses"
 
           $allIssues = $issueRefs + $issueCloses | Select-Object -Unique
           if ($allIssues.Count -eq 0) {
