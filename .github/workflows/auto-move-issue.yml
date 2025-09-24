@@ -32,23 +32,21 @@ jobs:
         id: extract_project
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |          
-          # Récupérer le premier projet V2
-          PROJECT_ID=
-          $(
-            gh api graphql -f query=
-            'query 
-            {
-              repository(owner: "'${{ github.repository_owner }}'", name: "'${{ github.event.repository.name }}'") 
-              {
-                projectsV2(first: 1) 
-                {
-                    nodes { id }
+        run: |
+          # Récupérer l'ID du projet avec l'API GraphQL
+          PROJECT_ID=$(gh api graphql -f query='
+            query {
+              repository(owner: "'${{ github.repository_owner }}'", name: "'${{ github.event.repository.name }}'") {
+                projectsV2(first: 1) {
+                  nodes { 
+                    id 
+                  }
                 }
               }
-            }' --jq '.data.repository.projectsV2.nodes[0].id'
-          )
-          echo "ID: $PROJECT_ID"
+            }' --jq '.data.repository.projectsV2.nodes[0].id')
+          
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "ID du projet: $PROJECT_ID"
 
 
   check-commit:
