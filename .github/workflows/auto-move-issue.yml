@@ -36,7 +36,7 @@ jobs:
           # Récupérer l'ID du projet avec l'API GraphQL
           PROJECT_ID=$(gh api graphql -f query='
             query {
-              repository(owner: "'${{ github.repository_owner }}'", name: "'${{ github.event.repository.name }}'") {
+              repository(owner: ${{ github.repository_owner }}, name: ${{ github.event.repository.name }}) {
                 projectsV2(first: 1) {
                   nodes { 
                     id 
