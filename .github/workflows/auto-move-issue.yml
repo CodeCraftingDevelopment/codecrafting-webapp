@@ -12,7 +12,7 @@ permissions:
 jobs:
 
   check-commit:
-    name: Récupération de l'issue
+    name: Récupération des infos du commit
     runs-on: ubuntu-latest
     outputs:
       ref_issue: ${{ steps.extract_refs.outputs.ref_issue }}
@@ -39,30 +39,41 @@ jobs:
           # Définir les sorties
           echo "ref_issue=$REF_ISSUE" >> $GITHUB_OUTPUT
           echo "closed_issue=$CLOSED_ISSUE" >> $GITHUB_OUTPUT
+
+  get-issue-info:
+    name: Récupération de l'issue
+    runs-on: ubuntu-latest
+    needs: check-commit
+    steps:
+
+      - name: Get repository id
+        run: |
+          REPO_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.id')
+          echo $REPO_ID
           
-  move-projects-to-in-progress:
+  move-project-to-in-progress:
     name: Projet vers "In-Progress"
     if: ${{ needs.check-commit.outputs.ref_issue != '' }}
     runs-on: ubuntu-latest
-    needs: check-commit
+    needs: [check-commit, get-issue-info]
     steps:
 
       - uses: actions/checkout@v3
 
       - name: Move issue to "In progress" if found
         run: |
-          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/CodeCraftingDevelopment/codecrafting-webapp/issues/3" -d '{"state":"closed"}'
+          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/3" -d '{"state":"open"}'
 #          curl -s \
 #          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
 #          -H "Accept: application/vnd.github.v3+json" \
 #          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues" | \
 #          jq "map(select(.number == ${{ needs.check-commit.outputs.ref_issue }})) | [.[] | {id, number, title}]"
 
-  move-projects-to-done:
+  move-project-to-done:
     name: Projet vers "Done"
     if: ${{ needs.check-commit.outputs.closed_issue != '' }}
     runs-on: ubuntu-latest
-    needs: check-commit
+    needs: [check-commit, get-issue-info]
     steps:
 
       - uses: actions/checkout@v3
