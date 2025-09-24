@@ -8,6 +8,11 @@ on:
 jobs:
   move-issue:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v3
 
@@ -34,7 +39,7 @@ jobs:
             }, {});
             
             const issues = Object.values(allIssues);
-            console.log('Issues found:', issues);
+            console.log('Issues trouvées:', issues);
             
             return issues;
           result-encoding: json
@@ -45,25 +50,31 @@ jobs:
         if: steps.extract_issues.outputs.result != '[]'
         id: get_project
         uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const { owner, repo } = context.repo;
+            try {
+              const { owner, repo } = context.repo;
+              console.log(`Recherche du projet pour ${owner}/${repo}`);
             
-            // Récupérer le premier projet du dépôt
-            const { data } = await github.graphql(`
-              query getProject($owner: String!, $repo: String!) {
-                repository(owner: $owner, name: $repo) {
-                  projectsV2(first: 1) {
-                    nodes {
-                      id
-                      fields(first: 10) {
-                        nodes {
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            name
-                            options {
+              // Récupérer le premier projet du dépôt
+              const { data, errors } = await github.graphql(`
+                query getProject($owner: String!, $repo: String!) {
+                  repository(owner: $owner, name: $repo) {
+                    projectsV2(first: 1) {
+                      nodes {
+                        id
+                        title
+                        fields(first: 10) {
+                          nodes {
+                            ... on ProjectV2SingleSelectField {
                               id
                               name
+                              options {
+                                id
+                                name
+                              }
                             }
                           }
                         }
@@ -71,85 +82,125 @@ jobs:
                     }
                   }
                 }
+              `, { owner, repo });
+            
+              if (errors) {
+                console.error('Erreur GraphQL:', JSON.stringify(errors, null, 2));
+                throw new Error('Erreur lors de la récupération du projet');
               }
-            `, { owner, repo });
             
-            const project = data.repository.projectsV2.nodes[0];
-            if (!project) throw new Error('No project found');
+              console.log('Réponse GraphQL:', JSON.stringify(data, null, 2));
             
-            const statusField = project.fields.nodes.find(f => f.name === 'Status');
-            if (!statusField) throw new Error('Status field not found');
+              const project = data?.repository?.projectsV2?.nodes?.[0];
+              if (!project) {
+                throw new Error('Aucun projet trouvé dans ce dépôt');
+              }
             
-            return {
-              projectId: project.id,
-              fieldId: statusField.id,
-              options: statusField.options
-            };
+              console.log(`Projet trouvé: ${project.title} (${project.id})`);
+            
+              const statusField = project.fields.nodes.find(f => f.name === 'Status');
+              if (!statusField) {
+                const fieldNames = project.fields.nodes.map(f => f.name).join(', ');
+                throw new Error(`Champ "Status" non trouvé. Champs disponibles: ${fieldNames || 'aucun'}`);
+              }
+            
+              return {
+                projectId: project.id,
+                fieldId: statusField.id,
+                options: statusField.options
+              };
+            } catch (error) {
+              console.error('Erreur détaillée:', error);
+              throw error;
+            }
           result-encoding: json
 
       - name: Update issues status
         if: steps.extract_issues.outputs.result != '[]'
         uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const issues = JSON.parse('${{ steps.extract_issues.outputs.result }}');
-            const { projectId, fieldId, options } = JSON.parse('${{ steps.get_project.outputs.result }}');
+            try {
+              const issues = JSON.parse('${{ steps.extract_issues.outputs.result }}');
+              const projectInfo = JSON.parse('${{ steps.get_project.outputs.result }}');
             
-            for (const issue of issues) {
-              const status = issue.action === 'done' ? 'Done' : 'In Progress';
-              const option = options.find(o => o.name === status);
-            
-              if (!option) {
-                console.log(`Status "${status}" not found for issue #${issue.number}`);
-                continue;
+              if (!projectInfo) {
+                throw new Error('Aucune information de projet disponible');
               }
             
-              try {
-                // Récupérer l'ID de l'item du projet
-                const { data } = await github.graphql(`
-                  query getItemId($owner: String!, $repo: String!, $issueNumber: Int!) {
-                    repository(owner: $owner, name: $repo) {
-                      issue(number: $issueNumber) {
-                        projectItems(first: 1) {
-                          nodes {
-                            id
+              const { projectId, fieldId, options } = projectInfo;
+              console.log('Début de la mise à jour des statuts...');
+            
+              for (const issue of issues) {
+                const status = issue.action === 'done' ? 'Done' : 'In Progress';
+                const option = options.find(o => o.name === status);
+            
+                if (!option) {
+                  console.log(`⚠️ Statut "${status}" non trouvé pour l'issue #${issue.number}`);
+                  continue;
+                }
+            
+                try {
+                  console.log(`Traitement de l'issue #${issue.number}...`);
+            
+                  // Récupérer l'ID de l'item du projet
+                  const { data, errors } = await github.graphql(`
+                    query getItemId($owner: String!, $repo: String!, $issueNumber: Int!) {
+                      repository(owner: $owner, name: $repo) {
+                        issue(number: $issueNumber) {
+                          projectItems(first: 1) {
+                            nodes {
+                              id
+                            }
                           }
                         }
                       }
                     }
-                  }
-                `, {
-                  ...context.repo,
-                  issueNumber: issue.number
-                });
+                  `, {
+                    ...context.repo,
+                    issueNumber: issue.number
+                  });
             
-                const itemId = data.repository.issue.projectItems.nodes[0]?.id;
-                if (!itemId) {
-                  console.log(`Project item not found for issue #${issue.number}`);
-                  continue;
+                  if (errors) {
+                    console.error('Erreur GraphQL:', JSON.stringify(errors, null, 2));
+                    continue;
+                  }
+            
+                  const itemId = data?.repository?.issue?.projectItems?.nodes?.[0]?.id;
+                  if (!itemId) {
+                    console.log(`⚠️ Item de projet non trouvé pour l'issue #${issue.number}`);
+                    continue;
+                  }
+            
+                  console.log(`Mise à jour de l'issue #${issue.number} vers le statut "${status}"...`);
+            
+                  // Mettre à jour le statut
+                  await github.graphql(`
+                    mutation updateStatus($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                      updateProjectV2ItemFieldValue(
+                        input: {
+                          projectId: $projectId,
+                          itemId: $itemId,
+                          fieldId: $fieldId,
+                          value: { singleSelectOptionId: $optionId }
+                        }
+                      ) { clientMutationId }
+                    }
+                  `, {
+                    projectId,
+                    itemId,
+                    fieldId,
+                    optionId: option.id
+                  });
+            
+                  console.log(`✅ Issue #${issue.number} mise à jour en "${status}"`);
+                } catch (error) {
+                  console.error(`❌ Erreur lors de la mise à jour de l'issue #${issue.number}:`, error.message);
                 }
-            
-                // Mettre à jour le statut
-                await github.graphql(`
-                  mutation updateStatus($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
-                    updateProjectV2ItemFieldValue(
-                      input: {
-                        projectId: $projectId,
-                        itemId: $itemId,
-                        fieldId: $fieldId,
-                        value: { singleSelectOptionId: $optionId }
-                      }
-                    ) { clientMutationId }
-                  }
-                `, {
-                  projectId,
-                  itemId,
-                  fieldId,
-                  optionId: option.id
-                });
-            
-                console.log(`✅ Issue #${issue.number} updated to "${status}"`);
-              } catch (error) {
-                console.error(`❌ Error updating issue #${issue.number}:`, error.message);
               }
+            } catch (error) {
+              console.error('❌ Erreur critique:', error);
+              throw error;
             }
