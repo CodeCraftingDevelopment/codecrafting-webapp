@@ -51,30 +51,13 @@ jobs:
 
       - name: Move issue to "In progress" if found
         run: |
-            # Récupérer les détails de l'issue
-            ISSUE_JSON=$(curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.ref_issue }}")
-            
-            # Afficher les détails pour le débogage
-            echo "Détails de l'issue :"
-            echo "$ISSUE_JSON" | jq '.'
-            
-            # Extraire le titre et le body
-            TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
-            BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
-            
-            # Mettre à jour l'issue avec le nouveau statut
-            curl -X PATCH \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.ref_issue }}" \
-            -d '{
-            "state": "open",
-            "title": "'"$TITLE"'",
-            "body": "'"$BODY"'",
-            "labels": ["in-progress"]
+          curl -X PATCH \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.ref_issue }}" \
+          -d '{
+          "state": "open",
+          "labels": ["in-progress"]
           }'
 
   move-projects-to-done:
@@ -88,28 +71,10 @@ jobs:
 
       - name: Move issue to "Done" if found
         run: |
-          # Récupérer les détails de l'issue
-             ISSUE_JSON=$(curl -s \
-             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-             -H "Accept: application/vnd.github.v3+json" \
-             "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.closed_issue }}")
-          
-             # Afficher les détails pour le débogage
-             echo "Détails de l'issue :"
-             echo "$ISSUE_JSON" | jq '.'
-          
-             # Extraire le titre et le body
-             TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
-             BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
-          
-             # Mettre à jour l'issue avec le nouveau statut
-             curl -X PATCH \
-             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-             -H "Accept: application/vnd.github.v3+json" \
-             "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.closed_issue }}" \
-             -d '{
-             "state": "open",
-             "title": "'"$TITLE"'",
-             "body": "'"$BODY"'",
-             "labels": ["Done"]
-           }'
+          curl -X PATCH \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.closed_issue }}" \
+          -d '{
+          "state": "closed"
+          }'
