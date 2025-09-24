@@ -33,20 +33,38 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Récupérer l'ID du projet avec l'API GraphQL
-          PROJECT_ID=$(gh api graphql -f query='
+            # Afficher les variables d'environnement pour le débogage
+            echo "Repository: ${{ github.repository_owner }}/${{ github.event.repository.name }}"
+            
+            # Exécuter la requête avec sortie brute pour le débogage
+            echo "Exécution de la requête GraphQL..."
+            RESPONSE=$(gh api graphql -f query='
             query {
-              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
-                projectsV2(first: 1) {
-                  nodes { 
-                    id 
-                  }
-                }
-              }
-            }' --jq '.data.repository.projectsV2.nodes[0].id')
-          
-          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
-          echo "ID du projet: $PROJECT_ID"
+            repository(owner: "'${{ github.repository_owner }}'", name: "'${{ github.event.repository.name }}'") {
+                                                                          projectsV2(first: 1) {
+                                                                            nodes {
+                                                                            id
+                                                                            }
+            }
+          }
+          }')
+            
+            # Afficher la réponse brute
+            echo "Réponse de l'API:"
+            echo "$RESPONSE"
+            
+            # Extraire l'ID du projet
+            PROJECT_ID=$(echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[0].id // empty')
+            
+            if [ -z "$PROJECT_ID" ]; then
+            echo "Aucun projet V2 trouvé ou erreur lors de la récupération"
+            # Vérifier les permissions
+            echo "Vérification des permissions..."
+            gh api -H "Authorization: token $GH_TOKEN" /user -i
+            else
+            echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+            echo "ID du projet trouvé: $PROJECT_ID"
+            fi
 
 
   check-commit:
