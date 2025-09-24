@@ -33,13 +33,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            echo "Nom du dépôt :"
-            gh api graphql -f query='
-            query {
-            repository(owner: "CodeCraftingDevelopment", name: "codecrafting-webapp") {
-                                                                 name
-          }
-          }' | jq -r '.data.repository.name'
+            echo "Nom du dépôt : test"
+
 
 
   check-commit:
