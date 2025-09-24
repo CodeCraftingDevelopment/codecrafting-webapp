@@ -14,6 +14,9 @@ jobs:
   check-commit:
     name: Vérification
     runs-on: ubuntu-latest
+    outputs:
+      ref_issues: ${{ steps.set-outputs.outputs.ref_issues }}
+      closed_issues: ${{ steps.set-outputs.outputs.closed_issues }}
     steps:
       - uses: actions/checkout@v3
 
@@ -29,12 +32,17 @@ jobs:
           # Extraire les fermetures d'issues (format: closes #123, fixed #456)
           CLOSED_ISSUES=$(echo "$COMMIT_MSG" | grep -oP '(?:closes|closed|fixes|fixed)\s*#\K\d+' | tr '\n' ' ')
           
+          # Fusionner et trier les numéros uniques
+          ALL_ISSUES=$(echo -e "$REF_ISSUES\n$CLOSED_ISSUES" | sort -n | uniq | tr '\n' ' ')
+          
           # Afficher les résultats
           echo "Issues référencées: $REF_ISSUES"
           echo "Issues fermées: $CLOSED_ISSUES"
+          echo "Toutes les issues uniques: $ALL_ISSUES"
           
           # Définir les sorties
           echo "ref_issues=$REF_ISSUES" >> $GITHUB_OUTPUT
           echo "closed_issues=$CLOSED_ISSUES" >> $GITHUB_OUTPUT
+          echo "all_issues=$ALL_ISSUES" >> $GITHUB_OUTPUT
           
         
