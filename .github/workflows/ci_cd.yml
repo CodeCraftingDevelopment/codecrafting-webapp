@@ -36,6 +36,7 @@ jobs:
       version: ${{ steps.set-outputs.outputs.version }}
       commit_hash: ${{ steps.set-outputs.outputs.commit_hash }}
       unstable_version: ${{ steps.set-outputs.outputs.unstable_version }}
+      date: ${{ steps.set-outputs.outputs.date }}
     steps:
       - uses: actions/checkout@v3
 
