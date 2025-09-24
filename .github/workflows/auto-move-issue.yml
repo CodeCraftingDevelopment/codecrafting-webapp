@@ -25,27 +25,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Récupérer le premier projet V2
-          PROJECT_JSON=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          # Récupérer et afficher le nom du dépôt
+          REPO_NAME=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/projects?state=open&per_page=1")
+            "https://api.github.com/repos/${{ github.repository }}" | jq -r '.name')
           
-          # Vérifier si des projets existent
-          if [ "$(echo "$PROJECT_JSON" | jq '. | length')" -eq 0 ]; then
-          echo "Aucun projet V2 trouvé pour ce dépôt"
-          exit 1
-          fi
-          
-          # Extraire les informations du projet
-          PROJECT_ID=$(echo "$PROJECT_JSON" | jq -r '.[0].id')
-          PROJECT_NAME=$(echo "$PROJECT_JSON" | jq -r '.[0].name')
-          
-          echo "ID du projet: $PROJECT_ID"
-          echo "Nom du projet: $PROJECT_NAME"
-          
-          # Sauvegarder pour les étapes suivantes
-          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
-          echo "project_name=$PROJECT_NAME" >> $GITHUB_OUTPUT
+          echo "Le nom du dépôt est : $REPO_NAME"
+          echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
 
 
   check-commit:
