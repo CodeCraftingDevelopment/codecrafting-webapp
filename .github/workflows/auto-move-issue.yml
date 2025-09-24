@@ -51,11 +51,15 @@ jobs:
 
       - name: Move issue to "In progress" if found
         run: |
+          ISSUE_NUM="${{ needs.check-commit.outputs.ref_issue }}"
+          REPO_OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${{ github.event.repository.name }}"
+          
           curl -X PATCH \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.ref_issue }}" \
-          -d '{"state": "open", "labels": ["in-progress"]}'
+          "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUM" \
+          -d '{"state":"open","labels":["in-progress"]}'
 
   move-projects-to-done:
     name: Projet vers "Done"
@@ -68,8 +72,12 @@ jobs:
 
       - name: Move issue to "Done" if found
         run: |
+          ISSUE_NUM="${{ needs.check-commit.outputs.closed_issue }}"
+          REPO_OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${{ github.event.repository.name }}"
+          
           curl -X PATCH \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ needs.check-commit.outputs.closed_issue }}" \
-          -d '{"state": "closed"}'
+          "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUM" \
+          -d '{"state":"closed"}'
