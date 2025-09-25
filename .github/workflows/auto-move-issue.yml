@@ -15,12 +15,9 @@ jobs:
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS }}
-#          REPO_OWNER: ${{ github.repository_owner }}
-#          REPO_NAME: ${{ github.event.repository.name }}
-#          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          REPO_OWNER: "CodeCraftingDevelopment"
-          REPO_NAME: "codecrafting-webapp"
-          COMMIT_MESSAGE: "refs #3"
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}"
         run: |
           # -----------------------------
           # 🔹 Configuration
