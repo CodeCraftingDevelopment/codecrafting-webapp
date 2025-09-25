@@ -5,99 +5,146 @@ on:
     branches:
       - '**'
 
-permissions:
-  contents: write
-  issues: write
-
 jobs:
-
-  check-commit:
-    name: Récupération des infos du commit
-    runs-on: ubuntu-latest
-    outputs:
-      ref_issue: ${{ steps.extract_refs.outputs.ref_issue }}
-      closed_issue: ${{ steps.extract_refs.outputs.closed_issue }}
+  move-issue:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Extract issues
-        id: extract_refs
+      - name: Move Issue to Correct Status
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          REPO_OWNER: ${{ github.repository_owner }}
+#          REPO_NAME: ${{ github.event.repository.name }}
+#          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          REPO_OWNER: "CodeCraftingDevelopment"
+          REPO_NAME: "codecrafting-webapp"
+          COMMIT_MESSAGE: "refs #3"
         run: |
-          # Récupérer le message du commit
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
-          
-          # Extraire la référence de l'issue (format: ref #123)
-          REF_ISSUE=$(echo "$COMMIT_MSG" | grep -oP 'ref\s*#\K\d+' | tr '\n' ' ')
-          
-          # Extraire la fermeture d'issue (format: close #123, fixed #456)
-          CLOSED_ISSUE=$(echo "$COMMIT_MSG" | grep -oP '(?:close|closed|fixe|fixed)\s*#\K\d+' | tr '\n' ' ')
+          # -----------------------------
+          # 🔹 Configuration
+          # -----------------------------
+          $token = $env:GITHUB_TOKEN
+          $repoOwner = $env:REPO_OWNER
+          $projectName = $env:REPO_NAME
+          $commitMessage = $env:COMMIT_MESSAGE
 
-          # Afficher les résultats
-          echo "Issue référencée: $REF_ISSUE"
-          echo "Issue fermée: $CLOSED_ISSUE"
-          
-          # Définir les sorties
-          echo "ref_issue=$REF_ISSUE" >> $GITHUB_OUTPUT
-          echo "closed_issue=$CLOSED_ISSUE" >> $GITHUB_OUTPUT
+          # -----------------------------
+          # 1️⃣ Extraction des issues
+          # -----------------------------
+          $issueRefs = @()
+          $issueCloses = @()
 
-  get-issue-info:
-    name: Récupération du projet
-    runs-on: ubuntu-latest
-    needs: check-commit
-    outputs:
-      repo_id: ${{ steps.extract_repo.outputs.ref_issue }}
-      projectv2_id: ${{ steps.extract_repo.outputs.projectv2_id }}
-    steps:
-      - name: Get repository id
-        id: extract_repo
-        run: |
-          REPO_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.id')
-          echo "repo_id=$REPO_ID" >> $GITHUB_OUTPUT
+          $regexRefs = [regex] "refs\s*#(\d+)"
+          foreach ($match in $regexRefs.Matches($commitMessage)) {
+              $issueRefs += [int]$match.Groups[1].Value
+          }
 
-      - name: Get project id
-        id: extract_issue
-        run: |
-          RESPONSE=$(curl -X POST https://api.github.com/graphql -H "Authorization: bearer ${{ secrets.TEST }}" -H "Content-Type: application/json" -d '{"query": "query { repository(owner: \"CodeCraftingDevelopment\", name: \"codecrafting-webapp\") { projectsV2(first: 10) { nodes { title id } } } }" }')
-          echo "$RESPONSE"
+          $regexCloses = [regex] "(closes|closed|fixes|fixed)\s*#(\d+)"
+          foreach ($match in $regexCloses.Matches($commitMessage)) {
+              $issueCloses += [int]$match.Groups[2].Value
+          }
 
+          $allIssues = $issueRefs + $issueCloses | Select-Object -Unique
+          if ($allIssues.Count -eq 0) {
+              Write-Host "Aucune référence d'issue trouvée dans le commit, arrêt du script."
+              exit 0
+          } else {
+              Write-Host "Issues trouvées : $($allIssues -join ', ')"
+          }
 
-          
-          
+          # -----------------------------
+          # 2️⃣ Récupération du repository
+          # -----------------------------
+          $queryRepos = '{ viewer { repositories(first: 100) { nodes { name } } } }'
+          $bodyRepos = @{ query = $queryRepos } | ConvertTo-Json -Compress
+          $response = Invoke-RestMethod `
+              -Uri "https://api.github.com/graphql" `
+              -Method POST `
+              -Headers @{ Authorization = "Bearer $token" } `
+              -Body $bodyRepos `
+              -ContentType "application/json"
 
-          
-          
-  move-project-to-in-progress:
-    name: Projet vers "In-Progress"
-    if: ${{ needs.check-commit.outputs.ref_issue != '' }}
-    runs-on: ubuntu-latest
-    needs: [check-commit, get-issue-info]
-    steps:
+          $repo = $response.data.viewer.repositories.nodes | Where-Object { $_.name -eq "$projectName" } | Select-Object -First 1
+          if ($null -eq $repo) { throw "Le repository '$projectName' n'existe pas !" }
 
-      - uses: actions/checkout@v3
+          # -----------------------------
+          # 3️⃣ Récupération du projet
+          # -----------------------------
+          $queryProjects = '{ repository(owner: "' + $repoOwner + '", name: "' + $repo.name + '") { projectsV2(first: 50) { nodes { id number title } } } }'
+          $bodyProjects = @{ query = $queryProjects } | ConvertTo-Json -Compress
+          $response = Invoke-RestMethod `
+              -Uri "https://api.github.com/graphql" `
+              -Method POST `
+              -Headers @{ Authorization = "Bearer $token" } `
+              -Body $bodyProjects `
+              -ContentType "application/json"
 
-      - name: Move issue to "In progress" if found
-        run: |
-          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/3" -d '{"state":"open"}'
-#          curl -s \
-#          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-#          -H "Accept: application/vnd.github.v3+json" \
-#          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues" | \
-#          jq "map(select(.number == ${{ needs.check-commit.outputs.ref_issue }})) | [.[] | {id, number, title}]"
+          $project = $response.data.repository.projectsV2.nodes | Select-Object -First 1
+          if ($null -eq $project) { throw "Aucun projet attaché !" }
 
-  move-project-to-done:
-    name: Projet vers "Done"
-    if: ${{ needs.check-commit.outputs.closed_issue != '' }}
-    runs-on: ubuntu-latest
-    needs: [check-commit, get-issue-info]
-    steps:
+          # -----------------------------
+          # 4️⃣ Récupération des items et champs
+          # -----------------------------
+          $queryDetails = '{ repository(owner: "' + $repoOwner + '", name: "' + $repo.name + '") { projectV2(number: ' + $project.number + ') { id title items(first: 100) { nodes { id content { ... on Issue { number title state url } } } } fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { id name options { id name } } } } } } }'
+          $bodyDetails = @{ query = $queryDetails } | ConvertTo-Json -Compress
+          $response = Invoke-RestMethod `
+              -Uri "https://api.github.com/graphql" `
+              -Method POST `
+              -Headers @{ Authorization = "Bearer $token" } `
+              -Body $bodyDetails `
+              -ContentType "application/json"
 
-      - uses: actions/checkout@v3
+          $items = $response.data.repository.projectV2.items.nodes
+          $fieldStatus = $response.data.repository.projectV2.fields.nodes | Where-Object { $_.name -eq "Status" } | Select-Object -First 1
+          if ($null -eq $fieldStatus) { throw "Champ 'Status' introuvable dans le projet." }
 
-      - name: Move issue to "Done" if found
-        run: |
-          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/CodeCraftingDevelopment/codecrafting-webapp/issues/3" -d '{"state":"closed"}'
-#          curl -s \
-#          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-#          -H "Accept: application/vnd.github.v3+json" \
-#          "https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues" | \
-#          jq "map(select(.number == ${{ needs.check-commit.outputs.closed_issue }})) | [.[] | {id, number, title}]"
+          # -----------------------------
+          # 5️⃣ Mise à jour des issues
+          # -----------------------------
+          foreach ($issueNumber in $allIssues) {
+              $issue = $items | Where-Object { $_.content.number -eq $issueNumber } | Select-Object -First 1
+              if ($null -eq $issue) {
+                  Write-Host "⚠️ Issue #$issueNumber non trouvée dans le projet."
+                  continue
+              }
+
+              if ($issueRefs -contains $issueNumber) {
+                  $targetStatus = "In Progress"
+              } elseif ($issueCloses -contains $issueNumber) {
+                  $targetStatus = "Done"
+              } else {
+                  Write-Host "⚠️ Aucun statut défini pour l'issue #$issueNumber"
+                  continue
+              }
+
+              $option = $fieldStatus.options | Where-Object { $_.name -eq $targetStatus } | Select-Object -First 1
+              if ($null -eq $option) {
+                  Write-Host "⚠️ Option '$targetStatus' introuvable dans le champ 'Status'."
+                  continue
+              }
+
+              $mutation = "mutation {
+                updateProjectV2ItemFieldValue(
+                  input: {
+                    projectId: `"$($project.id)`",
+                    itemId: `"$($issue.id)`",
+                    fieldId: `"$($fieldStatus.id)`",
+                    value: { singleSelectOptionId: `"$($option.id)`" }
+                  }
+                ) {
+                  projectV2Item { id }
+                }
+              }"
+
+              $bodyMutation = @{ query = $mutation } | ConvertTo-Json -Compress
+              $response = Invoke-RestMethod `
+                  -Uri "https://api.github.com/graphql" `
+                  -Method POST `
+                  -Headers @{ Authorization = "Bearer $token" } `
+                  -Body $bodyMutation `
+                  -ContentType "application/json"
+
+              Write-Host "✅ Issue #$issueNumber mise à jour en '$targetStatus'."
+          }
