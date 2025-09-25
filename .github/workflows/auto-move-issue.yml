@@ -57,7 +57,7 @@ jobs:
       - name: Get project id
         id: extract_issue
         run: |
-          curl -X POST https://api.github.com/graphql -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" -d '{"query": "query { repository(owner: \"CodeCraftingDevelopment\", name: \"codecrafting-webapp\") { projectsV2(first: 10) { nodes { title id } } } }" }'
+          curl -X POST https://api.github.com/graphql -H "Authorization: bearer ${{ secrets.ACTIONS }}" -H "Content-Type: application/json" -d '{"query": "query { repository(owner: \"CodeCraftingDevelopment\", name: \"codecrafting-webapp\") { projectsV2(first: 10) { nodes { title id } } } }" }'
 
 
           
