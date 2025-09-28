@@ -3,6 +3,6 @@ services:
     image: ghcr.io/ton-utilisateur/codecrafting-webapp:production
     container_name: codecrafting-webapp
     ports:
-      - "3000:3000"
+      - "80:3000"
     restart: unless-stopped
 
