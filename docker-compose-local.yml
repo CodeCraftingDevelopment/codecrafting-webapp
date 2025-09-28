@@ -1,6 +1,8 @@
 services:
   nextjs:
-    image: ghcr.io/ton-utilisateur/codecrafting-webapp:production
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: codecrafting-webapp
     ports:
       - "3000:3000"
