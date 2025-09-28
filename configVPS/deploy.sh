@@ -66,5 +66,5 @@ echo -e "\n${GREEN}Déploiement terminé avec succès !${NC}"
 echo -e "L'application est disponible à l'adresse : http://localhost:80\n"
 
 # Affichage des logs
-echo -e "${YELLOW}Affichage des logs (Ctrl+C pour quitter)...${NC}"
-docker logs -f "$CONTAINER_NAME"
+#echo -e "${YELLOW}Affichage des logs (Ctrl+C pour quitter)...${NC}"
+#docker logs -f "$CONTAINER_NAME"
