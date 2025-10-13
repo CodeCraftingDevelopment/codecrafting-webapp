@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     reactStrictMode: true,
     output: "standalone",  // 🔥 utile pour Docker
     productionBrowserSourceMaps: isStaging,
+    experimental: {
+        optimizePackageImports: ["@chakra-ui/react"],
+    },
     typescript : {
         tsconfigPath: isStaging || isDevelopment ? './tsconfig.json' : './tsconfig.prod.json',
     }

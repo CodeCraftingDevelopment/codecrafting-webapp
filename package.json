@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "clean": "rimraf .next",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build --turbopack",
     "postbuild": "shx cp -r public .next/standalone/ && shx cp -r .next/static .next/standalone/.next/",
     "start": "next start",
