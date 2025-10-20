@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "clean": "rimraf .next",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "postbuild": "shx cp -r public .next/standalone/ && shx cp -r .next/static .next/standalone/.next/",
     "start": "next start",
@@ -17,6 +17,7 @@
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^3.27.1",
     "@emotion/react": "^11.14.0",
+    "@fontsource/inter": "^5.2.8",
     "next": "15.5.3",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
