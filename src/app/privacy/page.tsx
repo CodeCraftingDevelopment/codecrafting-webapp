@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
                 Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement,
                 de limitation du traitement, de portabilité et d'opposition concernant vos données personnelles.
-                Pour exercer ces droits, contactez-nous à contact@codecrafting.dev.
+                Pour exercer ces droits, contactez-nous à contact@codecrafting.fr.
               </Text>
             </Box>
 
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
                 Pour toute question concernant cette politique de confidentialité ou le traitement
-                de vos données personnelles, vous pouvez nous contacter à l'adresse : contact@codecrafting.dev
+                de vos données personnelles, vous pouvez nous contacter à l'adresse : contact@codecrafting.fr
               </Text>
             </Box>
           </VStack>

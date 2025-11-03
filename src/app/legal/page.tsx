@@ -56,8 +56,8 @@ export default function LegalPage() {
                 <strong>Siège social :</strong> [Adresse complète]<br />
                 <strong>RCS :</strong> [Ville] [Numéro]<br />
                 <strong>SIRET :</strong> [Numéro SIRET]<br />
-                <strong>Email :</strong> contact@codecrafting.dev<br />
-                <strong>Téléphone :</strong> +33 1 23 45 67 89
+                <strong>Email :</strong> contact@codecrafting.fr<br />
+                <strong>Téléphone :</strong> [À compléter]
               </Text>
             </Box>
 
@@ -111,7 +111,7 @@ export default function LegalPage() {
                 Les informations contenues sur ce site sont aussi précises que possible et le site est
                 périodiquement remis à jour, mais peut toutefois contenir des inexactitudes, des omissions
                 ou des lacunes. Si vous constatez une lacune, erreur ou ce qui paraît être un dysfonctionnement,
-                merci de bien vouloir le signaler par email à contact@codecrafting.dev.
+                merci de bien vouloir le signaler par email à contact@codecrafting.fr.
               </Text>
             </Box>
           </VStack>

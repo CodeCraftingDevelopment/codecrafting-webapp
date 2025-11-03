@@ -57,11 +57,11 @@ export default function ContactPage() {
               Email
             </Heading>
             <ChakraLink
-              href="mailto:contact@codecrafting.dev"
+              href="mailto:contact@codecrafting.fr"
               color="blue.500"
               _hover={{ color: "blue.600" }}
             >
-              contact@codecrafting.dev
+              contact@codecrafting.fr
             </ChakraLink>
           </Box>
           <Box
@@ -81,7 +81,7 @@ export default function ContactPage() {
             <Heading as="h2" size="md" mb={2}>
               Téléphone
             </Heading>
-            <Text>+33 1 23 45 67 89</Text>
+            <Text color="gray.500" _dark={{ color: "gray.400" }} fontStyle="italic">À venir</Text>
           </Box>
         </VStack>
         <Box>

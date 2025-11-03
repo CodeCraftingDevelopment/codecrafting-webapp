@@ -44,7 +44,7 @@ export default function Footer() {
           >
             <VStack align={{ base: "center", md: "flex-start" }} gap={2}>
               <Text fontWeight="bold" fontSize="lg">
-                Codecrafting
+                Codecrafting.fr
               </Text>
               <Text fontSize="sm" color={textColor}>
                 Créer des expériences numériques exceptionnelles
@@ -86,7 +86,7 @@ export default function Footer() {
             borderColor={borderColor}
           >
             <Text fontSize="sm" color={textColor}>
-              © {new Date().getFullYear()} Codecrafting. Tous droits réservés.
+              © {new Date().getFullYear()} Codecrafting.fr Tous droits réservés.
             </Text>
 
             <HStack
