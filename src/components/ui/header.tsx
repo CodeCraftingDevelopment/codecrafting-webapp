@@ -59,7 +59,9 @@ export default function Header(){
                               p={2} style={gridItems}
                               display="flex"
                               alignItems="center"
-                              justifyContent="flex-end"
+                              justifyContent={{ base: "center", sm: "flex-end", md: "flex-end", lg: "flex-end" }}
+                              // justifyContent="flex-end"
+
                     >
                         <ColorModeButton padding={0} margin={0} size={"2xs"} style={content}/>
 
@@ -78,24 +80,24 @@ export default function Header(){
                         <Grid
                             templateColumns={"repeat(12, 1fr)"}
                             templateRows={"repeat(1, 1fr)"}
-                            gap={8}
+                            gap={{ base: 2, sm: 2, md: 8, lg: 8 }}
                             >
                             <GridItem
-                                colSpan={{ base: 12, sm: 12, md: 4, lg: 4 }}
+                                colSpan={{ base: 12, sm: 4, md: 4, lg: 4 }}
                                 rowSpan={1}>
                                 <Text style={content} textAlign="center">
                                     Accueil
                                 </Text>
                             </GridItem>
                             <GridItem
-                                colSpan={{ base: 12, sm: 12, md: 4, lg: 4 }}
+                                colSpan={{ base: 12, sm: 4, md: 4, lg: 4 }}
                                 rowSpan={1}>
                                 <Text style={content} textAlign="center">
                                     A propos
                                 </Text>
                             </GridItem>
                             <GridItem
-                                colSpan={{ base: 12, sm: 12, md: 4, lg: 4 }}
+                                colSpan={{ base: 12, sm: 4, md: 4, lg: 4 }}
                                 rowSpan={1}>
                                 <Text style={content} textAlign="center">
                                     Contact
