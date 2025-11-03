@@ -60,7 +60,8 @@ export default function Footer() {
                   <ChakraLink
                     key={social.name}
                     href={social.href}
-                    isExternal
+                    target="_blank"
+                    rel="noopener noreferrer"
                     fontSize="2xl"
                     transition="transform 0.2s ease"
                     _hover={{
