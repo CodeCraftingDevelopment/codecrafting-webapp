@@ -11,7 +11,7 @@ interface CodecraftLogoProps {
 }
 
 export function CodecraftLogo({width = 50, height = 50}: CodecraftLogoProps) {
-    const fillColor = useColorModeValue("#151515", "#FFFFFF")
+    const fillColor = useColorModeValue("#151515", "#E5E7EB")
 
     return (
         <svg

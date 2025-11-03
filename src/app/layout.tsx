@@ -1,6 +1,8 @@
 import type {Metadata} from "next";
 import {Provider} from "@/components/ui/provider"
 import Header from "@/components/ui/header";
+import Footer from "@/components/ui/footer";
+import {BackgroundShapes} from "@/components/ui/background-shapes";
 import React from "react";
 import {
     Amatic_SC,
@@ -50,12 +52,16 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             suppressHydrationWarning
             className={firaCode.className}
         >
-            <body>
+            <body style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Provider>
+                <BackgroundShapes />
                 <header>
                     <Header/>
                 </header>
-                {children}
+                <main style={{ flex: 1 }}>
+                    {children}
+                </main>
+                <Footer />
             </Provider>
             </body>
 
