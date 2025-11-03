@@ -59,7 +59,8 @@ export default function Header() {
                         href="/"
                         aria-label="Retour à l'accueil"
                         display="inline-flex"
-                        _focus={{boxShadow: "0 0 0 3px var(--chakra-colors-blue-500)", outline: "none"}}
+                        _focus={{ outline: "none", boxShadow: "none" }}
+                        _focusVisible={{ outline: "2px solid", outlineColor: "blue.500", outlineOffset: "2px", borderRadius: "md" }}
                     >
                         <Box p={3}>
                             <CodecraftLogo width={110} height={110}/>
