@@ -40,8 +40,7 @@ export default function AboutPage() {
             maxW="3xl"
             mx="auto"
           >
-            Nous sommes une équipe passionnée de développeurs et designers
-            dédiés à créer des expériences numériques exceptionnelles.
+            Après plus de cinq ans d’expérience en entreprise, je mets à disposition mes acquis techniques et mon regard opérationnel pour vos projets. Autodidacte depuis le lycée, passé par l’industrie et l’aéronautique avant de me consacrer pleinement au logiciel, je conçois et fais évoluer des applications en C#, TypeScript ou Flutter, en pilotant chaque étape : cadrage, développement, intégration et transfert de compétences.
           </Text>
         </Box>
 
@@ -61,11 +60,10 @@ export default function AboutPage() {
             }}
           >
             <Heading size="md" mb={4} color="purple.600" _dark={{ color: "purple.300" }}>
-              Notre Mission
+              Ma mission
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Transformer vos idées en solutions digitales innovantes et performantes.
-              Nous croyons en la puissance du code élégant et du design intuitif.
+              Comprendre vos besoins, puis concevoir des solutions numériques utiles, évolutives et faciles à prendre en main. Chaque projet est construit en étroite collaboration pour rester aligné sur vos priorités.
             </Text>
           </Box>
 
@@ -84,11 +82,10 @@ export default function AboutPage() {
             }}
           >
             <Heading size="md" mb={4} color="pink.600" _dark={{ color: "pink.300" }}>
-              Notre Expertise
+              Mon expertise
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Développement web et mobile, architecture cloud, design UI/UX,
-              et conseil en transformation digitale. Plus de 10 ans d'expérience.
+              Applications web sur mesure, interfaces mobiles légères, automatisations bureautiques et accompagnement digital. Un seul interlocuteur pour piloter, développer et livrer vos outils.
             </Text>
           </Box>
 
@@ -110,8 +107,7 @@ export default function AboutPage() {
               Technologies
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              React, Next.js, TypeScript, Node.js, Python, AWS, Docker,
-              et bien d'autres technologies modernes pour vos projets.
+              React, Next.js, TypeScript, Node.js, Python, .NET, Flutter, Docker… Un socle polyvalent pour répondre à des besoins web, bureau ou mobile et intégrer vos outils existants.
             </Text>
           </Box>
 
@@ -130,11 +126,10 @@ export default function AboutPage() {
             }}
           >
             <Heading size="md" mb={4} color="green.600" _dark={{ color: "green.300" }}>
-              Nos Valeurs
+              Mes valeurs
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Excellence technique, innovation continue, collaboration étroite
-              avec nos clients, et engagement pour la qualité à chaque étape.
+              Transparence, pédagogie et sens du service. Je privilégie des solutions accessibles, documentées et durables pour que vous restiez autonome après la livraison.
             </Text>
           </Box>
         </SimpleGrid>
@@ -151,11 +146,10 @@ export default function AboutPage() {
           textAlign="center"
         >
           <Heading size="lg" mb={4}>
-            Prêt à démarrer votre projet ?
+            Envie d'aller plus loin ?
           </Heading>
           <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-            Contactez-nous dès aujourd'hui pour discuter de vos besoins
-            et découvrir comment nous pouvons vous aider à réussir.
+            Parlons de vos idées et voyons comment Codecrafting peut vous aider à créer ou améliorer vos outils numériques.
           </Text>
         </Box>
       </VStack>

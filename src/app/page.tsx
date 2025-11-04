@@ -23,6 +23,14 @@ const fadeIn = keyframes`
 export default function Home() {
   return (
     <Container maxW="6xl" py={{ base: 16, md: 24 }}>
+      <Text
+        fontWeight="bold"
+        fontSize={{ base: "xl", md: "2xl" }}
+        textAlign="center"
+        mb={3}
+      >
+        Codecrafting.fr
+      </Text>
       <VStack
         gap={8}
         align="stretch"
