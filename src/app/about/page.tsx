@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Heading, Text, VStack, Container, SimpleGrid } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Container, SimpleGrid, Link as ChakraLink } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { keyframes } from "@emotion/react";
 
 const fadeInUp = keyframes`
@@ -137,24 +138,35 @@ export default function AboutPage() {
           </Box>
         </SimpleGrid>
 
-        <Box
-          mt={8}
-          p={8}
-          borderRadius="2xl"
-          bg="whiteAlpha.700"
-          _dark={{ bg: "blackAlpha.500", borderColor: "purple.800" }}
-          backdropFilter="blur(10px)"
-          border="1px solid"
-          borderColor="purple.100"
-          textAlign="center"
+        <ChakraLink
+          as={NextLink}
+          href="/contact"
+          _hover={{ textDecoration: "none" }}
         >
-          <Heading size="lg" mb={4}>
-            Envie d'aller plus loin ?
-          </Heading>
-          <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-            Parlons de vos idées et voyons comment Codecrafting peut vous aider à créer ou améliorer vos outils numériques.
-          </Text>
-        </Box>
+          <Box
+            mt={8}
+            p={8}
+            borderRadius="2xl"
+            bg="whiteAlpha.700"
+            _dark={{ bg: "blackAlpha.500", borderColor: "purple.800" }}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor="purple.100"
+            textAlign="center"
+            transition="all 0.3s ease"
+            _hover={{
+              transform: "translateY(-2px)",
+              boxShadow: "lg",
+            }}
+          >
+            <Heading size="lg" mb={4}>
+              Envie d'aller plus loin ?
+            </Heading>
+            <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
+              Parlons de vos idées et voyons comment Codecrafting peut vous aider à créer ou améliorer vos outils numériques.
+            </Text>
+          </Box>
+        </ChakraLink>
       </VStack>
     </Container>
   );

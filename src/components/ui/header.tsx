@@ -1,5 +1,5 @@
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
-import { Box, Flex, Grid, GridItem, Text, Link as ChakraLink } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Link as ChakraLink } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import NextLink from "next/link";
 
@@ -73,7 +73,7 @@ export default function Header() {
                     alignItems="center"
                 >
                     <Flex as="div" role="status" gap={2} flexWrap="wrap">
-                        <Text>Environnement : {process.env.NEXT_PUBLIC_ENV ?? "développement"}</Text>
+                        {/*<Text>Environnement : {process.env.NEXT_PUBLIC_ENV ?? "développement"}</Text>*/}
                     </Flex>
                 </GridItem>
 
