@@ -5,10 +5,12 @@ import NextLink from "next/link";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Footer() {
-  const bgColor = useColorModeValue("gray.50", "gray.900");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const textColor = useColorModeValue("gray.600", "gray.400");
-  const linkColor = useColorModeValue("blue.600", "blue.300");
+  const footerBg = useColorModeValue("chakra-body-bg", "chakra-body-bg");
+  const borderColor = "chakra-border-color";
+  const headingColor = useColorModeValue("chakra-body-text", "chakra-body-text");
+  const mutedTextColor = useColorModeValue("chakra-subtle-text", "chakra-subtle-text");
+  const linkColor = useColorModeValue("blue.500", "blue.300");
+  const iconHoverBg = useColorModeValue("blue.50", "blue.900");
 
   const socialLinks = [
     { name: "LinkedIn", href: "https://linkedin.com", icon: "💼" },
@@ -28,10 +30,11 @@ export default function Footer() {
       as="footer"
       mt="auto"
       py={8}
-      bg={bgColor}
+      bg={footerBg}
+      color={headingColor}
       borderTop="1px"
       borderColor={borderColor}
-      backdropFilter="blur(10px)"
+      shadow="md"
     >
       <Container maxW="6xl">
         <VStack gap={6} align="stretch">
@@ -46,7 +49,7 @@ export default function Footer() {
               <Text fontWeight="bold" fontSize="lg">
                 Codecrafting.fr
               </Text>
-              <Text fontSize="sm" color={textColor}>
+              <Text fontSize="sm" color={mutedTextColor}>
                 Créer des expériences numériques exceptionnelles
               </Text>
             </VStack>
@@ -63,9 +66,14 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     fontSize="2xl"
-                    transition="transform 0.2s ease"
+                    transition="transform 0.2s ease, background-color 0.2s ease"
+                    color={linkColor}
+                    rounded="full"
+                    px={2}
+                    py={1}
                     _hover={{
                       transform: "translateY(-2px) scale(1.1)",
+                      bg: iconHoverBg,
                     }}
                     aria-label={social.name}
                   >
@@ -86,7 +94,7 @@ export default function Footer() {
             borderTop="1px"
             borderColor={borderColor}
           >
-            <Text fontSize="sm" color={textColor}>
+            <Text fontSize="sm" color={mutedTextColor}>
               © {new Date().getFullYear()} Codecrafting.fr Tous droits réservés.
             </Text>
 
@@ -101,10 +109,9 @@ export default function Footer() {
                   as={NextLink}
                   href={link.href}
                   fontSize="sm"
+                  fontWeight="medium"
                   color={linkColor}
-                  _hover={{
-                    textDecoration: "underline",
-                  }}
+                  _hover={{ textDecoration: "underline" }}
                 >
                   {link.name}
                 </ChakraLink>
