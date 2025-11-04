@@ -29,7 +29,7 @@ export default function Footer() {
     <Box
       as="footer"
       mt="auto"
-      py={8}
+      py={{ base: 5, md: 6 }}
       bg={footerBg}
       color={headingColor}
       borderTop="1px"
@@ -40,13 +40,13 @@ export default function Footer() {
         <Grid
           templateColumns="repeat(12, 1fr)"
           templateRows="auto"
-          gap={{ base: 6, md: 8 }}
+          gap={{ base: 3, md: 5 }}
         >
           <GridItem
             colSpan={{ base: 12, md: 6 }}
             display="flex"
             flexDirection="column"
-            gap={2}
+            gap={1}
             alignItems={{ base: "center", md: "flex-start" }}
           >
             <Text fontWeight="bold" fontSize="lg">
@@ -61,25 +61,25 @@ export default function Footer() {
             colSpan={{ base: 12, md: 6 }}
             display="flex"
             flexDirection="column"
-            gap={3}
+            gap={1.5}
             alignItems={{ base: "center", md: "flex-end" }}
           >
             <Text fontWeight="semibold" fontSize="sm">
               Suivez-nous
             </Text>
-            <Flex gap={4} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
+            <Flex gap={2.5} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
               {socialLinks.map((social) => (
                 <ChakraLink
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  fontSize="2xl"
+                  fontSize="xl"
                   transition="transform 0.2s ease, background-color 0.2s ease"
                   color={linkColor}
                   rounded="full"
-                  px={2}
-                  py={1}
+                  px={1.5}
+                  py={0.75}
                   _hover={{
                     transform: "translateY(-2px) scale(1.1)",
                     bg: iconHoverBg,
@@ -92,10 +92,10 @@ export default function Footer() {
             </Flex>
           </GridItem>
 
-          <GridItem colSpan={12} pt={4} borderTop="1px" borderColor={borderColor}>
+          <GridItem colSpan={12} pt={1.5} borderTop="1px" borderColor={borderColor}>
             <Grid
               templateColumns="repeat(12, 1fr)"
-              gap={{ base: 4, md: 6 }}
+              gap={{ base: 1.5, md: 3 }}
               alignItems="center"
             >
               <GridItem
@@ -112,7 +112,7 @@ export default function Footer() {
                 display="flex"
                 justifyContent={{ base: "center", md: "flex-end" }}
               >
-                <Flex gap={4} wrap="wrap" justify="flex-end">
+                <Flex gap={3} wrap="wrap" justify="flex-end">
                   {legalLinks.map((link) => (
                     <ChakraLink
                       key={link.name}

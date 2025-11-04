@@ -9,7 +9,8 @@ const gridItemBaseProps = {
 
 const navLinkBaseProps = {
   textAlign: "center" as const,
-  p: 2,
+  px: 2,
+  py: 1,
   borderRadius: "md",
   _hover: {
     textDecoration: "none",
@@ -17,11 +18,6 @@ const navLinkBaseProps = {
     _dark: {
       bg: "whiteAlpha.100",
     },
-  },
-  _focusVisible: {
-    outline: "2px solid",
-    outlineColor: "blue.500",
-    outlineOffset: "2px",
   },
 };
 
@@ -37,8 +33,8 @@ export default function Header() {
             <Grid
                 templateColumns="repeat(12, 1fr)"
                 templateRows="repeat(2, auto)"
-                gap={2}
-                p={2}
+                gap={{ base: 1, md: 1.5 }}
+                p={{ base: 1, md: 1.5 }}
                 shadow="md"
                 bg="chakra-body-bg"
                 borderBottom="1px"
@@ -48,7 +44,7 @@ export default function Header() {
                     {...gridItemBaseProps}
                     rowSpan={2}
                     colSpan={{base: 12, sm: 2, md: 1, lg: 1}}
-                    minW={120}
+                    minW={88}
                     mx={{base: "auto", sm: "0"}}
                     display="flex"
                     alignItems="center"
@@ -62,8 +58,8 @@ export default function Header() {
                         _focus={{ outline: "none", boxShadow: "none" }}
                         _focusVisible={{ outline: "2px solid", outlineColor: "blue.500", outlineOffset: "2px", borderRadius: "md" }}
                     >
-                        <Box p={3}>
-                            <CodecraftLogo width={110} height={110}/>
+                        <Box p={1}>
+                            <CodecraftLogo width={88} height={88} />
                         </Box>
                     </ChakraLink>
                 </GridItem>
@@ -72,23 +68,23 @@ export default function Header() {
                     {...gridItemBaseProps}
                     colSpan={{base: 12, sm: 10, md: 9, lg: 9}}
                     rowSpan={1}
-                    p={2}
+                    p={{ base: 1, md: 1 }}
                     display="flex"
                     alignItems="center"
                 >
-                    <Flex as="div" role="status" gap={4} flexWrap="wrap">
+                    <Flex as="div" role="status" gap={2} flexWrap="wrap">
                         <Text>Environnement : {process.env.NEXT_PUBLIC_ENV ?? "développement"}</Text>
                     </Flex>
                 </GridItem>
 
                 <GridItem
                     {...gridItemBaseProps}
-                    colSpan={{base: 12, sm: 10, md: 2, lg: 2}}
+                    colSpan={{ base: 12, sm: 2, md: 2, lg: 2 }}
                     rowSpan={1}
-                    p={2}
+                    p={{ base: 1, md: 1 }}
                     display="flex"
                     alignItems="center"
-                    justifyContent={{base: "center", sm: "flex-end"}}
+                    justifyContent={{ base: "center", sm: "flex-end" }}
                 >
                     <ColorModeButton
                         aria-label="Basculer entre le mode clair et sombre"
@@ -102,16 +98,16 @@ export default function Header() {
                     {...gridItemBaseProps}
                     as="nav"
                     aria-label="Navigation principale"
-                    colSpan={{base: 12, sm: 12, md: 11, lg: 11}}
+                    colSpan={{base: 12, sm: 12, md: 10, lg: 10}}
                     rowSpan={1}
-                    p={2}
+                    p={{ base: 1, md: 1 }}
                 >
                     <Grid
                         as="ul"
                         listStyleType="none"
                         templateColumns="repeat(12, 1fr)"
                         templateRows="repeat(1, 1fr)"
-                        gap={{base: 2, sm: 2, md: 8, lg: 8}}
+                        gap={{base: 1, sm: 1.5, md: 3.5, lg: 3.5}}
                         m="0"
                         p="0"
                     >
