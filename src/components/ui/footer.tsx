@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Flex, Text, Link as ChakraLink, HStack, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Grid, GridItem, Text, Link as ChakraLink } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
@@ -37,88 +37,100 @@ export default function Footer() {
       shadow="md"
     >
       <Container maxW="6xl">
-        <VStack gap={6} align="stretch">
-          {/* Section réseaux sociaux */}
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            justify="space-between"
-            align={{ base: "center", md: "flex-start" }}
-            gap={6}
+        <Grid
+          templateColumns="repeat(12, 1fr)"
+          templateRows="auto"
+          gap={{ base: 6, md: 8 }}
+        >
+          <GridItem
+            colSpan={{ base: 12, md: 6 }}
+            display="flex"
+            flexDirection="column"
+            gap={2}
+            alignItems={{ base: "center", md: "flex-start" }}
           >
-            <VStack align={{ base: "center", md: "flex-start" }} gap={2}>
-              <Text fontWeight="bold" fontSize="lg">
-                Codecrafting.fr
-              </Text>
-              <Text fontSize="sm" color={mutedTextColor}>
-                Créer des expériences numériques exceptionnelles
-              </Text>
-            </VStack>
-
-            <VStack align={{ base: "center", md: "flex-end" }} gap={3}>
-              <Text fontWeight="semibold" fontSize="sm">
-                Suivez-nous
-              </Text>
-              <HStack gap={4}>
-                {socialLinks.map((social) => (
-                  <ChakraLink
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    fontSize="2xl"
-                    transition="transform 0.2s ease, background-color 0.2s ease"
-                    color={linkColor}
-                    rounded="full"
-                    px={2}
-                    py={1}
-                    _hover={{
-                      transform: "translateY(-2px) scale(1.1)",
-                      bg: iconHoverBg,
-                    }}
-                    aria-label={social.name}
-                  >
-                    {social.icon}
-                  </ChakraLink>
-                ))}
-              </HStack>
-            </VStack>
-          </Flex>
-
-          {/* Section liens légaux */}
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            justify="space-between"
-            align="center"
-            gap={4}
-            pt={4}
-            borderTop="1px"
-            borderColor={borderColor}
-          >
-            <Text fontSize="sm" color={mutedTextColor}>
-              © {new Date().getFullYear()} Codecrafting.fr Tous droits réservés.
+            <Text fontWeight="bold" fontSize="lg">
+              Codecrafting.fr
             </Text>
+            <Text fontSize="sm" color={mutedTextColor}>
+              Créer des expériences numériques exceptionnelles
+            </Text>
+          </GridItem>
 
-            <HStack
-              gap={4}
-              flexWrap="wrap"
-              justify={{ base: "center", md: "flex-end" }}
-            >
-              {legalLinks.map((link) => (
+          <GridItem
+            colSpan={{ base: 12, md: 6 }}
+            display="flex"
+            flexDirection="column"
+            gap={3}
+            alignItems={{ base: "center", md: "flex-end" }}
+          >
+            <Text fontWeight="semibold" fontSize="sm">
+              Suivez-nous
+            </Text>
+            <Flex gap={4} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
+              {socialLinks.map((social) => (
                 <ChakraLink
-                  key={link.name}
-                  as={NextLink}
-                  href={link.href}
-                  fontSize="sm"
-                  fontWeight="medium"
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fontSize="2xl"
+                  transition="transform 0.2s ease, background-color 0.2s ease"
                   color={linkColor}
-                  _hover={{ textDecoration: "underline" }}
+                  rounded="full"
+                  px={2}
+                  py={1}
+                  _hover={{
+                    transform: "translateY(-2px) scale(1.1)",
+                    bg: iconHoverBg,
+                  }}
+                  aria-label={social.name}
                 >
-                  {link.name}
+                  {social.icon}
                 </ChakraLink>
               ))}
-            </HStack>
-          </Flex>
-        </VStack>
+            </Flex>
+          </GridItem>
+
+          <GridItem colSpan={12} pt={4} borderTop="1px" borderColor={borderColor}>
+            <Grid
+              templateColumns="repeat(12, 1fr)"
+              gap={{ base: 4, md: 6 }}
+              alignItems="center"
+            >
+              <GridItem
+                colSpan={{ base: 12, md: 6 }}
+                textAlign={{ base: "center", md: "left" }}
+              >
+                <Text fontSize="sm" color={mutedTextColor}>
+                  © {new Date().getFullYear()} Codecrafting.fr Tous droits réservés.
+                </Text>
+              </GridItem>
+
+              <GridItem
+                colSpan={{ base: 12, md: 6 }}
+                display="flex"
+                justifyContent={{ base: "center", md: "flex-end" }}
+              >
+                <Flex gap={4} wrap="wrap" justify="flex-end">
+                  {legalLinks.map((link) => (
+                    <ChakraLink
+                      key={link.name}
+                      as={NextLink}
+                      href={link.href}
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color={linkColor}
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      {link.name}
+                    </ChakraLink>
+                  ))}
+                </Flex>
+              </GridItem>
+            </Grid>
+          </GridItem>
+        </Grid>
       </Container>
     </Box>
   );
