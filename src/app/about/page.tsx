@@ -17,8 +17,20 @@ const fadeInUp = keyframes`
 export default function AboutPage() {
   return (
     <Container maxW="6xl" py={{ base: 16, md: 24 }}>
+      <Text
+        fontSize={{ base: "lg", md: "xl" }}
+        color="gray.600"
+        _dark={{ color: "gray.300" }}
+        textAlign="center"
+        maxW="3xl"
+        mx="auto"
+        mb={0}
+        animation={`${fadeInUp} 0.6s ease-out`}
+      >
+        Après plus de cinq ans d’expérience en entreprise, je mets à disposition mes acquis techniques et mon regard opérationnel pour vos projets. Autodidacte depuis le lycée, passé par l’industrie et l’aéronautique avant de me consacrer pleinement au logiciel, je conçois et fais évoluer des applications en C#, TypeScript ou Flutter, en pilotant chaque étape : cadrage, développement, intégration et transfert de compétences.
+      </Text>
       <VStack
-        gap={8}
+        gap={{ base: 5, md: 6 }}
         align="stretch"
         animation={`${fadeInUp} 0.6s ease-out`}
       >
@@ -33,15 +45,6 @@ export default function AboutPage() {
           >
             À propos de Codecrafting
           </Heading>
-          <Text
-            fontSize={{ base: "lg", md: "xl" }}
-            color="gray.600"
-            _dark={{ color: "gray.300" }}
-            maxW="3xl"
-            mx="auto"
-          >
-            Après plus de cinq ans d’expérience en entreprise, je mets à disposition mes acquis techniques et mon regard opérationnel pour vos projets. Autodidacte depuis le lycée, passé par l’industrie et l’aéronautique avant de me consacrer pleinement au logiciel, je conçois et fais évoluer des applications en C#, TypeScript ou Flutter, en pilotant chaque étape : cadrage, développement, intégration et transfert de compétences.
-          </Text>
         </Box>
 
         <SimpleGrid columns={{ base: 1, md: 2 }} gap={6} mt={8}>
