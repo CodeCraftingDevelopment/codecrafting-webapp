@@ -33,12 +33,12 @@ export default function Home() {
           <Heading
             as="h1"
             size={{ base: "2xl", md: "4xl" }}
-            mb={4}
+            mb={2}
             bgGradient="linear(to-r, blue.400, purple.500)"
             bgClip="text"
             fontWeight="extrabold"
           >
-            Bienvenue sur Codecrafting
+            Codecrafting : le numérique accessible au quotidien
           </Heading>
           <Text
             fontSize={{ base: "lg", md: "xl" }}
@@ -46,9 +46,18 @@ export default function Home() {
             _dark={{ color: "gray.300" }}
             maxW="3xl"
             mx="auto"
+            mb={2}
           >
-            Créons ensemble des expériences numériques exceptionnelles.
-            Du code élégant, des designs modernes et des solutions innovantes.
+            Solutions digitales sur mesure pour petites structures.
+          </Text>
+          <Text
+            fontSize={{ base: "md", md: "lg" }}
+            color="gray.600"
+            _dark={{ color: "gray.300" }}
+            maxW="3xl"
+            mx="auto"
+          >
+            Codecrafting accompagne particuliers et petites entreprises dans la création d’outils web, mobiles ou bureautiques qui simplifient le quotidien. Chaque projet est conçu pour être durable, clair et facile à prendre en main.
           </Text>
         </Box>
 
@@ -110,12 +119,25 @@ export default function Home() {
           borderColor="blue.100"
         >
           <Heading size="md" mb={4}>
-            Nos services
+            Prestations proposées
           </Heading>
-          <Text color="gray.600" _dark={{ color: "gray.300" }}>
-            Développement web moderne, applications mobiles, design UI/UX,
-            et bien plus encore. Nous transformons vos idées en réalité.
-          </Text>
+          <VStack align="stretch" gap={3} textAlign="left" color="gray.600" _dark={{ color: "gray.300" }}>
+            <Text as="span">
+              • Applications web personnalisées : vitrines, portails clients et back-office adaptés à vos usages.
+            </Text>
+            <Text as="span">
+              • Applications mobiles légères : PWA ou apps natives pour fournir des services de proximité.
+            </Text>
+            <Text as="span">
+              • Outils bureautiques sur mesure : automatisations, tableaux de bord et scripts pour gagner du temps.
+            </Text>
+            <Text as="span">
+              • Maintenance et amélioration continue : corrections, optimisations et veille technique.
+            </Text>
+            <Text as="span">
+              • Accompagnement digital : conseils, formations courtes et intégration d’outils existants.
+            </Text>
+          </VStack>
         </Box>
       </VStack>
     </Container>
