@@ -34,9 +34,9 @@ export default function ContactPage() {
         >
           Contact
         </Heading>
-        <Text fontSize="lg">
-          Vous pouvez nous joindre à tout moment pour discuter de vos projets, poser des questions ou demander un
-          devis. Nous vous répondrons dans les plus brefs délais.
+        <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
+          Besoin d’un coup de main sur une application web, mobile ou sur vos outils internes&nbsp;? Envoyez-moi un
+          message et je vous réponds sous 48&nbsp;heures pour planifier la suite.
         </Text>
         <VStack gap={4} align="stretch">
           <Box
@@ -81,9 +81,36 @@ export default function ContactPage() {
             <Heading as="h2" size="md" mb={2}>
               Téléphone
             </Heading>
-            <Text color="gray.500" _dark={{ color: "gray.400" }} fontStyle="italic">À venir</Text>
+            <Text color="gray.600" _dark={{ color: "gray.300" }}>
+              Disponible sur rendez-vous. Proposez un créneau par mail et je vous rappelle pour un échange de 30&nbsp;minutes.
+            </Text>
+          </Box>
+          <Box
+            p={6}
+            borderRadius="xl"
+            bg="whiteAlpha.700"
+            _dark={{ bg: "blackAlpha.500", borderColor: "blue.800" }}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor="blue.100"
+            transition="all 0.3s ease"
+            _hover={{
+              transform: "translateY(-2px)",
+              boxShadow: "lg",
+            }}
+          >
+            <Heading as="h2" size="md" mb={2}>
+              Préparer notre échange
+            </Heading>
+            <Text color="gray.600" _dark={{ color: "gray.300" }}>
+              Quelques lignes sur votre activité, les objectifs visés et les échéances suffisent. J’arrive au rendez-vous
+              avec des premières pistes techniques adaptées.
+            </Text>
           </Box>
         </VStack>
+        <Text fontSize="md" color="gray.500" _dark={{ color: "gray.400" }}>
+          Basé en France, je travaille à distance et peux intervenir en journée ou en soirée selon vos contraintes.
+        </Text>
         <Box>
           <ChakraLink as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
             <Button colorScheme="blue">Retour à l&apos;accueil</Button>
