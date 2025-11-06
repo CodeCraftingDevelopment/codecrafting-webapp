@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Box, Heading, Text, VStack, Link as ChakraLink, Button } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -35,8 +35,8 @@ export default function ContactPage() {
           Contact
         </Heading>
         <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-          Besoin d’un coup de main sur une application web, mobile ou sur vos outils internes&nbsp;? Envoyez-moi un
-          message et je vous réponds sous 48&nbsp;heures pour planifier la suite.
+          Besoin d’aide en assistance informatique ou sur une application web, mobile ou bureautique&nbsp;? Écrivez-moi&nbsp;:
+          je vous réponds sous 48&nbsp;heures pour définir les prochaines étapes.
         </Text>
         <VStack gap={4} align="stretch">
           <Box
@@ -82,7 +82,7 @@ export default function ContactPage() {
               Téléphone
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Disponible sur rendez-vous. Proposez un créneau par mail et je vous rappelle pour un échange de 30&nbsp;minutes.
+              Disponible sur rendez-vous. Proposez un créneau par mail et je vous rappelle pour un échange.
             </Text>
           </Box>
           <Box

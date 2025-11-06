@@ -29,7 +29,7 @@ export default function Home() {
         textAlign="center"
         mb={3}
       >
-        Codecrafting.fr
+        Assistance informatique et solutions digitales sur mesure pour particuliers et petites structures.
       </Text>
       <VStack
         gap={8}
@@ -49,23 +49,13 @@ export default function Home() {
             Codecrafting : le numérique accessible au quotidien
           </Heading>
           <Text
-            fontSize={{ base: "lg", md: "xl" }}
-            color="gray.600"
-            _dark={{ color: "gray.300" }}
-            maxW="3xl"
-            mx="auto"
-            mb={2}
-          >
-            Solutions digitales sur mesure pour petites structures.
-          </Text>
-          <Text
             fontSize={{ base: "md", md: "lg" }}
             color="gray.600"
             _dark={{ color: "gray.300" }}
             maxW="3xl"
             mx="auto"
           >
-            Codecrafting accompagne particuliers et petites entreprises dans la création d’outils web, mobiles ou bureautiques qui simplifient le quotidien. Chaque projet est conçu pour être durable, clair et facile à prendre en main.
+            Codecrafting accompagne particuliers et petites entreprises en assistance informatique et dans la création d’outils web, mobiles ou bureautiques qui simplifient le quotidien. Chaque projet est conçu pour être durable, clair et facile à prendre en main.
           </Text>
         </Box>
 
@@ -131,19 +121,16 @@ export default function Home() {
           </Heading>
           <VStack align="stretch" gap={3} textAlign="left" color="gray.600" _dark={{ color: "gray.300" }}>
             <Text as="span">
-              • Applications web personnalisées : vitrines, portails clients et back-office adaptés à vos usages.
+              • Assistance informatique de proximité : dépannage, configuration, aide et conseils au quotidien.
+            </Text>
+            <Text as="span">
+              • Applications web personnalisées : vitrines simples, espaces clients sécurisés et outils d’administration alignés sur vos habitudes de travail.
             </Text>
             <Text as="span">
               • Applications mobiles légères : PWA ou apps natives pour fournir des services de proximité.
             </Text>
             <Text as="span">
-              • Outils bureautiques sur mesure : automatisations, tableaux de bord et scripts pour gagner du temps.
-            </Text>
-            <Text as="span">
-              • Maintenance et amélioration continue : corrections, optimisations et veille technique.
-            </Text>
-            <Text as="span">
-              • Accompagnement digital : conseils, formations courtes et intégration d’outils existants.
+              • Applications bureautiques sur mesure : automatisations, tableaux de bord et scripts pour gagner du temps.
             </Text>
           </VStack>
         </Box>
