@@ -28,7 +28,7 @@ export default function AboutPage() {
         mb={0}
         animation={`${fadeInUp} 0.6s ease-out`}
       >
-        Après plus de cinq ans d’expérience en entreprise, je mets à disposition mes acquis techniques et mon regard opérationnel pour vos projets. Autodidacte depuis le lycée, passé par l’industrie et l’aéronautique avant de me consacrer pleinement au logiciel, je conçois et fais évoluer des applications en C#, TypeScript ou Flutter, en pilotant chaque étape : cadrage, développement, intégration et transfert de compétences.
+        Après plus de cinq ans d’expérience en entreprise, je propose une assistance informatique qui s’appuie sur mes acquis techniques et mon regard opérationnel. Autodidacte depuis le lycée, passé par l’industrie et l’aéronautique avant de me consacrer pleinement au logiciel, je conçois et fais évoluer des applications en React, C#, Java ou Python, en pilotant chaque étape : cadrage, développement, intégration et transfert de compétences.
       </Text>
       <VStack
         gap={{ base: 5, md: 6 }}
@@ -67,7 +67,7 @@ export default function AboutPage() {
               Ma mission
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Comprendre vos besoins, puis concevoir des solutions numériques utiles, évolutives et faciles à prendre en main. Chaque projet est construit en étroite collaboration pour rester aligné sur vos priorités.
+              Comprendre vos besoins, vous aider au quotidien et concevoir des solutions numériques utiles, évolutives et faciles à prendre en main. Chaque projet est construit en étroite collaboration pour rester aligné sur vos priorités.
             </Text>
           </Box>
 
@@ -89,7 +89,7 @@ export default function AboutPage() {
               Mon expertise
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Applications web sur mesure, interfaces mobiles légères, automatisations bureautiques et accompagnement digital. Un seul interlocuteur pour piloter, développer et livrer vos outils.
+              Assistance informatique, petits développements web, mobiles et bureau, automatisations et accompagnement numérique. Un interlocuteur unique pour vous aider au quotidien ou concrétiser vos projets.
             </Text>
           </Box>
 
@@ -111,7 +111,7 @@ export default function AboutPage() {
               Technologies
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              React, Next.js, TypeScript, Node.js, Python, .NET, Flutter, Docker… Un socle polyvalent pour répondre à des besoins web, bureau ou mobile et intégrer vos outils existants.
+              React, C#, Java, Python… Un socle polyvalent pour répondre à des besoins web, bureau ou mobile et intégrer vos outils existants.
             </Text>
           </Box>
 
@@ -163,7 +163,7 @@ export default function AboutPage() {
               Envie d'aller plus loin ?
             </Heading>
             <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-              Parlons de vos idées et voyons comment Codecrafting peut vous aider à créer ou améliorer vos outils numériques.
+              Parlons de vos idées et voyons comment Codecrafting peut vous accompagner en assistance informatique et dans la création ou l'amélioration de vos outils numériques.
             </Text>
           </Box>
         </ChakraLink>

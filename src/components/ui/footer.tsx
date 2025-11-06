@@ -53,7 +53,7 @@ export default function Footer() {
               Codecrafting.fr
             </Text>
             <Text fontSize="sm" color={mutedTextColor}>
-              Concevoir des outils digitaux adaptés à vos besoins
+              Assistance informatique et conception d'outils digitaux adaptés à vos besoins
             </Text>
           </GridItem>
 
