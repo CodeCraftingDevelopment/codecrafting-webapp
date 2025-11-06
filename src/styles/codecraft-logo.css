@@ -1,0 +1,17 @@
+/* Styles pour le logo CodeCrafting */
+
+/* Thème clair (par défaut) */
+.codecrafting-logo-fill {
+  fill: #151515;
+  transition: fill 0.2s ease-in-out;
+}
+
+/* Thème sombre */
+.dark .codecrafting-logo-fill {
+  fill: #E5E7EB;
+}
+
+/* Désactiver la transition lors du changement initial pour éviter le flash */
+html[data-theme-changing] .codecrafting-logo-fill {
+  transition: none !important;
+}
