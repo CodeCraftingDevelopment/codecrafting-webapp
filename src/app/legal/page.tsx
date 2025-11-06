@@ -50,7 +50,7 @@ export default function LegalPage() {
                 Éditeur du site
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                <strong>Raison sociale :</strong> [Nom de votre société]<br />
+                <strong>Raison sociale :</strong> CodeCrafting<br />
                 <strong>Forme juridique :</strong> [SARL, SAS, etc.]<br />
                 <strong>Capital social :</strong> [montant] euros<br />
                 <strong>Siège social :</strong> [Adresse complète]<br />
@@ -66,7 +66,7 @@ export default function LegalPage() {
                 Directeur de la publication
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                [Nom et prénom du directeur de publication]
+                Christophe Pauliac
               </Text>
             </Box>
 
@@ -99,7 +99,7 @@ export default function LegalPage() {
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
                 <strong>Conception et développement :</strong> Codecrafting<br />
                 <strong>Framework :</strong> Next.js, React, Chakra UI<br />
-                <strong>Hébergement :</strong> [Nom du service d'hébergement]
+                <strong>Hébergement :</strong> LWS
               </Text>
             </Box>
 

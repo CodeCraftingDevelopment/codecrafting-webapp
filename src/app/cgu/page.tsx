@@ -61,7 +61,7 @@ export default function CGUPage() {
                 2. Mentions légales
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Le site Codecrafting est édité par [Nom de votre société], [forme juridique]
+                Le site Codecrafting est édité par CodeCrafting, [forme juridique]
                 au capital de [montant] euros, immatriculée au RCS de [ville] sous le numéro [numéro],
                 dont le siège social est situé [adresse].
               </Text>
