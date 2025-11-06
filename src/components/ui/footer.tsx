@@ -2,6 +2,7 @@
 
 import { Box, Container, Flex, Grid, GridItem, Text, Link as ChakraLink } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Footer() {
@@ -11,12 +12,11 @@ export default function Footer() {
   const mutedTextColor = useColorModeValue("chakra-subtle-text", "chakra-subtle-text");
   const linkColor = useColorModeValue("blue.500", "blue.300");
   const iconHoverBg = useColorModeValue("blue.50", "blue.900");
+  const githubIconColor = useColorModeValue("gray.800", "gray.100");
 
   const socialLinks = [
-    { name: "LinkedIn", href: "https://linkedin.com", icon: "💼" },
-    { name: "GitHub", href: "https://github.com", icon: "🐙" },
-    { name: "Twitter", href: "https://twitter.com", icon: "🐦" },
-    { name: "Instagram", href: "https://instagram.com", icon: "📷" },
+    { name: "LinkedIn", href: "https://linkedin.com", icon: <FaLinkedin /> },
+    { name: "GitHub", href: "https://github.com", icon: <FaGithub />, color: githubIconColor },
   ];
 
   const legalLinks = [
@@ -65,7 +65,7 @@ export default function Footer() {
             alignItems={{ base: "center", md: "flex-end" }}
           >
             <Text fontWeight="semibold" fontSize="sm">
-              Suivez-nous
+              Suivez-moi
             </Text>
             <Flex gap={2} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
               {socialLinks.map((social) => (
@@ -76,7 +76,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   fontSize="xl"
                   transition="transform 0.2s ease, background-color 0.2s ease"
-                  color={linkColor}
+                  color={(social as { color?: string }).color ?? linkColor}
                   rounded="full"
                   px={1}
                   py={0.5}
