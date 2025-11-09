@@ -74,22 +74,6 @@ export function ParticleNetwork() {
       canvas.height = window.innerHeight;
     };
 
-    const handleResize = () => {
-      config = getConfig();
-      particleCount = config.particleCount;
-      maxDistance = config.maxDistance;
-      minDistance = config.minDistance;
-      mouseRadius = config.mouseRadius;
-      returnSpeed = config.returnSpeed;
-      
-      resizeCanvas();
-      createParticles(); // Recréer les particules avec la nouvelle configuration
-    };
-    
-    // Initialisation
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
     // Création des particules avec espacement minimum
     const createParticles = () => {
       particlesRef.current = [];
@@ -128,7 +112,21 @@ export function ParticleNetwork() {
       }
     };
 
-    createParticles();
+    const handleResize = () => {
+      config = getConfig();
+      particleCount = config.particleCount;
+      maxDistance = config.maxDistance;
+      minDistance = config.minDistance;
+      mouseRadius = config.mouseRadius;
+      returnSpeed = config.returnSpeed;
+      
+      resizeCanvas();
+      createParticles(); // Recréer les particules avec la nouvelle configuration
+    };
+    
+    // Initialisation
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
     // Gestion de la souris
     const handleMouseMove = (e: MouseEvent) => {
