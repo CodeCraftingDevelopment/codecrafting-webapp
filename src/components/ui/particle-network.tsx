@@ -30,12 +30,43 @@ export function ParticleNetwork() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Configuration
-    const particleCount = 100;
-    const maxDistance = 180;
-    const minDistance = 40; // Distance minimale entre particules
-    const mouseRadius = 200;
-    const returnSpeed = 0.05;
+    // Configuration réactive
+    const getConfig = () => {
+      const width = window.innerWidth;
+      
+      if (width < 640) { // Mobile
+        return {
+          particleCount: 40,
+          maxDistance: 120,
+          minDistance: 30,
+          mouseRadius: 150,
+          returnSpeed: 0.05
+        };
+      } else if (width < 1024) { // Tablette
+        return {
+          particleCount: 70,
+          maxDistance: 150,
+          minDistance: 35,
+          mouseRadius: 180,
+          returnSpeed: 0.05
+        };
+      } else { // Desktop
+        return {
+          particleCount: 100,
+          maxDistance: 180,
+          minDistance: 40,
+          mouseRadius: 200,
+          returnSpeed: 0.05
+        };
+      }
+    };
+    
+    let config = getConfig();
+    let particleCount = config.particleCount;
+    let maxDistance = config.maxDistance;
+    let minDistance = config.minDistance;
+    let mouseRadius = config.mouseRadius;
+    let returnSpeed = config.returnSpeed;
 
     // Initialisation du canvas
     const resizeCanvas = () => {
@@ -43,8 +74,21 @@ export function ParticleNetwork() {
       canvas.height = window.innerHeight;
     };
 
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    const handleResize = () => {
+      config = getConfig();
+      particleCount = config.particleCount;
+      maxDistance = config.maxDistance;
+      minDistance = config.minDistance;
+      mouseRadius = config.mouseRadius;
+      returnSpeed = config.returnSpeed;
+      
+      resizeCanvas();
+      createParticles(); // Recréer les particules avec la nouvelle configuration
+    };
+    
+    // Initialisation
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
     // Création des particules avec espacement minimum
     const createParticles = () => {
