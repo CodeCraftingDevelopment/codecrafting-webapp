@@ -128,7 +128,7 @@ export function ParticleNetwork() {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Gestion de la souris
+    // Gestion de la souris et du tactile
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = {
         x: e.clientX,
@@ -136,7 +136,17 @@ export function ParticleNetwork() {
       };
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseRef.current = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        };
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     // Zones d'exclusion (header et footer)
     const getExclusionZones = () => {
@@ -239,8 +249,9 @@ export function ParticleNetwork() {
 
     // Nettoyage
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
