@@ -1,5 +1,5 @@
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
-import { Box, Flex, Link as ChakraLink, IconButton } from "@chakra-ui/react";
+import { Box, Flex, Link as ChakraLink, IconButton, Heading } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import NextLink from "next/link";
 import { FiUser } from "react-icons/fi";
@@ -112,6 +112,16 @@ export default function Header() {
                 gap={4}
             >
                 <Logo />
+                <Heading
+                    as="h1"
+                    size="4xl"
+                    textAlign="center"
+                    flexGrow={1}
+                    fontWeight="bold"
+                    display={{ base: "none", sm: "block" }}
+                >
+                    CodeCrafting
+                </Heading>
                 <HeaderActions />
             </Flex>
 
