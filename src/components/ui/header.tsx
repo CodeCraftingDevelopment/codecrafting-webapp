@@ -104,29 +104,51 @@ export default function Header() {
             borderColor="chakra-border-color"
             p={{ base: 2, md: 3 }}
         >
-            {/* Ligne supérieure : Logo + Actions */}
+            {/* Layout Mobile (base) : Logo / Icônes / Liens en colonnes */}
             <Flex
-                justifyContent="space-between"
+                direction="column"
                 alignItems="center"
-                mb={{ base: 2, md: 3 }}
-                gap={4}
+                gap={3}
+                display={{ base: "flex", md: "none" }}
             >
+                {/* Ligne 1 : Logo centré */}
                 <Logo />
-                <Heading
-                    as="h1"
-                    size="4xl"
-                    textAlign="center"
-                    flexGrow={1}
-                    fontWeight="bold"
-                    display={{ base: "none", sm: "block" }}
-                >
-                    CodeCrafting
-                </Heading>
+                
+                {/* Ligne 2 : Icônes centrées */}
                 <HeaderActions />
+                
+                {/* Ligne 3 : Liens en colonne */}
+                <Navigation />
             </Flex>
 
-            {/* Ligne inférieure : Navigation */}
-            <Navigation />
+            {/* Layout Moyen écran (md+) : Logo sur 2 lignes avec titre/icônes puis liens */}
+            <Flex
+                direction="column"
+                gap={3}
+                display={{ base: "none", md: "flex" }}
+            >
+                {/* Ligne 1 : Logo + Titre + Icônes */}
+                <Flex
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap={4}
+                >
+                    <Logo />
+                    <Heading
+                        as="h1"
+                        size="4xl"
+                        textAlign="center"
+                        flexGrow={1}
+                        fontWeight="bold"
+                    >
+                        CodeCrafting
+                    </Heading>
+                    <HeaderActions />
+                </Flex>
+
+                {/* Ligne 2 : Navigation centrée horizontalement */}
+                <Navigation />
+            </Flex>
         </Box>
     );
 }
