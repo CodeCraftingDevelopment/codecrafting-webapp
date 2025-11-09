@@ -90,16 +90,15 @@ export default function Header() {
                 >
                     <IconButton
                         aria-label="Se connecter"
-                        size="xs"
                         variant="ghost"
+                        size="xl"
                     >
                         <FiUser />
                     </IconButton>
                     <ColorModeButton
                         aria-label="Basculer entre le mode clair et sombre"
-                        padding={0}
-                        margin={0}
-                        size="2xs"
+                        variant="ghost"
+                        size="xl"
                     />
                 </GridItem>
 
