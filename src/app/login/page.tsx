@@ -48,13 +48,12 @@ export default function LoginPage() {
   return (
     <Box
       as="main"
-      minH="100vh"
       bg="transparent"
       _dark={{ bg: "transparent" }}
       display="flex"
-      alignItems="center"
       justifyContent="center"
-      py={{ base: 12, md: 24 }}
+      pt={{ base: 6, md: 12 }}
+      pb={{ base: 12, md: 24 }}
       px={{ base: 4, md: 8 }}
     >
       <Box
