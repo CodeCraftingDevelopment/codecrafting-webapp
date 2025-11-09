@@ -28,20 +28,20 @@ const pulse = keyframes`
 
 export function BackgroundShapes() {
   const shape1Color = useColorModeValue(
-    "rgba(59, 130, 246, 0.08)",
-    "rgba(96, 165, 250, 0.12)"
+    "rgba(37, 99, 235, 0.45)",
+    "rgba(59, 130, 246, 0.25)"
   );
   const shape2Color = useColorModeValue(
-    "rgba(147, 51, 234, 0.06)",
-    "rgba(192, 132, 252, 0.1)"
+    "rgba(239, 246, 255, 0.50)",
+    "rgba(241, 245, 249, 0.15)"
   );
   const shape3Color = useColorModeValue(
-    "rgba(236, 72, 153, 0.07)",
-    "rgba(244, 114, 182, 0.11)"
+    "rgba(220, 38, 38, 0.44)",
+    "rgba(239, 68, 68, 0.24)"
   );
   const shape4Color = useColorModeValue(
-    "rgba(34, 197, 94, 0.06)",
-    "rgba(74, 222, 128, 0.1)"
+    "rgba(37, 99, 235, 0.42)",
+    "rgba(59, 130, 246, 0.22)"
   );
 
   return (
