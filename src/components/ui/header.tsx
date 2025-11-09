@@ -61,21 +61,22 @@ function Navigation() {
         <Flex
             as="nav"
             aria-label="Navigation principale"
-            gap={{ base: 2, md: 4 }}
+            gap={{ base: 2, sm: 4, md: 8 }}
             flexWrap="wrap"
-            justifyContent={{ base: "center", md: "flex-start" }}
+            justifyContent="center"
+            alignItems="center"
             w="full"
+            flexDirection={{ base: "column", sm: "row" }}
         >
             {navigationItems.map((item) => (
                 <ChakraLink
                     key={item.href}
                     as={NextLink}
                     href={item.href}
-                    px={3}
+                    px={4}
                     py={2}
                     borderRadius="md"
                     textAlign="center"
-                    flex={{ base: "1 1 100%", sm: "1 1 auto" }}
                     _hover={{
                         textDecoration: "none",
                         bg: "blackAlpha.100",
