@@ -3,12 +3,12 @@ import {Provider} from "@/components/ui/provider"
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import {BackgroundShapes} from "@/components/ui/background-shapes";
+import {ParticleNetwork} from "@/components/ui/particle-network";
 import React from "react";
 import {
     Amatic_SC,
     Caveat,
     Comfortaa,
-    Dancing_Script,
     Fira_Code, Nunito,
     Pacifico,
     Poppins,
@@ -54,6 +54,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         >
             <body style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Provider>
+                <ParticleNetwork />
                 <BackgroundShapes />
                 <header>
                     <Header/>
