@@ -6,28 +6,9 @@ import {BackgroundShapes} from "@/components/ui/background-shapes";
 import {ParticleNetwork} from "@/components/ui/particle-network";
 import React from "react";
 import {
-    Amatic_SC,
-    Caveat,
-    Comfortaa,
-    Fira_Code, Nunito,
-    Pacifico,
-    Poppins,
-    Quicksand,
-    Roboto, Varela_Round
+    Fira_Code,
+    Varela_Round
 } from 'next/font/google'
-
-// Configuration de Roboto
-const roboto = Roboto({
-    weight: ['300', '400', '500', '700'], // Poids de police disponibles
-    subsets: ['latin'],
-    variable: '--font-roboto'
-})
-
-const poppins = Poppins({
-    weight: ['400', '500', '600', '700'],
-    subsets: ['latin'],
-    variable: '--font-poppins'
-})
 
 export const metadata: Metadata = {
     title: "Codecrafting",
