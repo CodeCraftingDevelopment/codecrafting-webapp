@@ -29,7 +29,7 @@ function Logo() {
             }}
         >
             <Box p={1}>
-                <CodecraftLogo width={88} height={88} />
+                <CodecraftLogo width={120} height={120} />
             </Box>
         </ChakraLink>
     );
