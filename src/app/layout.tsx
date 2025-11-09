@@ -20,12 +20,6 @@ const firaCode = Fira_Code({
     variable: '--font-firacode'
 })
 
-const varela = Varela_Round({
-    weight: '400',
-    subsets: ['latin'],
-    variable: '--font-varela'
-})
-
 export default function RootLayout(props: { children: React.ReactNode }) {
     const {children} = props
     return (
