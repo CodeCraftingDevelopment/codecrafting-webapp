@@ -48,25 +48,42 @@ export default function LoginPage() {
   return (
     <Box
       as="main"
-      mx="auto"
-      py={{ base: 16, md: 24 }}
+      minH="100vh"
+      bg="transparent"
+      _dark={{ bg: "transparent" }}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      py={{ base: 12, md: 24 }}
       px={{ base: 4, md: 8 }}
-      animation={`${fadeInUp} 0.6s ease-out`}
     >
-      <form onSubmit={handleSubmit} noValidate>
-        <VStack gap={6} align="stretch">
-          <Heading
-            as="h1"
-            size="xl"
-            textAlign="center"
-            bgGradient="linear(to-r, blue.400, purple.500)"
-            bgClip="text"
-          >
-            Connexion
-          </Heading>
-          <Text fontSize="md" textAlign="center" color="gray.600" _dark={{ color: "gray.300" }}>
-            Accède à ton espace en renseignant ton email et ton mot de passe.
-          </Text>
+      <Box
+        w="full"
+        maxW="md"
+        px={{ base: 6, md: 8 }}
+        py={{ base: 8, md: 10 }}
+        borderRadius="xl"
+        border="1px solid"
+        borderColor="blue.100"
+        boxShadow="xl"
+        bg="white"
+        _dark={{ bg: "gray.800", borderColor: "blue.700" }}
+        animation={`${fadeInUp} 0.6s ease-out`}
+      >
+        <form onSubmit={handleSubmit} noValidate>
+          <VStack gap={6} align="stretch">
+            <Heading
+              as="h1"
+              size="xl"
+              textAlign="center"
+              bgGradient="linear(to-r, blue.400, purple.500)"
+              bgClip="text"
+            >
+              Connexion
+            </Heading>
+            <Text fontSize="md" textAlign="center" color="gray.600" _dark={{ color: "gray.300" }}>
+              Accède à ton espace en renseignant ton email et ton mot de passe.
+            </Text>
 
           {error && (
             <AlertRoot status="error" borderRadius="md">
@@ -129,7 +146,8 @@ export default function LoginPage() {
             Retour à l&apos;accueil
           </ChakraLink>
         </VStack>
-      </form>
+        </form>
+      </Box>
     </Box>
   );
 }
