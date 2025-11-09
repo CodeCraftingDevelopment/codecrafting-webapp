@@ -39,13 +39,16 @@ function Logo() {
 function HeaderActions() {
     return (
         <Flex gap={2} alignItems="center">
-            <IconButton
-                aria-label="Se connecter"
-                variant="ghost"
-                size="xl"
-            >
-                <FiUser />
-            </IconButton>
+            <NextLink href="/login" passHref legacyBehavior>
+                <IconButton
+                    as="a"
+                    aria-label="Se connecter"
+                    variant="ghost"
+                    size="xl"
+                >
+                    <FiUser />
+                </IconButton>
+            </NextLink>
             <ColorModeButton
                 aria-label="Basculer entre le mode clair et sombre"
                 variant="ghost"
