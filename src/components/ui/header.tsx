@@ -1,7 +1,8 @@
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
-import { Box, Flex, Grid, GridItem, Link as ChakraLink } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Link as ChakraLink, IconButton } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import NextLink from "next/link";
+import { FiUser } from "react-icons/fi";
 
 const gridItemBaseProps = {
   overflow: "hidden" as const,
@@ -85,7 +86,15 @@ export default function Header() {
                     display="flex"
                     alignItems="center"
                     justifyContent={{ base: "center", sm: "flex-end" }}
+                    gap={2}
                 >
+                    <IconButton
+                        aria-label="Se connecter"
+                        size="xs"
+                        variant="ghost"
+                    >
+                        <FiUser />
+                    </IconButton>
                     <ColorModeButton
                         aria-label="Basculer entre le mode clair et sombre"
                         padding={0}
