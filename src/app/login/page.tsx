@@ -9,11 +9,10 @@ import { Text } from "@chakra-ui/react/text";
 import { VStack } from "@chakra-ui/react/stack";
 import { Link as ChakraLink } from "@chakra-ui/react/link";
 import { Container } from "@chakra-ui/react/container";
-import { useColorModeValue } from "@/components/ui/color-mode";
 import { AlertDescription, AlertRoot } from "@chakra-ui/react/alert";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";
-import {Box} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 const fadeInUp = keyframes`
   from {
@@ -24,12 +23,8 @@ const fadeInUp = keyframes`
 `;
 
 export default function LoginPage() {
-  const cardBg = useColorModeValue("whiteAlpha.800", "blackAlpha.500");
-  const cardBorder = useColorModeValue("blue.100", "blue.800");
-  const helperText = useColorModeValue("gray.600", "gray.300");
-  const mutedText = useColorModeValue("gray.500", "gray.400");
-  const linkColor = useColorModeValue("blue.500", "blue.300");
-  const linkHover = useColorModeValue("blue.600", "blue.200");
+  const helperText = "gray.600";
+  const mutedText = "gray.500";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,7 +63,7 @@ export default function LoginPage() {
           >
             Connexion
           </Heading>
-          <Text fontSize={{ base: "md", md: "lg" }} color={helperText}>
+          <Text fontSize={{ base: "md", md: "lg" }} color={helperText} _dark={{ color: "gray.300" }}>
             Accède à ton espace en renseignant ton email et ton mot de passe.
           </Text>
         </VStack>
@@ -81,8 +76,13 @@ export default function LoginPage() {
           py={{ base: 8, md: 10 }}
           borderRadius="2xl"
           border="1px solid"
-          borderColor={cardBorder}
-          bg={cardBg}
+          borderColor="blue.100"
+          bg="whiteAlpha.800"
+          _dark={{
+            bg: "blackAlpha.500",
+            borderColor: "blue.800",
+            boxShadow: "xl",
+          }}
           boxShadow="2xl"
           backdropFilter="blur(18px)"
           transition="all 0.3s ease"
@@ -138,14 +138,15 @@ export default function LoginPage() {
               </Button>
 
               <VStack gap={2} textAlign="center">
-                <Text fontSize="sm" color={mutedText}>
+                <Text fontSize="sm" color={mutedText} _dark={{ color: "gray.400" }}>
                   Pas encore de compte ? Contacte-nous pour activer ton accès.
                 </Text>
                 <ChakraLink
                   as={NextLink}
                   href="/"
-                  color={linkColor}
-                  _hover={{ color: linkHover }}
+                  color="blue.500"
+                  _hover={{ color: "blue.600" }}
+                  _dark={{ color: "blue.300", _hover: { color: "blue.200" } }}
                 >
                   Retour à l&apos;accueil
                 </ChakraLink>
