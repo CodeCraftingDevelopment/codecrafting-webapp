@@ -33,6 +33,7 @@ export function ParticleNetwork() {
     // Configuration
     const particleCount = 100;
     const maxDistance = 180;
+    const minDistance = 40; // Distance minimale entre particules
     const mouseRadius = 200;
     const returnSpeed = 0.05;
 
@@ -45,21 +46,41 @@ export function ParticleNetwork() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Création des particules
+    // Création des particules avec espacement minimum
     const createParticles = () => {
       particlesRef.current = [];
-      for (let i = 0; i < particleCount; i++) {
+      let attempts = 0;
+      const maxAttempts = particleCount * 50; // Limite pour éviter boucle infinie
+      
+      while (particlesRef.current.length < particleCount && attempts < maxAttempts) {
+        attempts++;
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        particlesRef.current.push({
-          x,
-          y,
-          vx: 0,
-          vy: 0,
-          radius: Math.random() * 2 + 1,
-          originX: x,
-          originY: y,
-        });
+        
+        // Vérifier si la nouvelle particule est assez éloignée des autres
+        let tooClose = false;
+        for (const existing of particlesRef.current) {
+          const dx = x - existing.x;
+          const dy = y - existing.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < minDistance) {
+            tooClose = true;
+            break;
+          }
+        }
+        
+        if (!tooClose) {
+          particlesRef.current.push({
+            x,
+            y,
+            vx: 0,
+            vy: 0,
+            radius: Math.random() * 2 + 1,
+            originX: x,
+            originY: y,
+          });
+        }
       }
     };
 
@@ -75,9 +96,36 @@ export function ParticleNetwork() {
 
     window.addEventListener("mousemove", handleMouseMove);
 
+    // Zones d'exclusion (header et footer)
+    const getExclusionZones = () => {
+      const header = document.querySelector('header');
+      const footer = document.querySelector('footer');
+      const zones = [];
+      
+      if (header) {
+        const rect = header.getBoundingClientRect();
+        zones.push({ top: 0, bottom: rect.bottom, left: 0, right: canvas.width });
+      }
+      
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        zones.push({ top: rect.top, bottom: canvas.height, left: 0, right: canvas.width });
+      }
+      
+      return zones;
+    };
+
+    const isInExclusionZone = (x: number, y: number, zones: Array<{top: number, bottom: number, left: number, right: number}>) => {
+      return zones.some(zone => 
+        x >= zone.left && x <= zone.right && y >= zone.top && y <= zone.bottom
+      );
+    };
+
     // Animation
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const exclusionZones = getExclusionZones();
 
       // Mise à jour et dessin des particules
       particlesRef.current.forEach((particle, i) => {
@@ -108,27 +156,36 @@ export function ParticleNetwork() {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Dessin de la particule
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = particleColor;
-        ctx.fill();
+        // Ne dessiner que si la particule n'est pas dans une zone d'exclusion
+        const inExclusionZone = isInExclusionZone(particle.x, particle.y, exclusionZones);
+        
+        if (!inExclusionZone) {
+          // Dessin de la particule
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          ctx.fillStyle = particleColor;
+          ctx.fill();
 
-        // Connexions avec les autres particules
-        for (let j = i + 1; j < particlesRef.current.length; j++) {
-          const other = particlesRef.current[j];
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          // Connexions avec les autres particules
+          for (let j = i + 1; j < particlesRef.current.length; j++) {
+            const other = particlesRef.current[j];
+            
+            // Ne pas dessiner la connexion si l'autre particule est dans une zone d'exclusion
+            if (isInExclusionZone(other.x, other.y, exclusionZones)) continue;
+            
+            const dx = particle.x - other.x;
+            const dy = particle.y - other.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < maxDistance) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            const opacity = 1 - distance / maxDistance;
-            ctx.strokeStyle = lineColor.replace("0.15", String(opacity * 0.15));
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (distance < maxDistance) {
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(other.x, other.y);
+              const opacity = 1 - distance / maxDistance;
+              ctx.strokeStyle = lineColor.replace("0.15", String(opacity * 0.15));
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });
