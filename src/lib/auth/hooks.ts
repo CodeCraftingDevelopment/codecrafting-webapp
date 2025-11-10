@@ -1,25 +1,25 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 /**
  * Hook personnalisé pour vérifier l'authentification côté client
  * Redirige automatiquement vers /login si non authentifié
- * 
+ *
  * @returns Session et status
  * @example
  * ```tsx
  * "use client";
- * 
+ *
  * export default function ProtectedComponent() {
  *   const { session, status } = useRequireAuth();
- *   
+ *
  *   if (status === "loading") {
  *     return <div>Chargement...</div>;
  *   }
- *   
+ *
  *   return <div>Bonjour {session.user.name}</div>;
  * }
  * ```
@@ -41,19 +41,19 @@ export function useRequireAuth() {
  * Hook personnalisé pour vérifier le rôle admin côté client
  * Redirige vers /login si non authentifié
  * Redirige vers / si authentifié mais pas admin
- * 
+ *
  * @returns Session et status
  * @example
  * ```tsx
  * "use client";
- * 
+ *
  * export default function AdminComponent() {
  *   const { session, status } = useRequireAdmin();
- *   
+ *
  *   if (status === "loading") {
  *     return <div>Chargement...</div>;
  *   }
- *   
+ *
  *   return <div>Page admin</div>;
  * }
  * ```
@@ -75,20 +75,20 @@ export function useRequireAdmin() {
 
 /**
  * Hook personnalisé pour vérifier un rôle spécifique côté client
- * 
+ *
  * @param role - Le rôle requis
  * @returns Session et status
  * @example
  * ```tsx
  * "use client";
- * 
+ *
  * export default function MemberComponent() {
  *   const { session, status } = useRequireRole("member");
- *   
+ *
  *   if (status === "loading") {
  *     return <div>Chargement...</div>;
  *   }
- *   
+ *
  *   return <div>Page membre</div>;
  * }
  * ```

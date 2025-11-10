@@ -5,10 +5,10 @@ import { useRequireAuth } from "@/lib/auth/hooks";
 
 /**
  * Exemple de composant client protégé
- * 
+ *
  * Ce composant utilise le hook useRequireAuth() pour vérifier l'authentification.
  * Si l'utilisateur n'est pas authentifié, il sera automatiquement redirigé vers /login.
- * 
+ *
  * Pour utiliser ce composant:
  * 1. Renommez ce fichier en supprimant ".example"
  * 2. Importez-le dans votre page: import ProtectedComponent from "@/components/auth/ProtectedComponent"
@@ -36,7 +36,7 @@ export default function ProtectedComponent() {
   return (
     <VStack gap={4} align="stretch">
       <Heading size="lg">Composant protégé</Heading>
-      
+
       <Box
         p={6}
         borderRadius="lg"
@@ -58,14 +58,10 @@ export default function ProtectedComponent() {
         </VStack>
       </Box>
 
-      <Box
-        p={4}
-        borderRadius="md"
-        bg="green.50"
-        _dark={{ bg: "green.900" }}
-      >
+      <Box p={4} borderRadius="md" bg="green.50" _dark={{ bg: "green.900" }}>
         <Text fontSize="sm">
-          ✅ Ce composant est uniquement visible par les utilisateurs authentifiés.
+          ✅ Ce composant est uniquement visible par les utilisateurs
+          authentifiés.
         </Text>
       </Box>
     </VStack>

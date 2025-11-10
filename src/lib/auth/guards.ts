@@ -4,7 +4,7 @@ import { auth } from "./session";
 /**
  * Vérifie qu'un utilisateur est authentifié
  * Redirige vers /login si non authentifié
- * 
+ *
  * @returns Session de l'utilisateur authentifié
  * @example
  * ```ts
@@ -16,11 +16,11 @@ import { auth } from "./session";
  */
 export async function requireAuth() {
   const session = await auth();
-  
+
   if (!session) {
     redirect("/login");
   }
-  
+
   return session;
 }
 
@@ -28,7 +28,7 @@ export async function requireAuth() {
  * Vérifie qu'un utilisateur est authentifié ET a le rôle admin
  * Redirige vers /login si non authentifié
  * Redirige vers / si authentifié mais pas admin
- * 
+ *
  * @returns Session de l'utilisateur admin
  * @example
  * ```ts
@@ -40,11 +40,11 @@ export async function requireAuth() {
  */
 export async function requireAdmin() {
   const session = await requireAuth();
-  
+
   if (session.user.role !== "admin") {
     redirect("/");
   }
-  
+
   return session;
 }
 
@@ -52,7 +52,7 @@ export async function requireAdmin() {
  * Vérifie qu'un utilisateur a un rôle spécifique
  * Redirige vers /login si non authentifié
  * Redirige vers / si le rôle ne correspond pas
- * 
+ *
  * @param role - Le rôle requis
  * @returns Session de l'utilisateur avec le rôle requis
  * @example
@@ -65,24 +65,24 @@ export async function requireAdmin() {
  */
 export async function requireRole(role: "admin" | "member") {
   const session = await requireAuth();
-  
+
   if (session.user.role !== role) {
     redirect("/");
   }
-  
+
   return session;
 }
 
 /**
  * Récupère la session de l'utilisateur (peut être null)
  * Utile pour les pages qui adaptent leur contenu selon l'état de connexion
- * 
+ *
  * @returns Session ou null
  * @example
  * ```ts
  * export default async function HomePage() {
  *   const session = await getOptionalAuth();
- *   
+ *
  *   return (
  *     <div>
  *       {session ? (

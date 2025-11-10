@@ -1,5 +1,5 @@
-import { requireAdmin } from "@/lib/auth/guards";
 import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { requireAdmin } from "@/lib/auth/guards";
 
 /**
  * Page Admin - Exemple de page protégée par rôle
@@ -36,10 +36,8 @@ export default async function AdminPage() {
         >
           <VStack gap={4} align="start">
             <Heading size="lg">Bienvenue, {session.user.name}</Heading>
-            
-            <Text>
-              Vous êtes connecté en tant qu&apos;administrateur.
-            </Text>
+
+            <Text>Vous êtes connecté en tant qu&apos;administrateur.</Text>
 
             <Box mt={4}>
               <Text fontWeight="bold" mb={2}>
@@ -55,12 +53,7 @@ export default async function AdminPage() {
           </VStack>
         </Box>
 
-        <Box
-          p={6}
-          borderRadius="lg"
-          bg="blue.50"
-          _dark={{ bg: "blue.900" }}
-        >
+        <Box p={6} borderRadius="lg" bg="blue.50" _dark={{ bg: "blue.900" }}>
           <Text fontSize="sm" color="blue.800" _dark={{ color: "blue.200" }}>
             💡 <strong>Note:</strong> Cette page utilise la fonction{" "}
             <code>requireAdmin()</code> pour vérifier automatiquement

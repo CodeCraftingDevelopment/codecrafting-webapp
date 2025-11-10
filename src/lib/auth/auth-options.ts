@@ -15,37 +15,37 @@ const findUserByEmail = (email: string) =>
 export const authOptions: NextAuthOptions = {
   // Secret pour signer les tokens JWT (OBLIGATOIRE en production)
   secret: process.env.NEXTAUTH_SECRET,
-  
+
   // Pages personnalisées
   pages: {
     signIn: "/login",
   },
-  
+
   // Stratégie de session: JWT (requis pour CredentialsProvider)
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 jours
   },
-  
+
   // Providers d'authentification
   providers: [
     CredentialsProvider({
       // Nom affiché sur la page de connexion
       name: "Email et mot de passe",
-      
+
       // Définition des champs du formulaire
       credentials: {
-        email: { 
-          label: "Email", 
+        email: {
+          label: "Email",
           type: "email",
-          placeholder: "exemple@codecrafting.fr"
+          placeholder: "exemple@codecrafting.fr",
         },
-        password: { 
-          label: "Mot de passe", 
-          type: "password" 
+        password: {
+          label: "Mot de passe",
+          type: "password",
         },
       },
-      
+
       /**
        * Fonction d'autorisation appelée lors de la tentative de connexion
        * Retourne un objet User si les credentials sont valides, null sinon
@@ -75,7 +75,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  
+
   // Callbacks pour personnaliser le comportement
   callbacks: {
     /**
@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    
+
     /**
      * Callback Session: appelé lors de la récupération de la session
      * Permet d'ajouter des données du JWT à la session

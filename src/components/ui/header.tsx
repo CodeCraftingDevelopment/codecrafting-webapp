@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { FiLogOut, FiUser, FiHome, FiShield } from "react-icons/fi";
+import { FiHome, FiLogOut, FiShield, FiUser } from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";
 
@@ -75,7 +75,7 @@ function HeaderActions() {
                 </Flex>
               </ChakraLink>
             </Menu.Item>
-            
+
             {session.user.role === "admin" && (
               <Menu.Item value="admin" asChild>
                 <ChakraLink as={NextLink} href="/admin" display="flex">
@@ -86,9 +86,9 @@ function HeaderActions() {
                 </ChakraLink>
               </Menu.Item>
             )}
-            
+
             <Menu.Separator />
-            
+
             <Menu.Item value="logout" onClick={() => signOut()}>
               <Flex alignItems="center" gap={2}>
                 <FiLogOut />

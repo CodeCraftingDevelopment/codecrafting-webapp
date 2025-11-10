@@ -1,5 +1,5 @@
-import { requireAuth } from "@/lib/auth/guards";
 import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { requireAuth } from "@/lib/auth/guards";
 
 /**
  * Page Dashboard - Exemple de page protégée
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
         >
           <VStack gap={4} align="start">
             <Heading size="lg">Informations de session</Heading>
-            
+
             <Box>
               <Text fontWeight="bold">Nom:</Text>
               <Text>{session.user.name}</Text>
