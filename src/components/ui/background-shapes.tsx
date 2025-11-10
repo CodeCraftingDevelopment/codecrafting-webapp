@@ -52,6 +52,7 @@ export function BackgroundShapes() {
       pointerEvents="none"
       zIndex={-1}
       opacity={0.6}
+      suppressHydrationWarning
     >
       {/* Cercle flottant 1 */}
       <Box
@@ -64,6 +65,7 @@ export function BackgroundShapes() {
         bg={shape1Color}
         filter="blur(40px)"
         animation={`${float1} 20s ease-in-out infinite`}
+        suppressHydrationWarning
       />
 
       {/* Rectangle arrondi 1 */}
@@ -77,6 +79,7 @@ export function BackgroundShapes() {
         bg={shape2Color}
         filter="blur(50px)"
         animation={`${float2} 25s ease-in-out infinite`}
+        suppressHydrationWarning
       />
 
       {/* Cercle flottant 2 */}
@@ -90,6 +93,7 @@ export function BackgroundShapes() {
         bg={shape3Color}
         filter="blur(45px)"
         animation={`${float3} 18s ease-in-out infinite`}
+        suppressHydrationWarning
       />
 
       {/* Rectangle arrondi 2 */}
@@ -103,6 +107,7 @@ export function BackgroundShapes() {
         bg={shape4Color}
         filter="blur(55px)"
         animation={`${pulse} 15s ease-in-out infinite`}
+        suppressHydrationWarning
       />
 
       {/* Cercle flottant 3 */}
@@ -117,6 +122,7 @@ export function BackgroundShapes() {
         bg={shape1Color}
         filter="blur(60px)"
         animation={`${float1} 30s ease-in-out infinite reverse`}
+        suppressHydrationWarning
       />
     </Box>
   );
