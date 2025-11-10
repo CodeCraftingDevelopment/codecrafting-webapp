@@ -26,20 +26,6 @@ jobs:
       - name: Installation des dépendances
         run: npm ci
 
-      - name: Préparer .env.local
-        run: |
-          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
-          NEXT_PUBLIC_ENV=production
-          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
-          NEXT_PUBLIC_ENV=developement
-          else
-          NEXT_PUBLIC_ENV=${{ github.ref_name }}
-          fi
-          cat <<EOF > .env.local
-          NEXT_PUBLIC_ENV=$NEXT_PUBLIC_ENV
-          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-          EOF
-
       - name: Compilation des sources
         run: npm run build
 
