@@ -46,7 +46,7 @@ function HeaderActions() {
   return (
     <Flex gap={2} alignItems="center">
       <NextLink href="/login" passHref>
-        <IconButton as="a" aria-label="Se connecter" variant="ghost" size="xl">
+        <IconButton aria-label="Se connecter" variant="ghost" size="xl">
           <FiUser />
         </IconButton>
       </NextLink>
