@@ -2,8 +2,8 @@
 
 import {
   Box,
-  Link as ChakraLink,
   Button,
+  Link as ChakraLink,
   Flex,
   Heading,
   IconButton,
