@@ -10,8 +10,8 @@ import {
   Menu,
   Text,
 } from "@chakra-ui/react";
-import { signIn, signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";

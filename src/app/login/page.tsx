@@ -1,7 +1,7 @@
 "use client";
 
-import { Box } from "@chakra-ui/react";
 import { AlertDescription, AlertRoot } from "@chakra-ui/react/alert";
+import { Box } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react/button";
 import { Container } from "@chakra-ui/react/container";
 import { Field } from "@chakra-ui/react/field";
@@ -10,9 +10,9 @@ import { Link as ChakraLink } from "@chakra-ui/react/link";
 import { VStack } from "@chakra-ui/react/stack";
 import { Text } from "@chakra-ui/react/text";
 import { keyframes } from "@emotion/react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { type FormEvent, useState } from "react";
 
 const fadeInUp = keyframes`
