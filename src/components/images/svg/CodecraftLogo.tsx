@@ -1,7 +1,6 @@
 // components/CodecraftLogo.tsx
 "use client";
 
-import React from "react";
 import "@/styles/codecraft-logo.css";
 
 interface CodecraftLogoProps {

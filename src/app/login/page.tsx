@@ -39,6 +39,7 @@ export default function LoginPage() {
       // TODO: appeler ici votre API d'authentification.
       await new Promise((resolve) => setTimeout(resolve, 800));
     } catch (submissionError) {
+      console.error("Erreur lors de la soumission:", submissionError);
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
