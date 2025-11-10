@@ -3,8 +3,12 @@
  * Exécuter avec: node check-env.js
  */
 
-const fs = require("node:fs");
-const path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log("🔍 Vérification de la configuration NextAuth...\n");
 
@@ -16,12 +20,22 @@ console.log(
   `1. Fichier .env.local: ${envExists ? "✅ Existe" : "❌ Manquant"}`,
 );
 
+console.log(
+  `1. Fichier .env.local path: ${envPath}`,
+);
+
 if (envExists) {
   try {
     const envContent = fs.readFileSync(envPath, "utf-8");
     const lines = envContent
-      .split("\n")
-      .filter((line) => line.trim() && !line.startsWith("#"));
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith("#"));
+
+    console.log("   Lignes détectées:");
+    lines.forEach((line, index) => {
+      console.log(`     [${index}] ${JSON.stringify(line)}`);
+    });
 
     console.log(`   Nombre de variables: ${lines.length}`);
 
