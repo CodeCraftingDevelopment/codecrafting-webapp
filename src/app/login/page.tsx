@@ -3,7 +3,6 @@
 import { FormEvent, useState } from "react";
 import { Button } from "@chakra-ui/react/button";
 import { Field } from "@chakra-ui/react/field";
-import { Heading } from "@chakra-ui/react/heading";
 import { Input } from "@chakra-ui/react/input";
 import { Text } from "@chakra-ui/react/text";
 import { VStack } from "@chakra-ui/react/stack";
@@ -55,14 +54,13 @@ export default function LoginPage() {
     >
       <VStack gap={10} align="stretch" animation={`${fadeInUp} 0.6s ease-out`}>
         <VStack gap={3} textAlign="center" maxW="2xl" mx="auto">
-          <Heading
-            as="h1"
-            size={{ base: "2xl", md: "3xl" }}
-            bgGradient="linear(to-r, blue.400, purple.500)"
-            bgClip="text"
-          >
-            Connexion
-          </Heading>
+            <Text
+                fontWeight="bold"
+                fontSize={{ base: "xl", md: "2xl" }}
+                textAlign="center"
+            >
+                Connexion
+            </Text>
           <Text fontSize={{ base: "md", md: "lg" }} color={helperText} _dark={{ color: "gray.300" }}>
             Accède à ton espace en renseignant ton email et ton mot de passe.
           </Text>
