@@ -1,6 +1,14 @@
 "use client";
 
-import { Box, Heading, Text, Button, VStack, Container, Link as ChakraLink } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  Container,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";
 
@@ -29,7 +37,8 @@ export default function Home() {
         textAlign="center"
         mb={3}
       >
-        Assistance informatique et solutions digitales sur mesure pour particuliers et petites structures.
+        Assistance informatique et solutions digitales sur mesure pour
+        particuliers et petites structures.
       </Text>
       <VStack
         gap={8}
@@ -55,7 +64,10 @@ export default function Home() {
             maxW="3xl"
             mx="auto"
           >
-            Codecrafting accompagne particuliers et petites entreprises en assistance informatique et dans la création d’outils web, mobiles ou bureautiques qui simplifient le quotidien. Chaque projet est conçu pour être durable, clair et facile à prendre en main.
+            Codecrafting accompagne particuliers et petites entreprises en
+            assistance informatique et dans la création d’outils web, mobiles ou
+            bureautiques qui simplifient le quotidien. Chaque projet est conçu
+            pour être durable, clair et facile à prendre en main.
           </Text>
         </Box>
 
@@ -66,7 +78,11 @@ export default function Home() {
           justifyContent="center"
           flexWrap="wrap"
         >
-          <ChakraLink as={NextLink} href="/contact" _hover={{ textDecoration: "none" }}>
+          <ChakraLink
+            as={NextLink}
+            href="/contact"
+            _hover={{ textDecoration: "none" }}
+          >
             <Button
               size="lg"
               colorScheme="blue"
@@ -84,7 +100,11 @@ export default function Home() {
               Nous contacter
             </Button>
           </ChakraLink>
-          <ChakraLink as={NextLink} href="/about" _hover={{ textDecoration: "none" }}>
+          <ChakraLink
+            as={NextLink}
+            href="/about"
+            _hover={{ textDecoration: "none" }}
+          >
             <Button
               size="lg"
               variant="outline"
@@ -119,18 +139,29 @@ export default function Home() {
           <Heading size="md" mb={4}>
             Prestations proposées
           </Heading>
-          <VStack align="stretch" gap={3} textAlign="left" color="gray.600" _dark={{ color: "gray.300" }}>
+          <VStack
+            align="stretch"
+            gap={3}
+            textAlign="left"
+            color="gray.600"
+            _dark={{ color: "gray.300" }}
+          >
             <Text as="span">
-              • Assistance informatique de proximité : dépannage, configuration, aide et conseils au quotidien.
+              • Assistance informatique de proximité : dépannage, configuration,
+              aide et conseils au quotidien.
             </Text>
             <Text as="span">
-              • Applications web personnalisées : vitrines simples, espaces clients sécurisés et outils d’administration alignés sur vos habitudes de travail.
+              • Applications web personnalisées : vitrines simples, espaces
+              clients sécurisés et outils d’administration alignés sur vos
+              habitudes de travail.
             </Text>
             <Text as="span">
-              • Applications mobiles légères : PWA ou apps natives pour fournir des services de proximité.
+              • Applications mobiles légères : PWA ou apps natives pour fournir
+              des services de proximité.
             </Text>
             <Text as="span">
-              • Applications bureautiques sur mesure : automatisations, tableaux de bord et scripts pour gagner du temps.
+              • Applications bureautiques sur mesure : automatisations, tableaux
+              de bord et scripts pour gagner du temps.
             </Text>
           </VStack>
         </Box>

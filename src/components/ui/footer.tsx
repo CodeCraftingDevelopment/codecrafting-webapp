@@ -1,6 +1,14 @@
 "use client";
 
-import { Box, Container, Flex, Grid, GridItem, Text, Link as ChakraLink } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Flex,
+  Grid,
+  GridItem,
+  Text,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { useColorModeValue } from "@/components/ui/color-mode";
@@ -8,15 +16,26 @@ import { useColorModeValue } from "@/components/ui/color-mode";
 export default function Footer() {
   const footerBg = useColorModeValue("chakra-body-bg", "chakra-body-bg");
   const borderColor = "chakra-border-color";
-  const headingColor = useColorModeValue("chakra-body-text", "chakra-body-text");
-  const mutedTextColor = useColorModeValue("chakra-subtle-text", "chakra-subtle-text");
+  const headingColor = useColorModeValue(
+    "chakra-body-text",
+    "chakra-body-text",
+  );
+  const mutedTextColor = useColorModeValue(
+    "chakra-subtle-text",
+    "chakra-subtle-text",
+  );
   const linkColor = useColorModeValue("blue.500", "blue.300");
   const iconHoverBg = useColorModeValue("blue.50", "blue.900");
   const githubIconColor = useColorModeValue("gray.800", "gray.100");
 
   const socialLinks = [
     { name: "LinkedIn", href: "https://linkedin.com", icon: <FaLinkedin /> },
-    { name: "GitHub", href: "https://github.com", icon: <FaGithub />, color: githubIconColor },
+    {
+      name: "GitHub",
+      href: "https://github.com",
+      icon: <FaGithub />,
+      color: githubIconColor,
+    },
   ];
 
   const legalLinks = [
@@ -53,7 +72,8 @@ export default function Footer() {
               Codecrafting.fr
             </Text>
             <Text fontSize="sm" color={mutedTextColor}>
-              Assistance informatique et conception d'outils digitaux adaptés à vos besoins
+              Assistance informatique et conception d'outils digitaux adaptés à
+              vos besoins
             </Text>
           </GridItem>
 
@@ -67,7 +87,11 @@ export default function Footer() {
             <Text fontWeight="semibold" fontSize="sm">
               Suivez-moi
             </Text>
-            <Flex gap={2} wrap="wrap" justify={{ base: "center", md: "flex-end" }}>
+            <Flex
+              gap={2}
+              wrap="wrap"
+              justify={{ base: "center", md: "flex-end" }}
+            >
               {socialLinks.map((social) => (
                 <ChakraLink
                   key={social.name}
@@ -92,7 +116,12 @@ export default function Footer() {
             </Flex>
           </GridItem>
 
-          <GridItem colSpan={12} pt={1} borderTop="1px" borderColor={borderColor}>
+          <GridItem
+            colSpan={12}
+            pt={1}
+            borderTop="1px"
+            borderColor={borderColor}
+          >
             <Grid
               templateColumns="repeat(12, 1fr)"
               gap={{ base: 1, md: 2.5 }}
@@ -103,7 +132,8 @@ export default function Footer() {
                 textAlign={{ base: "center", md: "left" }}
               >
                 <Text fontSize="sm" color={mutedTextColor}>
-                  © {new Date().getFullYear()} Codecrafting.fr Tous droits réservés.
+                  © {new Date().getFullYear()} Codecrafting.fr Tous droits
+                  réservés.
                 </Text>
               </GridItem>
 

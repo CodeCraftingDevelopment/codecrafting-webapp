@@ -20,8 +20,14 @@ export function ParticleNetwork() {
   const mouseRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number | undefined>(undefined);
 
-  const particleColor = useColorModeValue("rgba(96, 165, 250, 0.8)", "rgba(147, 197, 253, 0.7)");
-  const lineColor = useColorModeValue("rgba(139, 92, 246, 0.3)", "rgba(167, 139, 250, 0.25)");
+  const particleColor = useColorModeValue(
+    "rgba(96, 165, 250, 0.8)",
+    "rgba(147, 197, 253, 0.7)",
+  );
+  const lineColor = useColorModeValue(
+    "rgba(139, 92, 246, 0.3)",
+    "rgba(167, 139, 250, 0.25)",
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,34 +39,37 @@ export function ParticleNetwork() {
     // Configuration réactive
     const getConfig = () => {
       const width = window.innerWidth;
-      
-      if (width < 640) { // Mobile
+
+      if (width < 640) {
+        // Mobile
         return {
           particleCount: 40,
           maxDistance: 120,
           minDistance: 30,
           mouseRadius: 150,
-          returnSpeed: 0.05
+          returnSpeed: 0.05,
         };
-      } else if (width < 1024) { // Tablette
+      } else if (width < 1024) {
+        // Tablette
         return {
           particleCount: 70,
           maxDistance: 150,
           minDistance: 35,
           mouseRadius: 180,
-          returnSpeed: 0.05
+          returnSpeed: 0.05,
         };
-      } else { // Desktop
+      } else {
+        // Desktop
         return {
           particleCount: 100,
           maxDistance: 180,
           minDistance: 40,
           mouseRadius: 200,
-          returnSpeed: 0.05
+          returnSpeed: 0.05,
         };
       }
     };
-    
+
     let config = getConfig();
     let particleCount = config.particleCount;
     let maxDistance = config.maxDistance;
@@ -79,25 +88,28 @@ export function ParticleNetwork() {
       particlesRef.current = [];
       let attempts = 0;
       const maxAttempts = particleCount * 50; // Limite pour éviter boucle infinie
-      
-      while (particlesRef.current.length < particleCount && attempts < maxAttempts) {
+
+      while (
+        particlesRef.current.length < particleCount &&
+        attempts < maxAttempts
+      ) {
         attempts++;
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        
+
         // Vérifier si la nouvelle particule est assez éloignée des autres
         let tooClose = false;
         for (const existing of particlesRef.current) {
           const dx = x - existing.x;
           const dy = y - existing.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < minDistance) {
             tooClose = true;
             break;
           }
         }
-        
+
         if (!tooClose) {
           particlesRef.current.push({
             x,
@@ -119,11 +131,11 @@ export function ParticleNetwork() {
       minDistance = config.minDistance;
       mouseRadius = config.mouseRadius;
       returnSpeed = config.returnSpeed;
-      
+
       resizeCanvas();
       createParticles(); // Recréer les particules avec la nouvelle configuration
     };
-    
+
     // Initialisation
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -150,33 +162,56 @@ export function ParticleNetwork() {
 
     // Zones d'exclusion (header et footer)
     const getExclusionZones = () => {
-      const header = document.querySelector('header');
-      const footer = document.querySelector('footer');
+      const header = document.querySelector("header");
+      const footer = document.querySelector("footer");
       const zones = [];
-      
+
       if (header) {
         const rect = header.getBoundingClientRect();
-        zones.push({ top: 0, bottom: rect.bottom, left: 0, right: canvas.width });
+        zones.push({
+          top: 0,
+          bottom: rect.bottom,
+          left: 0,
+          right: canvas.width,
+        });
       }
-      
+
       if (footer) {
         const rect = footer.getBoundingClientRect();
-        zones.push({ top: rect.top, bottom: canvas.height, left: 0, right: canvas.width });
+        zones.push({
+          top: rect.top,
+          bottom: canvas.height,
+          left: 0,
+          right: canvas.width,
+        });
       }
-      
+
       return zones;
     };
 
-    const isInExclusionZone = (x: number, y: number, zones: Array<{top: number, bottom: number, left: number, right: number}>) => {
-      return zones.some(zone => 
-        x >= zone.left && x <= zone.right && y >= zone.top && y <= zone.bottom
+    const isInExclusionZone = (
+      x: number,
+      y: number,
+      zones: Array<{
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+      }>,
+    ) => {
+      return zones.some(
+        (zone) =>
+          x >= zone.left &&
+          x <= zone.right &&
+          y >= zone.top &&
+          y <= zone.bottom,
       );
     };
 
     // Animation
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       const exclusionZones = getExclusionZones();
 
       // Mise à jour et dessin des particules
@@ -209,8 +244,12 @@ export function ParticleNetwork() {
         particle.y += particle.vy;
 
         // Ne dessiner que si la particule n'est pas dans une zone d'exclusion
-        const inExclusionZone = isInExclusionZone(particle.x, particle.y, exclusionZones);
-        
+        const inExclusionZone = isInExclusionZone(
+          particle.x,
+          particle.y,
+          exclusionZones,
+        );
+
         if (!inExclusionZone) {
           // Dessin de la particule
           ctx.beginPath();
@@ -221,10 +260,10 @@ export function ParticleNetwork() {
           // Connexions avec les autres particules
           for (let j = i + 1; j < particlesRef.current.length; j++) {
             const other = particlesRef.current[j];
-            
+
             // Ne pas dessiner la connexion si l'autre particule est dans une zone d'exclusion
             if (isInExclusionZone(other.x, other.y, exclusionZones)) continue;
-            
+
             const dx = particle.x - other.x;
             const dy = particle.y - other.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -234,7 +273,10 @@ export function ParticleNetwork() {
               ctx.moveTo(particle.x, particle.y);
               ctx.lineTo(other.x, other.y);
               const opacity = 1 - distance / maxDistance;
-              ctx.strokeStyle = lineColor.replace("0.15", String(opacity * 0.15));
+              ctx.strokeStyle = lineColor.replace(
+                "0.15",
+                String(opacity * 0.15),
+              );
               ctx.lineWidth = 0.5;
               ctx.stroke();
             }

@@ -17,11 +17,7 @@ const fadeInUp = keyframes`
 export default function CGUPage() {
   return (
     <Container maxW="4xl" py={{ base: 16, md: 24 }}>
-      <VStack
-        gap={6}
-        align="stretch"
-        animation={`${fadeInUp} 0.6s ease-out`}
-      >
+      <VStack gap={6} align="stretch" animation={`${fadeInUp} 0.6s ease-out`}>
         <Heading
           as="h1"
           size={{ base: "xl", md: "2xl" }}
@@ -32,7 +28,7 @@ export default function CGUPage() {
         </Heading>
 
         <Text fontSize="sm" color="gray.500" _dark={{ color: "gray.400" }}>
-          Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}
+          Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}
         </Text>
 
         <Box
@@ -50,9 +46,10 @@ export default function CGUPage() {
                 1. Objet
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Les présentes conditions générales d'utilisation (CGU) ont pour objet de définir
-                les modalités et conditions d'utilisation des services proposés sur le site
-                Codecrafting, ainsi que de définir les droits et obligations des parties dans ce cadre.
+                Les présentes conditions générales d'utilisation (CGU) ont pour
+                objet de définir les modalités et conditions d'utilisation des
+                services proposés sur le site Codecrafting, ainsi que de définir
+                les droits et obligations des parties dans ce cadre.
               </Text>
             </Box>
 
@@ -61,9 +58,10 @@ export default function CGUPage() {
                 2. Mentions légales
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Le site Codecrafting est édité par CodeCrafting, [forme juridique]
-                au capital de [montant] euros, immatriculée au RCS de [ville] sous le numéro [numéro],
-                dont le siège social est situé [adresse].
+                Le site Codecrafting est édité par CodeCrafting, [forme
+                juridique] au capital de [montant] euros, immatriculée au RCS de
+                [ville] sous le numéro [numéro], dont le siège social est situé
+                [adresse].
               </Text>
             </Box>
 
@@ -72,8 +70,9 @@ export default function CGUPage() {
                 3. Accès au site
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Le site est accessible gratuitement à tout utilisateur disposant d'un accès à Internet.
-                Tous les frais supportés par l'utilisateur pour accéder au service (matériel informatique,
+                Le site est accessible gratuitement à tout utilisateur disposant
+                d'un accès à Internet. Tous les frais supportés par
+                l'utilisateur pour accéder au service (matériel informatique,
                 logiciels, connexion Internet, etc.) sont à sa charge.
               </Text>
             </Box>
@@ -83,8 +82,9 @@ export default function CGUPage() {
                 4. Propriété intellectuelle
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                L'ensemble des contenus présents sur le site (textes, images, graphismes, logo, icônes, etc.)
-                sont la propriété exclusive de Codecrafting, à l'exception des marques, logos ou contenus
+                L'ensemble des contenus présents sur le site (textes, images,
+                graphismes, logo, icônes, etc.) sont la propriété exclusive de
+                Codecrafting, à l'exception des marques, logos ou contenus
                 appartenant à d'autres sociétés partenaires ou auteurs.
               </Text>
             </Box>
@@ -94,9 +94,11 @@ export default function CGUPage() {
                 5. Responsabilité
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Codecrafting ne pourra être tenu responsable des dommages directs et indirects causés
-                au matériel de l'utilisateur, lors de l'accès au site, et résultant soit de l'utilisation
-                d'un matériel ne répondant pas aux spécifications, soit de l'apparition d'un bug ou d'une incompatibilité.
+                Codecrafting ne pourra être tenu responsable des dommages
+                directs et indirects causés au matériel de l'utilisateur, lors
+                de l'accès au site, et résultant soit de l'utilisation d'un
+                matériel ne répondant pas aux spécifications, soit de
+                l'apparition d'un bug ou d'une incompatibilité.
               </Text>
             </Box>
 
@@ -105,8 +107,10 @@ export default function CGUPage() {
                 6. Droit applicable
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Les présentes CGU sont régies par le droit français. En cas de litige, et après l'échec
-                de toute tentative de recherche d'une solution amiable, les tribunaux français seront seuls compétents.
+                Les présentes CGU sont régies par le droit français. En cas de
+                litige, et après l'échec de toute tentative de recherche d'une
+                solution amiable, les tribunaux français seront seuls
+                compétents.
               </Text>
             </Box>
           </VStack>

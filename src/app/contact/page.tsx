@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, Heading, Text, VStack, Link as ChakraLink, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  Link as ChakraLink,
+  Button,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";
 
@@ -35,8 +42,9 @@ export default function ContactPage() {
           Contact
         </Heading>
         <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-          Besoin d’aide en assistance informatique ou sur une application web, mobile ou bureautique&nbsp;? Écrivez-moi&nbsp;:
-          je vous réponds sous 48&nbsp;heures pour définir les prochaines étapes.
+          Besoin d’aide en assistance informatique ou sur une application web,
+          mobile ou bureautique&nbsp;? Écrivez-moi&nbsp;: je vous réponds sous
+          48&nbsp;heures pour définir les prochaines étapes.
         </Text>
         <VStack gap={4} align="stretch">
           <Box
@@ -82,7 +90,8 @@ export default function ContactPage() {
               Téléphone
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Disponible sur rendez-vous. Proposez un créneau par mail et je vous rappelle pour un échange.
+              Disponible sur rendez-vous. Proposez un créneau par mail et je
+              vous rappelle pour un échange.
             </Text>
           </Box>
           <Box
@@ -103,16 +112,22 @@ export default function ContactPage() {
               Préparer notre échange
             </Heading>
             <Text color="gray.600" _dark={{ color: "gray.300" }}>
-              Quelques lignes sur votre activité, les objectifs visés et les échéances suffisent. J’arrive au rendez-vous
-              avec des premières pistes techniques adaptées.
+              Quelques lignes sur votre activité, les objectifs visés et les
+              échéances suffisent. J’arrive au rendez-vous avec des premières
+              pistes techniques adaptées.
             </Text>
           </Box>
         </VStack>
         <Text fontSize="md" color="gray.500" _dark={{ color: "gray.400" }}>
-          Basé en France, je travaille à distance et peux intervenir en journée ou en soirée selon vos contraintes.
+          Basé en France, je travaille à distance et peux intervenir en journée
+          ou en soirée selon vos contraintes.
         </Text>
         <Box>
-          <ChakraLink as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
+          <ChakraLink
+            as={NextLink}
+            href="/"
+            _hover={{ textDecoration: "none" }}
+          >
             <Button colorScheme="blue">Retour à l&apos;accueil</Button>
           </ChakraLink>
         </Box>

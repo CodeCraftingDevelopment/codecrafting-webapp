@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Button, Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Text,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";
 
@@ -31,8 +37,9 @@ export default function NotFound() {
         Page introuvable
       </Heading>
       <Text fontSize="lg" maxW="lg">
-        La page que vous cherchez n&apos;existe pas ou a été déplacée. Vérifiez l&apos;adresse ou revenez à
-        l&apos;accueil pour continuer votre navigation.
+        La page que vous cherchez n&apos;existe pas ou a été déplacée. Vérifiez
+        l&apos;adresse ou revenez à l&apos;accueil pour continuer votre
+        navigation.
       </Text>
       <ChakraLink as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
         <Button colorScheme="blue" size="md">

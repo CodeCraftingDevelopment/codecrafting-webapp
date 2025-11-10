@@ -17,11 +17,7 @@ const fadeInUp = keyframes`
 export default function LegalPage() {
   return (
     <Container maxW="4xl" py={{ base: 16, md: 24 }}>
-      <VStack
-        gap={6}
-        align="stretch"
-        animation={`${fadeInUp} 0.6s ease-out`}
-      >
+      <VStack gap={6} align="stretch" animation={`${fadeInUp} 0.6s ease-out`}>
         <Heading
           as="h1"
           size={{ base: "xl", md: "2xl" }}
@@ -32,7 +28,7 @@ export default function LegalPage() {
         </Heading>
 
         <Text fontSize="sm" color="gray.500" _dark={{ color: "gray.400" }}>
-          Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}
+          Dernière mise à jour : {new Date().toLocaleDateString("fr-FR")}
         </Text>
 
         <Box
@@ -50,13 +46,20 @@ export default function LegalPage() {
                 Éditeur du site
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                <strong>Raison sociale :</strong> CodeCrafting<br />
-                <strong>Forme juridique :</strong> [SARL, SAS, etc.]<br />
-                <strong>Capital social :</strong> [montant] euros<br />
-                <strong>Siège social :</strong> [Adresse complète]<br />
-                <strong>RCS :</strong> [Ville] [Numéro]<br />
-                <strong>SIRET :</strong> [Numéro SIRET]<br />
-                <strong>Email :</strong> contact@codecrafting.fr<br />
+                <strong>Raison sociale :</strong> CodeCrafting
+                <br />
+                <strong>Forme juridique :</strong> [SARL, SAS, etc.]
+                <br />
+                <strong>Capital social :</strong> [montant] euros
+                <br />
+                <strong>Siège social :</strong> [Adresse complète]
+                <br />
+                <strong>RCS :</strong> [Ville] [Numéro]
+                <br />
+                <strong>SIRET :</strong> [Numéro SIRET]
+                <br />
+                <strong>Email :</strong> contact@codecrafting.fr
+                <br />
                 <strong>Téléphone :</strong> [À compléter]
               </Text>
             </Box>
@@ -75,8 +78,10 @@ export default function LegalPage() {
                 Hébergement
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                <strong>Hébergeur :</strong> [Nom de l'hébergeur]<br />
-                <strong>Adresse :</strong> [Adresse de l'hébergeur]<br />
+                <strong>Hébergeur :</strong> [Nom de l'hébergeur]
+                <br />
+                <strong>Adresse :</strong> [Adresse de l'hébergeur]
+                <br />
                 <strong>Téléphone :</strong> [Numéro de téléphone]
               </Text>
             </Box>
@@ -86,9 +91,11 @@ export default function LegalPage() {
                 Propriété intellectuelle
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur
-                et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour
-                les documents téléchargeables et les représentations iconographiques et photographiques.
+                L'ensemble de ce site relève de la législation française et
+                internationale sur le droit d'auteur et la propriété
+                intellectuelle. Tous les droits de reproduction sont réservés, y
+                compris pour les documents téléchargeables et les
+                représentations iconographiques et photographiques.
               </Text>
             </Box>
 
@@ -97,8 +104,10 @@ export default function LegalPage() {
                 Crédits
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                <strong>Conception et développement :</strong> Codecrafting<br />
-                <strong>Framework :</strong> Next.js, React, Chakra UI<br />
+                <strong>Conception et développement :</strong> Codecrafting
+                <br />
+                <strong>Framework :</strong> Next.js, React, Chakra UI
+                <br />
                 <strong>Hébergement :</strong> LWS
               </Text>
             </Box>
@@ -108,10 +117,12 @@ export default function LegalPage() {
                 Limitation de responsabilité
               </Heading>
               <Text color="gray.600" _dark={{ color: "gray.300" }}>
-                Les informations contenues sur ce site sont aussi précises que possible et le site est
-                périodiquement remis à jour, mais peut toutefois contenir des inexactitudes, des omissions
-                ou des lacunes. Si vous constatez une lacune, erreur ou ce qui paraît être un dysfonctionnement,
-                merci de bien vouloir le signaler par email à contact@codecrafting.fr.
+                Les informations contenues sur ce site sont aussi précises que
+                possible et le site est périodiquement remis à jour, mais peut
+                toutefois contenir des inexactitudes, des omissions ou des
+                lacunes. Si vous constatez une lacune, erreur ou ce qui paraît
+                être un dysfonctionnement, merci de bien vouloir le signaler par
+                email à contact@codecrafting.fr.
               </Text>
             </Box>
           </VStack>

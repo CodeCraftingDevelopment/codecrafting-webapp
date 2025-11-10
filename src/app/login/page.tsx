@@ -54,14 +54,18 @@ export default function LoginPage() {
     >
       <VStack gap={10} align="stretch" animation={`${fadeInUp} 0.6s ease-out`}>
         <VStack gap={3} textAlign="center" maxW="2xl" mx="auto">
-            <Text
-                fontWeight="bold"
-                fontSize={{ base: "xl", md: "2xl" }}
-                textAlign="center"
-            >
-                Connexion
-            </Text>
-          <Text fontSize={{ base: "md", md: "lg" }} color={helperText} _dark={{ color: "gray.300" }}>
+          <Text
+            fontWeight="bold"
+            fontSize={{ base: "xl", md: "2xl" }}
+            textAlign="center"
+          >
+            Connexion
+          </Text>
+          <Text
+            fontSize={{ base: "md", md: "lg" }}
+            color={helperText}
+            _dark={{ color: "gray.300" }}
+          >
             Accède à ton espace en renseignant ton email et ton mot de passe.
           </Text>
         </VStack>
@@ -136,7 +140,11 @@ export default function LoginPage() {
               </Button>
 
               <VStack gap={2} textAlign="center">
-                <Text fontSize="sm" color={mutedText} _dark={{ color: "gray.400" }}>
+                <Text
+                  fontSize="sm"
+                  color={mutedText}
+                  _dark={{ color: "gray.400" }}
+                >
                   Pas encore de compte ? Contacte-nous pour activer ton accès.
                 </Text>
                 <ChakraLink
