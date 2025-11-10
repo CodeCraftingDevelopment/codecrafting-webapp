@@ -1,14 +1,14 @@
-import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import {
   Box,
-  Flex,
   Link as ChakraLink,
-  IconButton,
+  Flex,
   Heading,
+  IconButton,
 } from "@chakra-ui/react";
-import { ColorModeButton } from "@/components/ui/color-mode";
 import NextLink from "next/link";
 import { FiUser } from "react-icons/fi";
+import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
+import { ColorModeButton } from "@/components/ui/color-mode";
 
 // Configuration de la navigation
 const navigationItems = [

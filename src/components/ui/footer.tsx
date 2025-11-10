@@ -2,12 +2,12 @@
 
 import {
   Box,
+  Link as ChakraLink,
   Container,
   Flex,
   Grid,
   GridItem,
   Text,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";

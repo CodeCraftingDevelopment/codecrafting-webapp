@@ -2,12 +2,12 @@
 
 import {
   Box,
+  Button,
+  Link as ChakraLink,
+  Container,
   Heading,
   Text,
-  Button,
   VStack,
-  Container,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";

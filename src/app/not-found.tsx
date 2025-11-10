@@ -3,9 +3,9 @@
 import {
   Box,
   Button,
+  Link as ChakraLink,
   Heading,
   Text,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";

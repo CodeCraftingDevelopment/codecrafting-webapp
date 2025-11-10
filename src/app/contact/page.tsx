@@ -2,11 +2,11 @@
 
 import {
   Box,
+  Button,
+  Link as ChakraLink,
   Heading,
   Text,
   VStack,
-  Link as ChakraLink,
-  Button,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import NextLink from "next/link";

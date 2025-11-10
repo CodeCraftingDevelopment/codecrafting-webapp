@@ -2,15 +2,15 @@
 
 import {
   Box,
+  Link as ChakraLink,
+  Container,
   Heading,
+  SimpleGrid,
   Text,
   VStack,
-  Container,
-  SimpleGrid,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { keyframes } from "@emotion/react";
+import NextLink from "next/link";
 
 const fadeInUp = keyframes`
   from {

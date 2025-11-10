@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Provider } from "@/components/ui/provider";
-import Header from "@/components/ui/header";
-import Footer from "@/components/ui/footer";
-import { BackgroundShapes } from "@/components/ui/background-shapes";
-import { ParticleNetwork } from "@/components/ui/particle-network";
-import React from "react";
 import { Fira_Code } from "next/font/google";
+import type React from "react";
+import { BackgroundShapes } from "@/components/ui/background-shapes";
+import Footer from "@/components/ui/footer";
+import Header from "@/components/ui/header";
+import { ParticleNetwork } from "@/components/ui/particle-network";
+import { Provider } from "@/components/ui/provider";
 
 export const metadata: Metadata = {
   title: "Codecrafting",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
+import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
 const fadeInUp = keyframes`

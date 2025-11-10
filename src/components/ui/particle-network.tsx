@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Box } from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 interface Particle {
