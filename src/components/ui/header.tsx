@@ -66,36 +66,38 @@ function HeaderActions() {
               </Flex>
             </Button>
           </Menu.Trigger>
-          <Menu.Content>
-            <Menu.Item value="dashboard" asChild>
-              <ChakraLink as={NextLink} href="/dashboard" display="flex">
-                <Flex alignItems="center" gap={2}>
-                  <FiHome />
-                  <Text>Dashboard</Text>
-                </Flex>
-              </ChakraLink>
-            </Menu.Item>
-
-            {session.user.role === "admin" && (
-              <Menu.Item value="admin" asChild>
-                <ChakraLink as={NextLink} href="/admin" display="flex">
+          <Menu.Positioner>
+            <Menu.Content positioning={{ placement: "bottom-start" }}>
+              <Menu.Item value="dashboard" asChild>
+                <ChakraLink as={NextLink} href="/dashboard" display="flex">
                   <Flex alignItems="center" gap={2}>
-                    <FiShield />
-                    <Text>Administration</Text>
+                    <FiHome />
+                    <Text>Dashboard</Text>
                   </Flex>
                 </ChakraLink>
               </Menu.Item>
-            )}
 
-            <Menu.Separator />
+              {session.user.role === "admin" && (
+                <Menu.Item value="admin" asChild>
+                  <ChakraLink as={NextLink} href="/admin" display="flex">
+                    <Flex alignItems="center" gap={2}>
+                      <FiShield />
+                      <Text>Administration</Text>
+                    </Flex>
+                  </ChakraLink>
+                </Menu.Item>
+              )}
 
-            <Menu.Item value="logout" onClick={() => signOut()}>
-              <Flex alignItems="center" gap={2}>
-                <FiLogOut />
-                <Text>Se déconnecter</Text>
-              </Flex>
-            </Menu.Item>
-          </Menu.Content>
+              <Menu.Separator />
+
+              <Menu.Item value="logout" onClick={() => signOut()}>
+                <Flex alignItems="center" gap={2}>
+                  <FiLogOut />
+                  <Text>Se déconnecter</Text>
+                </Flex>
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Positioner>
         </Menu.Root>
       ) : (
         <IconButton
