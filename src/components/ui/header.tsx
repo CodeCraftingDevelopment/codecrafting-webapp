@@ -1,12 +1,18 @@
+'use client';
+
 import {
   Box,
   Link as ChakraLink,
+  Button,
   Flex,
   Heading,
   IconButton,
+  Menu,
+  Text,
 } from "@chakra-ui/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
-import { FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";
 
@@ -43,13 +49,39 @@ function Logo() {
 
 // Composant Actions (icônes utilisateur et thème)
 function HeaderActions() {
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+
   return (
     <Flex gap={2} alignItems="center">
-      <NextLink href="/login" passHref>
-        <IconButton aria-label="Se connecter" variant="ghost" size="xl">
+      {isAuthenticated && session?.user ? (
+        <Menu.Root>
+          <Menu.Trigger asChild>
+            <Button variant="ghost" size="lg" px={3}>
+              <Text fontSize="sm" fontWeight="medium">
+                {session.user.name ?? session.user.email}
+              </Text>
+            </Button>
+          </Menu.Trigger>
+          <Menu.Content>
+            <Menu.Item value="logout" onClick={() => signOut()}>
+              <Flex alignItems="center" gap={2}>
+                <FiLogOut />
+                <Text>Se déconnecter</Text>
+              </Flex>
+            </Menu.Item>
+          </Menu.Content>
+        </Menu.Root>
+      ) : (
+        <IconButton
+          aria-label="Se connecter"
+          variant="ghost"
+          size="xl"
+          onClick={() => signIn(undefined, { callbackUrl: "/" })}
+        >
           <FiUser />
         </IconButton>
-      </NextLink>
+      )}
       <ColorModeButton
         aria-label="Basculer entre le mode clair et sombre"
         variant="ghost"

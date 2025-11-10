@@ -10,6 +10,8 @@ import { Link as ChakraLink } from "@chakra-ui/react/link";
 import { VStack } from "@chakra-ui/react/stack";
 import { Text } from "@chakra-ui/react/text";
 import { keyframes } from "@emotion/react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { type FormEvent, useState } from "react";
 
@@ -25,6 +27,7 @@ export default function LoginPage() {
   const helperText = "gray.600";
   const mutedText = "gray.500";
 
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,8 +39,18 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      // TODO: appeler ici votre API d'authentification.
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Email ou mot de passe invalide.");
+        return;
+      }
+
+      router.push("/");
     } catch (submissionError) {
       console.error("Erreur lors de la soumission:", submissionError);
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
