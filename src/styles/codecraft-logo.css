@@ -13,5 +13,5 @@
 
 /* Désactiver la transition lors du changement initial pour éviter le flash */
 html[data-theme-changing] .codecrafting-logo-fill {
-  transition: none !important;
+  transition: none;
 }

@@ -101,7 +101,6 @@ export default function Header() {
   return (
     <Box
       as="header"
-      role="banner"
       shadow="md"
       bg="chakra-body-bg"
       borderBottom="1px"

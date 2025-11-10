@@ -17,7 +17,10 @@ export function CodecraftLogo({ width = 50, height = 50 }: CodecraftLogoProps) {
       height={height}
       viewBox="0 0 1024 1024"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-labelledby="codecraft-logo-title"
     >
+      <title id="codecraft-logo-title">CodeCraft Logo</title>
       <defs id="defs1" />
       <g id="g1">
         <g id="g510" transform="translate(9.8306391,2.8087564)">
