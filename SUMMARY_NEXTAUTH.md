@@ -83,6 +83,7 @@ Ou sur Windows (PowerShell):
 ```powershell
 $secret = [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 "NEXTAUTH_SECRET=$secret" | Out-File -FilePath .env.local -Encoding utf8
+Write-Host "NEXTAUTH_SECRET=$secret"
 ```
 
 ### 2. Lancer l'application
