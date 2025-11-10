@@ -3,8 +3,8 @@
  * Exécuter avec: node check-env.js
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 console.log("🔍 Vérification de la configuration NextAuth...\n");
 
