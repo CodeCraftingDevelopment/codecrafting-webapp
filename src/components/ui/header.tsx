@@ -55,7 +55,7 @@ function HeaderActions() {
   return (
     <Flex gap={2} alignItems="center">
       {isAuthenticated && session?.user ? (
-        <Menu.Root>
+        <Menu.Root positioning={{ placement: "bottom-start" }}>
           <Menu.Trigger asChild>
             <Button variant="ghost" size="lg" px={3}>
               <Flex alignItems="center" gap={2}>
@@ -67,7 +67,7 @@ function HeaderActions() {
             </Button>
           </Menu.Trigger>
           <Menu.Positioner>
-            <Menu.Content positioning={{ placement: "bottom-start" }}>
+            <Menu.Content>
               <Menu.Item value="dashboard" asChild>
                 <ChakraLink as={NextLink} href="/dashboard" display="flex">
                   <Flex alignItems="center" gap={2}>
