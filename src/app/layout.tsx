@@ -20,7 +20,11 @@ const firaCode = Fira_Code({
 export default function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
-    <html suppressHydrationWarning className={firaCode.className} lang={"fr"}>
+    <html
+      suppressHydrationWarning
+      className={`${firaCode.className} light`}
+      lang={"fr"}
+    >
       <body
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
