@@ -1,6 +1,10 @@
-import NextAuth from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth-options";
 
-const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
-
-export { handlers, auth, signIn, signOut };
+/**
+ * Récupère la session côté serveur (Server Components, API Routes, Server Actions)
+ * @returns Session object ou null si non authentifié
+ */
+export async function auth() {
+  return await getServerSession(authOptions);
+}

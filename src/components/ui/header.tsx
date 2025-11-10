@@ -12,11 +12,11 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser, FiHome, FiShield } from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";
 
-// Configuration de la navigation
+// Configuration de la navigation publique
 const navigationItems = [
   { href: "/", label: "Accueil" },
   { href: "/about", label: "À propos" },
@@ -58,12 +58,37 @@ function HeaderActions() {
         <Menu.Root>
           <Menu.Trigger asChild>
             <Button variant="ghost" size="lg" px={3}>
-              <Text fontSize="sm" fontWeight="medium">
-                {session.user.name ?? session.user.email}
-              </Text>
+              <Flex alignItems="center" gap={2}>
+                <FiUser />
+                <Text fontSize="sm" fontWeight="medium">
+                  {session.user.name ?? session.user.email}
+                </Text>
+              </Flex>
             </Button>
           </Menu.Trigger>
           <Menu.Content>
+            <Menu.Item value="dashboard" asChild>
+              <ChakraLink as={NextLink} href="/dashboard" display="flex">
+                <Flex alignItems="center" gap={2}>
+                  <FiHome />
+                  <Text>Dashboard</Text>
+                </Flex>
+              </ChakraLink>
+            </Menu.Item>
+            
+            {session.user.role === "admin" && (
+              <Menu.Item value="admin" asChild>
+                <ChakraLink as={NextLink} href="/admin" display="flex">
+                  <Flex alignItems="center" gap={2}>
+                    <FiShield />
+                    <Text>Administration</Text>
+                  </Flex>
+                </ChakraLink>
+              </Menu.Item>
+            )}
+            
+            <Menu.Separator />
+            
             <Menu.Item value="logout" onClick={() => signOut()}>
               <Flex alignItems="center" gap={2}>
                 <FiLogOut />
