@@ -2,6 +2,8 @@ services:
   nextjs:
     image: ghcr.io/codecraftingdevelopment/codecrafting-webapp:production
     container_name: codecrafting-webapp
+    env_file:
+      - /opt/codecrafting/.env.production
     ports:
       - "3000:3000"
     restart: unless-stopped
