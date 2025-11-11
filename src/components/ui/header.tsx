@@ -9,12 +9,16 @@ import {
   IconButton,
   Menu,
   Text,
+  Drawer,
+  VStack,
+  Separator,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { FiHome, FiLogOut, FiShield, FiUser } from "react-icons/fi";
+import { FiHome, FiLogOut, FiShield, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";
+import { useState } from "react";
 
 // Configuration de la navigation publique
 const navigationItems = [
@@ -155,6 +159,177 @@ function Navigation() {
   );
 }
 
+// Composant Menu Burger pour mobile
+function MenuBurger() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+
+  const handleClose = () => setIsOpen(false);
+
+  return (
+    <>
+      <IconButton
+        aria-label="Ouvrir le menu"
+        variant="ghost"
+        size="lg"
+        onClick={() => setIsOpen(true)}
+      >
+        <FiMenu size={24} />
+      </IconButton>
+
+      <Drawer.Root open={isOpen} onOpenChange={(e) => setIsOpen(e.open)} placement="end">
+        <Drawer.Backdrop />
+        <Drawer.Positioner>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Drawer.Title>Menu</Drawer.Title>
+                <Drawer.CloseTrigger asChild>
+                  <IconButton
+                    aria-label="Fermer le menu"
+                    variant="ghost"
+                    size="sm"
+                  >
+                    <FiX size={20} />
+                  </IconButton>
+                </Drawer.CloseTrigger>
+              </Flex>
+            </Drawer.Header>
+
+            <Drawer.Body>
+              <VStack gap={4} alignItems="stretch">
+                {/* Section Navigation */}
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                    Navigation
+                  </Text>
+                  <VStack gap={2} alignItems="stretch">
+                    {navigationItems.map((item) => (
+                      <ChakraLink
+                        key={item.href}
+                        as={NextLink}
+                        href={item.href}
+                        px={4}
+                        py={3}
+                        borderRadius="md"
+                        onClick={handleClose}
+                        _hover={{
+                          textDecoration: "none",
+                          bg: "blackAlpha.100",
+                          _dark: {
+                            bg: "whiteAlpha.100",
+                          },
+                        }}
+                      >
+                        {item.label}
+                      </ChakraLink>
+                    ))}
+                  </VStack>
+                </Box>
+
+                <Separator />
+
+                {/* Section Utilisateur */}
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                    Compte
+                  </Text>
+                  <VStack gap={2} alignItems="stretch">
+                    {isAuthenticated && session?.user ? (
+                      <>
+                        <Box px={4} py={2}>
+                          <Text fontSize="sm" fontWeight="medium">
+                            {session.user.name ?? session.user.email}
+                          </Text>
+                        </Box>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          onClick={handleClose}
+                          asChild
+                        >
+                          <ChakraLink as={NextLink} href="/dashboard" display="flex">
+                            <Flex alignItems="center" gap={2}>
+                              <FiHome />
+                              <Text>Dashboard</Text>
+                            </Flex>
+                          </ChakraLink>
+                        </Button>
+
+                        {session.user.role === "admin" && (
+                          <Button
+                            variant="ghost"
+                            justifyContent="flex-start"
+                            onClick={handleClose}
+                            asChild
+                          >
+                            <ChakraLink as={NextLink} href="/admin" display="flex">
+                              <Flex alignItems="center" gap={2}>
+                                <FiShield />
+                                <Text>Administration</Text>
+                              </Flex>
+                            </ChakraLink>
+                          </Button>
+                        )}
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          onClick={() => {
+                            handleClose();
+                            signOut();
+                          }}
+                        >
+                          <Flex alignItems="center" gap={2}>
+                            <FiLogOut />
+                            <Text>Se déconnecter</Text>
+                          </Flex>
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        justifyContent="flex-start"
+                        onClick={() => {
+                          handleClose();
+                          signIn(undefined, { callbackUrl: "/" });
+                        }}
+                      >
+                        <Flex alignItems="center" gap={2}>
+                          <FiUser />
+                          <Text>Se connecter</Text>
+                        </Flex>
+                      </Button>
+                    )}
+                  </VStack>
+                </Box>
+
+                <Separator />
+
+                {/* Section Thème */}
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                    Apparence
+                  </Text>
+                  <Flex px={4} py={2}>
+                    <ColorModeButton
+                      aria-label="Basculer entre le mode clair et sombre"
+                      variant="ghost"
+                      size="lg"
+                    />
+                  </Flex>
+                </Box>
+              </VStack>
+            </Drawer.Body>
+          </Drawer.Content>
+        </Drawer.Positioner>
+      </Drawer.Root>
+    </>
+  );
+}
+
 // Composant Header principal
 export default function Header() {
   return (
@@ -166,24 +341,17 @@ export default function Header() {
       borderColor="chakra-border-color"
       p={{ base: 2, md: 3 }}
     >
-      {/* Layout Mobile (base) : Logo / Icônes / Liens en colonnes */}
+      {/* Layout Mobile (base) : Logo à gauche + Menu burger à droite */}
       <Flex
-        direction="column"
+        justifyContent="space-between"
         alignItems="center"
-        gap={3}
         display={{ base: "flex", md: "none" }}
       >
-        {/* Ligne 1 : Logo centré */}
         <Logo />
-
-        {/* Ligne 2 : Icônes centrées */}
-        <HeaderActions />
-
-        {/* Ligne 3 : Liens en colonne */}
-        <Navigation />
+        <MenuBurger />
       </Flex>
 
-      {/* Layout Moyen écran (md+) : Logo sur 2 lignes avec titre/icônes puis liens */}
+      {/* Layout Desktop (md+) : Logo sur 2 lignes avec titre/icônes puis liens */}
       <Flex direction="column" gap={3} display={{ base: "none", md: "flex" }}>
         {/* Ligne 1 : Logo + Titre + Icônes */}
         <Flex justifyContent="space-between" alignItems="center" gap={4}>
