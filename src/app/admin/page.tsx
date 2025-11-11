@@ -1,4 +1,12 @@
-import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Code,
+  Container,
+  Heading,
+  SimpleGrid,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { requireAdmin } from "@/lib/auth/guards";
 
 /**
@@ -10,6 +18,25 @@ export default async function AdminPage() {
   // Redirige vers /login si non authentifié
   // Redirige vers / si authentifié mais pas admin
   const session = await requireAdmin();
+
+  const envVariables = [
+    {
+      label: "NEXT_PUBLIC_ENV",
+      value: process.env.NEXT_PUBLIC_ENV ?? "Non définie",
+      description: "Environnement courant côté client",
+    },
+    {
+      label: "NEXTAUTH_URL",
+      value: process.env.NEXTAUTH_URL ?? "Non définie",
+      description: "URL publique utilisée par NextAuth",
+    },
+    {
+      label: "NEXTAUTH_SECRET",
+      value: process.env.NEXTAUTH_SECRET ?? "Non définie",
+      description:
+        "Secret de signature NextAuth (garder confidentiel, affiché ici car vous êtes administrateur)",
+    },
+  ];
 
   return (
     <Container maxW="4xl" py={16}>
@@ -50,6 +77,40 @@ export default async function AdminPage() {
                 <Text>• Modération du contenu</Text>
               </VStack>
             </Box>
+          </VStack>
+        </Box>
+
+        <Box
+          p={8}
+          borderRadius="xl"
+          border="1px solid"
+          borderColor="green.100"
+          bg="green.50"
+          _dark={{ bg: "green.900", borderColor: "green.700" }}
+        >
+          <VStack gap={6} align="stretch">
+            <Heading size="md">Variables d&apos;environnement actives</Heading>
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+              {envVariables.map((envVar) => (
+                <Box
+                  key={envVar.label}
+                  p={4}
+                  borderRadius="lg"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  bg="white"
+                  _dark={{ bg: "gray.800", borderColor: "gray.700" }}
+                >
+                  <Text fontWeight="semibold">{envVar.label}</Text>
+                  <Code display="block" mt={2} p={2} whiteSpace="pre-wrap">
+                    {envVar.value}
+                  </Code>
+                  <Text mt={2} fontSize="sm" color="gray.600" _dark={{ color: "gray.300" }}>
+                    {envVar.description}
+                  </Text>
+                </Box>
+              ))}
+            </SimpleGrid>
           </VStack>
         </Box>
 
