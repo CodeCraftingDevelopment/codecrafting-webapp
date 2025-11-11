@@ -105,7 +105,12 @@ export default async function AdminPage() {
                   <Code display="block" mt={2} p={2} whiteSpace="pre-wrap">
                     {envVar.value}
                   </Code>
-                  <Text mt={2} fontSize="sm" color="gray.600" _dark={{ color: "gray.300" }}>
+                  <Text
+                    mt={2}
+                    fontSize="sm"
+                    color="gray.600"
+                    _dark={{ color: "gray.300" }}
+                  >
                     {envVar.description}
                   </Text>
                 </Box>

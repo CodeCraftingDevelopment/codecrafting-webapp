@@ -4,21 +4,28 @@ import {
   Box,
   Button,
   Link as ChakraLink,
+  Drawer,
   Flex,
   Heading,
   IconButton,
   Menu,
-  Text,
-  Drawer,
-  VStack,
   Separator,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { FiHome, FiLogOut, FiShield, FiUser, FiMenu, FiX } from "react-icons/fi";
+import { useState } from "react";
+import {
+  FiHome,
+  FiLogOut,
+  FiMenu,
+  FiShield,
+  FiUser,
+  FiX,
+} from "react-icons/fi";
 import { CodecraftLogo } from "@/components/images/svg/CodecraftLogo";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { useState } from "react";
 
 // Configuration de la navigation publique
 const navigationItems = [
@@ -178,7 +185,11 @@ function MenuBurger() {
         <FiMenu size={24} />
       </IconButton>
 
-      <Drawer.Root open={isOpen} onOpenChange={(e) => setIsOpen(e.open)} placement="end">
+      <Drawer.Root
+        open={isOpen}
+        onOpenChange={(e) => setIsOpen(e.open)}
+        placement="end"
+      >
         <Drawer.Backdrop />
         <Drawer.Positioner>
           <Drawer.Content>
@@ -250,7 +261,11 @@ function MenuBurger() {
                           onClick={handleClose}
                           asChild
                         >
-                          <ChakraLink as={NextLink} href="/dashboard" display="flex">
+                          <ChakraLink
+                            as={NextLink}
+                            href="/dashboard"
+                            display="flex"
+                          >
                             <Flex alignItems="center" gap={2}>
                               <FiHome />
                               <Text>Dashboard</Text>
@@ -265,7 +280,11 @@ function MenuBurger() {
                             onClick={handleClose}
                             asChild
                           >
-                            <ChakraLink as={NextLink} href="/admin" display="flex">
+                            <ChakraLink
+                              as={NextLink}
+                              href="/admin"
+                              display="flex"
+                            >
                               <Flex alignItems="center" gap={2}>
                                 <FiShield />
                                 <Text>Administration</Text>

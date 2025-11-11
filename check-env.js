@@ -20,9 +20,7 @@ console.log(
   `1. Fichier .env.local: ${envExists ? "✅ Existe" : "❌ Manquant"}`,
 );
 
-console.log(
-  `1. Fichier .env.local path: ${envPath}`,
-);
+console.log(`1. Fichier .env.local path: ${envPath}`);
 
 if (envExists) {
   try {
