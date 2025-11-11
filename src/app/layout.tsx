@@ -1,3 +1,4 @@
+import { Box, Flex } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { Fira_Code } from "next/font/google";
 import type React from "react";
@@ -25,17 +26,19 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       className={`${firaCode.className} light`}
       lang={"fr"}
     >
-      <body
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
+      <body>
         <Provider>
-          <ParticleNetwork />
-          <BackgroundShapes />
-          <header>
-            <Header />
-          </header>
-          <main style={{ flex: 1 }}>{children}</main>
-          <Footer />
+          <Flex direction="column" minH="100vh">
+            <ParticleNetwork />
+            <BackgroundShapes />
+            <Box as="header">
+              <Header />
+            </Box>
+            <Box as="main" flex={1}>
+              {children}
+            </Box>
+            <Footer />
+          </Flex>
         </Provider>
       </body>
     </html>
