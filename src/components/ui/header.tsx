@@ -179,10 +179,12 @@ function MenuBurger() {
       <IconButton
         aria-label="Ouvrir le menu"
         variant="ghost"
-        size="lg"
+        size="2xl"
         onClick={() => setIsOpen(true)}
+        h={28}
+        w={28}
       >
-        <FiMenu size={24} />
+        <FiMenu size={56} />
       </IconButton>
 
       <Drawer.Root
@@ -225,11 +227,17 @@ function MenuBurger() {
                         py={3}
                         borderRadius="md"
                         onClick={handleClose}
+                        fontSize="md"
+                        fontWeight="medium"
+                        transition="all 0.2s"
                         _hover={{
                           textDecoration: "none",
-                          bg: "blackAlpha.100",
+                          bg: "blue.100",
+                          transform: "translateX(4px)",
+                          color: "blue.700",
                           _dark: {
-                            bg: "whiteAlpha.100",
+                            bg: "blue.700",
+                            color: "blue.100",
                           },
                         }}
                       >
@@ -260,6 +268,12 @@ function MenuBurger() {
                           justifyContent="flex-start"
                           onClick={handleClose}
                           asChild
+                          _hover={{
+                            bg: "blackAlpha.100",
+                            _dark: {
+                              bg: "whiteAlpha.100",
+                            },
+                          }}
                         >
                           <ChakraLink
                             as={NextLink}
@@ -279,6 +293,12 @@ function MenuBurger() {
                             justifyContent="flex-start"
                             onClick={handleClose}
                             asChild
+                            _hover={{
+                              bg: "blackAlpha.100",
+                              _dark: {
+                                bg: "whiteAlpha.100",
+                              },
+                            }}
                           >
                             <ChakraLink
                               as={NextLink}
@@ -300,6 +320,12 @@ function MenuBurger() {
                             handleClose();
                             signOut();
                           }}
+                          _hover={{
+                            bg: "blackAlpha.100",
+                            _dark: {
+                              bg: "whiteAlpha.100",
+                            },
+                          }}
                         >
                           <Flex alignItems="center" gap={2}>
                             <FiLogOut />
@@ -314,6 +340,12 @@ function MenuBurger() {
                         onClick={() => {
                           handleClose();
                           signIn(undefined, { callbackUrl: "/" });
+                        }}
+                        _hover={{
+                          bg: "blackAlpha.100",
+                          _dark: {
+                            bg: "whiteAlpha.100",
+                          },
                         }}
                       >
                         <Flex alignItems="center" gap={2}>
