@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Container, Heading, Text, VStack } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
 const fadeInUp = keyframes`
@@ -57,7 +51,8 @@ export default function BlogPage() {
           textAlign="center"
         >
           <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
-            Le blog est en cours de construction. Revenez bientôt pour découvrir nos articles !
+            Le blog est en cours de construction. Revenez bientôt pour découvrir
+            nos articles !
           </Text>
         </Box>
       </VStack>
