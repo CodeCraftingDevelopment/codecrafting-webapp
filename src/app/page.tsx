@@ -51,7 +51,7 @@ export default function Home() {
             as="h1"
             size={{ base: "2xl", md: "4xl" }}
             mb={2}
-            bgGradient="linear(to-r, blue.400, purple.500)"
+            bgGradient="linear(to-r, primary.400, secondary.500)"
             bgClip="text"
             fontWeight="extrabold"
           >
@@ -59,8 +59,7 @@ export default function Home() {
           </Heading>
           <Text
             fontSize={{ base: "md", md: "lg" }}
-            color="gray.600"
-            _dark={{ color: "gray.300" }}
+            color="text.secondary"
             maxW="3xl"
             mx="auto"
           >
@@ -85,7 +84,8 @@ export default function Home() {
           >
             <Button
               size="lg"
-              colorScheme="blue"
+              bg="button.primary.bg"
+              color="button.primary.text"
               px={8}
               py={6}
               fontSize="lg"
@@ -94,6 +94,7 @@ export default function Home() {
               _hover={{
                 transform: "translateY(-2px)",
                 boxShadow: "xl",
+                bg: "button.primary.hover",
               }}
               transition="all 0.3s ease"
             >
@@ -108,15 +109,18 @@ export default function Home() {
             <Button
               size="lg"
               variant="outline"
-              colorScheme="blue"
+              bg="button.ghost.bg"
+              color="button.primary.bg"
+              borderColor="button.primary.bg"
               px={8}
               py={6}
               fontSize="lg"
               borderRadius="xl"
               _hover={{
                 transform: "translateY(-2px)",
-                bg: "blue.50",
-                _dark: { bg: "blue.900" },
+                bg: "button.primary.bg",
+                color: "button.primary.text",
+                borderColor: "button.primary.hover",
               }}
               transition="all 0.3s ease"
             >
@@ -130,11 +134,11 @@ export default function Home() {
           mt={8}
           p={8}
           borderRadius="2xl"
-          bg="whiteAlpha.700"
-          _dark={{ bg: "blackAlpha.500", borderColor: "blue.800" }}
+          bg="card.bg"
+          _dark={{ bg: "card.bg" }}
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor="blue.100"
+          borderColor="card.border"
         >
           <Heading size="md" mb={4}>
             Prestations proposées
@@ -143,8 +147,7 @@ export default function Home() {
             align="stretch"
             gap={3}
             textAlign="left"
-            color="gray.600"
-            _dark={{ color: "gray.300" }}
+            color="text.secondary"
           >
             <Text as="span">
               • Assistance informatique de proximité : dépannage, configuration,

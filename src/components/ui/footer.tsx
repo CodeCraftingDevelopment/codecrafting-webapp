@@ -14,19 +14,13 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Footer() {
-  const footerBg = useColorModeValue("chakra-body-bg", "chakra-body-bg");
-  const borderColor = "chakra-border-color";
-  const headingColor = useColorModeValue(
-    "chakra-body-text",
-    "chakra-body-text",
-  );
-  const mutedTextColor = useColorModeValue(
-    "chakra-subtle-text",
-    "chakra-subtle-text",
-  );
-  const linkColor = useColorModeValue("blue.500", "blue.300");
-  const iconHoverBg = useColorModeValue("blue.50", "blue.900");
-  const githubIconColor = useColorModeValue("gray.800", "gray.100");
+  const footerBg = "bg.secondary";
+  const borderColor = "border.light";
+  const headingColor = "text.primary";
+  const mutedTextColor = "text.secondary";
+  const linkColor = "link.color";
+  const iconHoverBg = "hover.bg";
+  const githubIconColor = "text.primary";
 
   const socialLinks = [
     { name: "LinkedIn", href: "https://linkedin.com", icon: <FaLinkedin /> },

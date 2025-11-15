@@ -36,12 +36,12 @@ export default function ContactPage() {
         <Heading
           as="h1"
           size="2xl"
-          bgGradient="linear(to-r, blue.400, purple.500)"
+          bgGradient="linear(to-r, primary.400, secondary.500)"
           bgClip="text"
         >
           Contact
         </Heading>
-        <Text fontSize="lg" color="gray.600" _dark={{ color: "gray.300" }}>
+        <Text fontSize="lg" color="text.secondary">
           Besoin d’aide en assistance informatique ou sur une application web,
           mobile ou bureautique&nbsp;? Écrivez-moi&nbsp;: je vous réponds sous
           48&nbsp;heures pour définir les prochaines étapes.
@@ -50,11 +50,11 @@ export default function ContactPage() {
           <Box
             p={6}
             borderRadius="xl"
-            bg="whiteAlpha.700"
-            _dark={{ bg: "blackAlpha.500", borderColor: "blue.800" }}
+            bg="card.bg"
+            _dark={{ bg: "card.bg" }}
             backdropFilter="blur(10px)"
             border="1px solid"
-            borderColor="blue.100"
+            borderColor="card.border"
             transition="all 0.3s ease"
             _hover={{
               transform: "translateY(-2px)",
@@ -66,8 +66,8 @@ export default function ContactPage() {
             </Heading>
             <ChakraLink
               href="mailto:contact@codecrafting.fr"
-              color="blue.500"
-              _hover={{ color: "blue.600" }}
+              color="link.color"
+              _hover={{ color: "link.hover" }}
             >
               contact@codecrafting.fr
             </ChakraLink>
@@ -75,11 +75,11 @@ export default function ContactPage() {
           <Box
             p={6}
             borderRadius="xl"
-            bg="whiteAlpha.700"
-            _dark={{ bg: "blackAlpha.500", borderColor: "blue.800" }}
+            bg="card.bg"
+            _dark={{ bg: "card.bg" }}
             backdropFilter="blur(10px)"
             border="1px solid"
-            borderColor="blue.100"
+            borderColor="card.border"
             transition="all 0.3s ease"
             _hover={{
               transform: "translateY(-2px)",
@@ -89,7 +89,7 @@ export default function ContactPage() {
             <Heading as="h2" size="md" mb={2}>
               Téléphone
             </Heading>
-            <Text color="gray.600" _dark={{ color: "gray.300" }}>
+            <Text color="text.secondary">
               Disponible sur rendez-vous. Proposez un créneau par mail et je
               vous rappelle pour un échange.
             </Text>
@@ -97,11 +97,11 @@ export default function ContactPage() {
           <Box
             p={6}
             borderRadius="xl"
-            bg="whiteAlpha.700"
-            _dark={{ bg: "blackAlpha.500", borderColor: "blue.800" }}
+            bg="card.bg"
+            _dark={{ bg: "card.bg" }}
             backdropFilter="blur(10px)"
             border="1px solid"
-            borderColor="blue.100"
+            borderColor="card.border"
             transition="all 0.3s ease"
             _hover={{
               transform: "translateY(-2px)",
@@ -111,14 +111,14 @@ export default function ContactPage() {
             <Heading as="h2" size="md" mb={2}>
               Préparer notre échange
             </Heading>
-            <Text color="gray.600" _dark={{ color: "gray.300" }}>
+            <Text color="text.secondary">
               Quelques lignes sur votre activité, les objectifs visés et les
               échéances suffisent. J’arrive au rendez-vous avec des premières
               pistes techniques adaptées.
             </Text>
           </Box>
         </VStack>
-        <Text fontSize="md" color="gray.500" _dark={{ color: "gray.400" }}>
+        <Text fontSize="md" color="text.muted">
           Basé en France, je travaille à distance et peux intervenir en journée
           ou en soirée selon vos contraintes.
         </Text>
@@ -128,7 +128,13 @@ export default function ContactPage() {
             href="/"
             _hover={{ textDecoration: "none" }}
           >
-            <Button colorScheme="blue">Retour à l&apos;accueil</Button>
+            <Button
+              bg="button.primary.bg"
+              color="button.primary.text"
+              _hover={{
+                bg: "button.primary.hover",
+              }}
+            >Retour à l&apos;accueil</Button>
           </ChakraLink>
         </Box>
       </VStack>

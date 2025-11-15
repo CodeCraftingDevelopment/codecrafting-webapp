@@ -160,8 +160,8 @@ const config = defineConfig({
         card: {
           bg: { 
             value: { 
-              base: "white", 
-              _dark: "{colors.neutral.800}" 
+              base: "whiteAlpha.800", 
+              _dark: "blackAlpha.500" 
             } 
           },
           border: { 
@@ -268,8 +268,8 @@ const config = defineConfig({
         input: {
           bg: { 
             value: { 
-              base: "white", 
-              _dark: "{colors.neutral.800}" 
+              base: "whiteAlpha.800", 
+              _dark: "blackAlpha.500" 
             } 
           },
           border: { 

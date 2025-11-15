@@ -24,8 +24,8 @@ const fadeInUp = keyframes`
 `;
 
 export default function LoginPage() {
-  const helperText = "gray.600";
-  const mutedText = "gray.500";
+  const helperText = "text.secondary";
+  const mutedText = "text.muted";
 
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -78,7 +78,6 @@ export default function LoginPage() {
           <Text
             fontSize={{ base: "md", md: "lg" }}
             color={helperText}
-            _dark={{ color: "gray.300" }}
           >
             Accède à ton espace en renseignant ton email et ton mot de passe.
           </Text>
@@ -92,11 +91,11 @@ export default function LoginPage() {
           py={{ base: 8, md: 10 }}
           borderRadius="2xl"
           border="1px solid"
-          borderColor="blue.100"
-          bg="whiteAlpha.800"
+          borderColor="card.border"
+          bg="card.bg"
           _dark={{
-            bg: "blackAlpha.500",
-            borderColor: "blue.800",
+            bg: "card.bg",
+            borderColor: "card.border",
             boxShadow: "xl",
           }}
           boxShadow="2xl"
@@ -145,10 +144,14 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                colorScheme="blue"
+                bg="button.primary.bg"
+                color="button.primary.text"
                 size="lg"
                 loading={isSubmitting}
                 loadingText="Connexion en cours"
+                _hover={{
+                  bg: "button.primary.hover",
+                }}
               >
                 Se connecter
               </Button>
@@ -157,7 +160,6 @@ export default function LoginPage() {
                 <Text
                   fontSize="sm"
                   color={mutedText}
-                  _dark={{ color: "gray.400" }}
                 >
                   Pas encore de compte ? Contacte-nous pour activer ton accès.
                 </Text>

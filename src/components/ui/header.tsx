@@ -46,7 +46,7 @@ function Logo() {
       _focus={{ outline: "none", boxShadow: "none" }}
       _focusVisible={{
         outline: "2px solid",
-        outlineColor: "blue.500",
+        outlineColor: "focus.default",
         outlineOffset: "2px",
         borderRadius: "md",
       }}
@@ -153,10 +153,7 @@ function Navigation() {
           textAlign="center"
           _hover={{
             textDecoration: "none",
-            bg: "blackAlpha.100",
-            _dark: {
-              bg: "whiteAlpha.100",
-            },
+            bg: "hover.bg",
           }}
         >
           {item.label}
@@ -214,7 +211,7 @@ function MenuBurger() {
               <VStack gap={4} alignItems="stretch">
                 {/* Section Navigation */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
                     Navigation
                   </Text>
                   <VStack gap={2} alignItems="stretch">
@@ -232,13 +229,9 @@ function MenuBurger() {
                         transition="all 0.2s"
                         _hover={{
                           textDecoration: "none",
-                          bg: "blue.100",
+                          bg: "hover.bg",
                           transform: "translateX(4px)",
-                          color: "blue.700",
-                          _dark: {
-                            bg: "blue.700",
-                            color: "blue.100",
-                          },
+                          color: "text.primary",
                         }}
                       >
                         {item.label}
@@ -251,7 +244,7 @@ function MenuBurger() {
 
                 {/* Section Utilisateur */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
                     Compte
                   </Text>
                   <VStack gap={2} alignItems="stretch">
@@ -269,10 +262,7 @@ function MenuBurger() {
                           onClick={handleClose}
                           asChild
                           _hover={{
-                            bg: "blackAlpha.100",
-                            _dark: {
-                              bg: "whiteAlpha.100",
-                            },
+                            bg: "hover.bg",
                           }}
                         >
                           <ChakraLink
@@ -321,10 +311,7 @@ function MenuBurger() {
                             signOut();
                           }}
                           _hover={{
-                            bg: "blackAlpha.100",
-                            _dark: {
-                              bg: "whiteAlpha.100",
-                            },
+                            bg: "hover.bg",
                           }}
                         >
                           <Flex alignItems="center" gap={2}>
@@ -361,7 +348,7 @@ function MenuBurger() {
 
                 {/* Section Thème */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="gray.500">
+                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
                     Apparence
                   </Text>
                   <Flex px={4} py={2}>
@@ -387,9 +374,9 @@ export default function Header() {
     <Box
       as="header"
       shadow="md"
-      bg="chakra-body-bg"
+      bg="header.bg"
       borderBottom="1px"
-      borderColor="chakra-border-color"
+      borderColor="header.border"
       p={{ base: 2, md: 3 }}
     >
       {/* Layout Mobile (base) : Logo à gauche + Menu burger à droite */}
