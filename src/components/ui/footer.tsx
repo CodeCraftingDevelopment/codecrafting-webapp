@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Footer() {
   const footerBg = "bg.secondary";

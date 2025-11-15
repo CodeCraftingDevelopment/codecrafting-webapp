@@ -2,8 +2,8 @@
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from "next-auth/react";
-import { ColorModeProvider, type ColorModeProviderProps } from "./color-mode";
 import { theme } from "@/theme/colors";
+import { ColorModeProvider, type ColorModeProviderProps } from "./color-mode";
 
 export function Provider(props: ColorModeProviderProps) {
   const { children, ...rest } = props;

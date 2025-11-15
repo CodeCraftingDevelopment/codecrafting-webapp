@@ -134,7 +134,9 @@ export default function ContactPage() {
               _hover={{
                 bg: "button.primary.hover",
               }}
-            >Retour à l&apos;accueil</Button>
+            >
+              Retour à l&apos;accueil
+            </Button>
           </ChakraLink>
         </Box>
       </VStack>

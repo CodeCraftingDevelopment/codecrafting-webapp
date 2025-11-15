@@ -2,7 +2,7 @@
 // Palette de couleurs basée sur le logo Codecraft (#00bece)
 // Compatible avec Chakra UI v3.27.1
 
-import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react"
+import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
 const config = defineConfig({
   theme: {
@@ -108,416 +108,416 @@ const config = defineConfig({
       colors: {
         // Text
         text: {
-          primary: { 
-            value: { 
-              base: "{colors.neutral.900}", 
-              _dark: "{colors.neutral.50}" 
-            } 
+          primary: {
+            value: {
+              base: "{colors.neutral.900}",
+              _dark: "{colors.neutral.50}",
+            },
           },
-          secondary: { 
-            value: { 
-              base: "{colors.neutral.600}", 
-              _dark: "{colors.neutral.400}" 
-            } 
+          secondary: {
+            value: {
+              base: "{colors.neutral.600}",
+              _dark: "{colors.neutral.400}",
+            },
           },
-          muted: { 
-            value: { 
-              base: "{colors.neutral.500}", 
-              _dark: "{colors.neutral.500}" 
-            } 
+          muted: {
+            value: {
+              base: "{colors.neutral.500}",
+              _dark: "{colors.neutral.500}",
+            },
           },
-          inverse: { 
-            value: { 
-              base: "{colors.neutral.50}", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          inverse: {
+            value: {
+              base: "{colors.neutral.50}",
+              _dark: "{colors.neutral.900}",
+            },
           },
         },
 
         // Background
         bg: {
-          primary: { 
-            value: { 
-              base: "{colors.neutral.50}", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          primary: {
+            value: {
+              base: "{colors.neutral.50}",
+              _dark: "{colors.neutral.900}",
+            },
           },
-          secondary: { 
-            value: { 
-              base: "white", 
-              _dark: "{colors.neutral.800}" 
-            } 
+          secondary: {
+            value: {
+              base: "white",
+              _dark: "{colors.neutral.800}",
+            },
           },
-          tertiary: { 
-            value: { 
-              base: "{colors.neutral.100}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          tertiary: {
+            value: {
+              base: "{colors.neutral.100}",
+              _dark: "{colors.neutral.700}",
+            },
           },
         },
 
         // Cards
         card: {
-          bg: { 
-            value: { 
-              base: "whiteAlpha.800", 
-              _dark: "blackAlpha.500" 
-            } 
+          bg: {
+            value: {
+              base: "whiteAlpha.800",
+              _dark: "blackAlpha.500",
+            },
           },
-          border: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          border: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.700}",
+            },
           },
-          shadow: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          shadow: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.900}",
+            },
           },
         },
 
         // Links
         link: {
-          color: { 
-            value: { 
-              base: "{colors.primary.500}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          color: {
+            value: {
+              base: "{colors.primary.500}",
+              _dark: "{colors.primary.400}",
+            },
           },
-          hover: { 
-            value: { 
-              base: "{colors.primary.600}", 
-              _dark: "{colors.primary.300}" 
-            } 
+          hover: {
+            value: {
+              base: "{colors.primary.600}",
+              _dark: "{colors.primary.300}",
+            },
           },
-          visited: { 
-            value: { 
-              base: "{colors.primary.700}", 
-              _dark: "{colors.primary.500}" 
-            } 
+          visited: {
+            value: {
+              base: "{colors.primary.700}",
+              _dark: "{colors.primary.500}",
+            },
           },
         },
 
         // Boutons
         button: {
           primary: {
-            bg: { 
-              value: { 
-                base: "{colors.primary.500}", 
-                _dark: "{colors.primary.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.primary.500}",
+                _dark: "{colors.primary.600}",
+              },
             },
-            hover: { 
-              value: { 
-                base: "{colors.primary.600}", 
-                _dark: "{colors.primary.700}" 
-              } 
+            hover: {
+              value: {
+                base: "{colors.primary.600}",
+                _dark: "{colors.primary.700}",
+              },
             },
-            text: { 
-              value: { 
-                base: "white", 
-                _dark: "white" 
-              } 
+            text: {
+              value: {
+                base: "white",
+                _dark: "white",
+              },
             },
           },
           secondary: {
-            bg: { 
-              value: { 
-                base: "{colors.secondary.500}", 
-                _dark: "{colors.secondary.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.secondary.500}",
+                _dark: "{colors.secondary.600}",
+              },
             },
-            hover: { 
-              value: { 
-                base: "{colors.secondary.600}", 
-                _dark: "{colors.secondary.700}" 
-              } 
+            hover: {
+              value: {
+                base: "{colors.secondary.600}",
+                _dark: "{colors.secondary.700}",
+              },
             },
-            text: { 
-              value: { 
-                base: "white", 
-                _dark: "white" 
-              } 
+            text: {
+              value: {
+                base: "white",
+                _dark: "white",
+              },
             },
           },
           ghost: {
-            bg: { 
-              value: { 
-                base: "transparent", 
-                _dark: "transparent" 
-              } 
+            bg: {
+              value: {
+                base: "transparent",
+                _dark: "transparent",
+              },
             },
-            hover: { 
-              value: { 
-                base: "{colors.primary.50}", 
-                _dark: "{colors.primary.900}" 
-              } 
+            hover: {
+              value: {
+                base: "{colors.primary.50}",
+                _dark: "{colors.primary.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.primary.600}", 
-                _dark: "{colors.primary.400}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.primary.600}",
+                _dark: "{colors.primary.400}",
+              },
             },
           },
         },
 
         // Formulaires
         input: {
-          bg: { 
-            value: { 
-              base: "whiteAlpha.800", 
-              _dark: "blackAlpha.500" 
-            } 
+          bg: {
+            value: {
+              base: "whiteAlpha.800",
+              _dark: "blackAlpha.500",
+            },
           },
-          border: { 
-            value: { 
-              base: "{colors.neutral.300}", 
-              _dark: "{colors.neutral.600}" 
-            } 
+          border: {
+            value: {
+              base: "{colors.neutral.300}",
+              _dark: "{colors.neutral.600}",
+            },
           },
-          focus: { 
-            value: { 
-              base: "{colors.primary.500}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          focus: {
+            value: {
+              base: "{colors.primary.500}",
+              _dark: "{colors.primary.400}",
+            },
           },
-          placeholder: { 
-            value: { 
-              base: "{colors.neutral.400}", 
-              _dark: "{colors.neutral.500}" 
-            } 
+          placeholder: {
+            value: {
+              base: "{colors.neutral.400}",
+              _dark: "{colors.neutral.500}",
+            },
           },
         },
 
         // Headers et navigation
         header: {
-          bg: { 
-            value: { 
-              base: "white", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          bg: {
+            value: {
+              base: "white",
+              _dark: "{colors.neutral.900}",
+            },
           },
-          border: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          border: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.700}",
+            },
           },
         },
         nav: {
-          link: { 
-            value: { 
-              base: "{colors.neutral.700}", 
-              _dark: "{colors.neutral.300}" 
-            } 
+          link: {
+            value: {
+              base: "{colors.neutral.700}",
+              _dark: "{colors.neutral.300}",
+            },
           },
-          linkHover: { 
-            value: { 
-              base: "{colors.primary.600}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          linkHover: {
+            value: {
+              base: "{colors.primary.600}",
+              _dark: "{colors.primary.400}",
+            },
           },
         },
 
         // États
         hover: {
-          bg: { 
-            value: { 
-              base: "{colors.primary.50}", 
-              _dark: "{colors.primary.900}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.primary.50}",
+              _dark: "{colors.primary.900}",
+            },
           },
         },
         active: {
-          bg: { 
-            value: { 
-              base: "{colors.primary.100}", 
-              _dark: "{colors.primary.800}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.primary.100}",
+              _dark: "{colors.primary.800}",
+            },
           },
         },
         disabled: {
-          text: { 
-            value: { 
-              base: "{colors.neutral.400}", 
-              _dark: "{colors.neutral.600}" 
-            } 
+          text: {
+            value: {
+              base: "{colors.neutral.400}",
+              _dark: "{colors.neutral.600}",
+            },
           },
-          bg: { 
-            value: { 
-              base: "{colors.neutral.100}", 
-              _dark: "{colors.neutral.800}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.neutral.100}",
+              _dark: "{colors.neutral.800}",
+            },
           },
         },
 
         // Bordures
         border: {
-          light: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          light: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.700}",
+            },
           },
-          medium: { 
-            value: { 
-              base: "{colors.neutral.300}", 
-              _dark: "{colors.neutral.600}" 
-            } 
+          medium: {
+            value: {
+              base: "{colors.neutral.300}",
+              _dark: "{colors.neutral.600}",
+            },
           },
-          dark: { 
-            value: { 
-              base: "{colors.neutral.400}", 
-              _dark: "{colors.neutral.500}" 
-            } 
+          dark: {
+            value: {
+              base: "{colors.neutral.400}",
+              _dark: "{colors.neutral.500}",
+            },
           },
         },
 
         // Focus et accessibilité
         focus: {
-          default: { 
-            value: { 
-              base: "{colors.primary.500}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          default: {
+            value: {
+              base: "{colors.primary.500}",
+              _dark: "{colors.primary.400}",
+            },
           },
-          ring: { 
-            value: { 
-              base: "{colors.primary.500}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          ring: {
+            value: {
+              base: "{colors.primary.500}",
+              _dark: "{colors.primary.400}",
+            },
           },
         },
 
         // Overlays et modals
         overlay: {
-          bg: { 
-            value: { 
-              base: "rgba(0, 0, 0, 0.4)", 
-              _dark: "rgba(0, 0, 0, 0.6)" 
-            } 
+          bg: {
+            value: {
+              base: "rgba(0, 0, 0, 0.4)",
+              _dark: "rgba(0, 0, 0, 0.6)",
+            },
           },
-          backdrop: { 
-            value: { 
-              base: "{colors.neutral.900}", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          backdrop: {
+            value: {
+              base: "{colors.neutral.900}",
+              _dark: "{colors.neutral.900}",
+            },
           },
         },
 
         // Dividers
         divider: {
-          bg: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.700}",
+            },
           },
         },
 
         // Code et préformatés
         code: {
-          bg: { 
-            value: { 
-              base: "{colors.neutral.100}", 
-              _dark: "{colors.neutral.800}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.neutral.100}",
+              _dark: "{colors.neutral.800}",
+            },
           },
-          text: { 
-            value: { 
-              base: "{colors.primary.600}", 
-              _dark: "{colors.primary.400}" 
-            } 
+          text: {
+            value: {
+              base: "{colors.primary.600}",
+              _dark: "{colors.primary.400}",
+            },
           },
         },
         pre: {
-          bg: { 
-            value: { 
-              base: "{colors.neutral.900}", 
-              _dark: "{colors.neutral.900}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.neutral.900}",
+              _dark: "{colors.neutral.900}",
+            },
           },
-          text: { 
-            value: { 
-              base: "{colors.neutral.100}", 
-              _dark: "{colors.neutral.200}" 
-            } 
+          text: {
+            value: {
+              base: "{colors.neutral.100}",
+              _dark: "{colors.neutral.200}",
+            },
           },
         },
 
         // Badges et tags
         badge: {
           primary: {
-            bg: { 
-              value: { 
-                base: "{colors.primary.100}", 
-                _dark: "{colors.primary.900}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.primary.100}",
+                _dark: "{colors.primary.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.primary.800}", 
-                _dark: "{colors.primary.200}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.primary.800}",
+                _dark: "{colors.primary.200}",
+              },
             },
           },
           secondary: {
-            bg: { 
-              value: { 
-                base: "{colors.secondary.100}", 
-                _dark: "{colors.secondary.900}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.secondary.100}",
+                _dark: "{colors.secondary.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.secondary.800}", 
-                _dark: "{colors.secondary.200}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.secondary.800}",
+                _dark: "{colors.secondary.200}",
+              },
             },
           },
           success: {
-            bg: { 
-              value: { 
-                base: "{colors.success.100}", 
-                _dark: "{colors.success.900}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.success.100}",
+                _dark: "{colors.success.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.success.800}", 
-                _dark: "{colors.success.200}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.success.800}",
+                _dark: "{colors.success.200}",
+              },
             },
           },
           warning: {
-            bg: { 
-              value: { 
-                base: "{colors.warning.100}", 
-                _dark: "{colors.warning.900}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.warning.100}",
+                _dark: "{colors.warning.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.warning.800}", 
-                _dark: "{colors.warning.200}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.warning.800}",
+                _dark: "{colors.warning.200}",
+              },
             },
           },
           error: {
-            bg: { 
-              value: { 
-                base: "{colors.error.100}", 
-                _dark: "{colors.error.900}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.error.100}",
+                _dark: "{colors.error.900}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.error.800}", 
-                _dark: "{colors.error.200}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.error.800}",
+                _dark: "{colors.error.200}",
+              },
             },
           },
         },
@@ -525,107 +525,107 @@ const config = defineConfig({
         // Notifications et toasts
         toast: {
           success: {
-            bg: { 
-              value: { 
-                base: "{colors.success.500}", 
-                _dark: "{colors.success.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.success.500}",
+                _dark: "{colors.success.600}",
+              },
             },
-            text: { 
-              value: { 
-                base: "white", 
-                _dark: "white" 
-              } 
+            text: {
+              value: {
+                base: "white",
+                _dark: "white",
+              },
             },
           },
           error: {
-            bg: { 
-              value: { 
-                base: "{colors.error.500}", 
-                _dark: "{colors.error.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.error.500}",
+                _dark: "{colors.error.600}",
+              },
             },
-            text: { 
-              value: { 
-                base: "white", 
-                _dark: "white" 
-              } 
+            text: {
+              value: {
+                base: "white",
+                _dark: "white",
+              },
             },
           },
           warning: {
-            bg: { 
-              value: { 
-                base: "{colors.warning.500}", 
-                _dark: "{colors.warning.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.warning.500}",
+                _dark: "{colors.warning.600}",
+              },
             },
-            text: { 
-              value: { 
-                base: "{colors.neutral.900}", 
-                _dark: "{colors.neutral.900}" 
-              } 
+            text: {
+              value: {
+                base: "{colors.neutral.900}",
+                _dark: "{colors.neutral.900}",
+              },
             },
           },
           info: {
-            bg: { 
-              value: { 
-                base: "{colors.info.500}", 
-                _dark: "{colors.info.600}" 
-              } 
+            bg: {
+              value: {
+                base: "{colors.info.500}",
+                _dark: "{colors.info.600}",
+              },
             },
-            text: { 
-              value: { 
-                base: "white", 
-                _dark: "white" 
-              } 
+            text: {
+              value: {
+                base: "white",
+                _dark: "white",
+              },
             },
           },
         },
 
         // Skeleton loading
         skeleton: {
-          bg: { 
-            value: { 
-              base: "{colors.neutral.200}", 
-              _dark: "{colors.neutral.700}" 
-            } 
+          bg: {
+            value: {
+              base: "{colors.neutral.200}",
+              _dark: "{colors.neutral.700}",
+            },
           },
-          highlight: { 
-            value: { 
-              base: "{colors.neutral.100}", 
-              _dark: "{colors.neutral.600}" 
-            } 
+          highlight: {
+            value: {
+              base: "{colors.neutral.100}",
+              _dark: "{colors.neutral.600}",
+            },
           },
         },
 
         // Ombres
         shadow: {
-          sm: { 
-            value: { 
-              base: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", 
-              _dark: "0 1px 2px 0 rgba(0, 0, 0, 0.2)" 
-            } 
+          sm: {
+            value: {
+              base: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+              _dark: "0 1px 2px 0 rgba(0, 0, 0, 0.2)",
+            },
           },
-          md: { 
-            value: { 
-              base: "0 4px 6px -1px rgba(0, 0, 0, 0.1)", 
-              _dark: "0 4px 6px -1px rgba(0, 0, 0, 0.3)" 
-            } 
+          md: {
+            value: {
+              base: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              _dark: "0 4px 6px -1px rgba(0, 0, 0, 0.3)",
+            },
           },
-          lg: { 
-            value: { 
-              base: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", 
-              _dark: "0 10px 15px -3px rgba(0, 0, 0, 0.4)" 
-            } 
+          lg: {
+            value: {
+              base: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+              _dark: "0 10px 15px -3px rgba(0, 0, 0, 0.4)",
+            },
           },
         },
       },
     },
   },
-})
+});
 
 // Configuration du thème complet
-export const theme = createSystem(defaultConfig, config)
+export const theme = createSystem(defaultConfig, config);
 
 // Export par défaut
-export default theme
+export default theme;

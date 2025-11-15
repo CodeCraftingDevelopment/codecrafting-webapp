@@ -75,10 +75,7 @@ export default function LoginPage() {
           >
             Connexion
           </Text>
-          <Text
-            fontSize={{ base: "md", md: "lg" }}
-            color={helperText}
-          >
+          <Text fontSize={{ base: "md", md: "lg" }} color={helperText}>
             Accède à ton espace en renseignant ton email et ton mot de passe.
           </Text>
         </VStack>
@@ -157,10 +154,7 @@ export default function LoginPage() {
               </Button>
 
               <VStack gap={2} textAlign="center">
-                <Text
-                  fontSize="sm"
-                  color={mutedText}
-                >
+                <Text fontSize="sm" color={mutedText}>
                   Pas encore de compte ? Contacte-nous pour activer ton accès.
                 </Text>
                 <ChakraLink

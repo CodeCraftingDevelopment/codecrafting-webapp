@@ -211,7 +211,12 @@ function MenuBurger() {
               <VStack gap={4} alignItems="stretch">
                 {/* Section Navigation */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    mb={2}
+                    color="text.muted"
+                  >
                     Navigation
                   </Text>
                   <VStack gap={2} alignItems="stretch">
@@ -244,7 +249,12 @@ function MenuBurger() {
 
                 {/* Section Utilisateur */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    mb={2}
+                    color="text.muted"
+                  >
                     Compte
                   </Text>
                   <VStack gap={2} alignItems="stretch">
@@ -348,7 +358,12 @@ function MenuBurger() {
 
                 {/* Section Thème */}
                 <Box>
-                  <Text fontSize="sm" fontWeight="bold" mb={2} color="text.muted">
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    mb={2}
+                    color="text.muted"
+                  >
                     Apparence
                   </Text>
                   <Flex px={4} py={2}>
