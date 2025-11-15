@@ -443,8 +443,16 @@ export default function Header() {
             textAlign="center"
             flexGrow={1}
             fontWeight="bold"
+            letterSpacing="wider"
+            color="#00bece"
+                        _dark={{
+              color: "#00bece"
+            }}
           >
-            CodeCrafting
+            CODE
+            <Text as="span" fontWeight="normal" opacity={0.9}>
+              {" "}CRAFTING
+            </Text>
           </Heading>
           <HeaderActions />
         </Flex>
