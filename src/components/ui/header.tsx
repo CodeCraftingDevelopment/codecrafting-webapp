@@ -80,7 +80,7 @@ function HeaderActions() {
           <Menu.Positioner>
             <Menu.Content>
               <Menu.Item value="dashboard" asChild>
-                <ChakraLink as={NextLink} href="/dashboard" display="flex">
+                <ChakraLink as={NextLink} href="/dashboard" display="flex" _hover={{ bg: "hover.bg" }}>
                   <Flex alignItems="center" gap={2}>
                     <FiHome />
                     <Text>Dashboard</Text>
@@ -90,7 +90,7 @@ function HeaderActions() {
 
               {session.user.role === "admin" && (
                 <Menu.Item value="admin" asChild>
-                  <ChakraLink as={NextLink} href="/admin" display="flex">
+                  <ChakraLink as={NextLink} href="/admin" display="flex" _hover={{ bg: "hover.bg" }}>
                     <Flex alignItems="center" gap={2}>
                       <FiShield />
                       <Text>Administration</Text>
@@ -101,7 +101,7 @@ function HeaderActions() {
 
               <Menu.Separator />
 
-              <Menu.Item value="logout" onClick={() => signOut()}>
+              <Menu.Item value="logout" onClick={() => signOut()} _hover={{ bg: "hover.bg" }}>
                 <Flex alignItems="center" gap={2}>
                   <FiLogOut />
                   <Text>Se déconnecter</Text>
