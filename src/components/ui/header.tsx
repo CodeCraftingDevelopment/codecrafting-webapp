@@ -209,6 +209,9 @@ function MenuBurger() {
                     aria-label="Fermer le menu"
                     variant="ghost"
                     size="sm"
+                    bg="transparent"
+                    _hover={{ bg: "hover.bg" }}
+                    _active={{ bg: "hover.bg" }}
                   >
                     <FiX size={20} />
                   </IconButton>
