@@ -68,7 +68,7 @@ function HeaderActions() {
       {isAuthenticated && session?.user ? (
         <Menu.Root positioning={{ placement: "bottom-start" }}>
           <Menu.Trigger asChild>
-            <Button variant="ghost" size="lg" px={3}>
+            <Button variant="ghost" size="lg" px={3} _hover={{ bg: "hover.bg" }}>
               <Flex alignItems="center" gap={2}>
                 <FiUser />
                 <Text fontSize="sm" fontWeight="medium">
@@ -116,6 +116,7 @@ function HeaderActions() {
           variant="ghost"
           size="xl"
           onClick={() => signIn(undefined, { callbackUrl: "/" })}
+          _hover={{ bg: "hover.bg" }}
         >
           <FiUser />
         </IconButton>
@@ -124,6 +125,7 @@ function HeaderActions() {
         aria-label="Basculer entre le mode clair et sombre"
         variant="ghost"
         size="xl"
+        _hover={{ bg: "hover.bg" }}
       />
     </Flex>
   );
@@ -180,6 +182,9 @@ function MenuBurger() {
         onClick={() => setIsOpen(true)}
         h={28}
         w={28}
+        _hover={{
+          bg: "hover.bg",
+        }}
       >
         <FiMenu size={56} />
       </IconButton>
@@ -336,10 +341,7 @@ function MenuBurger() {
                           signIn(undefined, { callbackUrl: "/" });
                         }}
                         _hover={{
-                          bg: "blackAlpha.100",
-                          _dark: {
-                            bg: "whiteAlpha.100",
-                          },
+                          bg: "hover.bg",
                         }}
                       >
                         <Flex alignItems="center" gap={2}>
