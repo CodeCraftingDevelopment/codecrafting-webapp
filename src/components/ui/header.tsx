@@ -434,14 +434,19 @@ export default function Header() {
 
       {/* Layout Desktop (md+) : Logo sur 2 lignes avec titre/icônes puis liens */}
       <Flex direction="column" gap={3} display={{ base: "none", md: "flex" }}>
-        {/* Ligne 1 : Logo + Titre + Icônes */}
-        <Flex justifyContent="space-between" alignItems="center" gap={4}>
-          <Logo />
+        {/* Ligne 1 : Logo + Titre + Icônes avec layout responsive */}
+        <Box position="relative" display="grid" gridTemplateColumns="auto 1fr auto" alignItems="center" gap={4} minH="80px">
+          <Box justifySelf="start">
+            <Logo />
+          </Box>
           <Heading
             as="h1"
-            size="4xl"
+            size={{ base: "3xl", md: "4xl", lg: "4xl" }}
+            position={{ base: "relative", md: "relative", lg: "absolute" }}
+            left={{ base: "auto", md: "auto", lg: "50%" }}
+            transform={{ base: "none", md: "none", lg: "translateX(-50%)" }}
             textAlign="center"
-            flexGrow={1}
+            justifySelf="center"
             fontWeight="bold"
             letterSpacing="wider"
             color="#00bece"
@@ -450,6 +455,7 @@ export default function Header() {
               color: "#00bece",
               textShadow: "0 0 20px rgba(0, 190, 206, 0.6)",
             }}
+            zIndex={{ lg: 1 }}
           >
             CODE
             <Text as="span" fontWeight="normal" opacity={0.9}>
@@ -457,8 +463,10 @@ export default function Header() {
               CRAFTING
             </Text>
           </Heading>
-          <HeaderActions />
-        </Flex>
+          <Box justifySelf="end">
+            <HeaderActions />
+          </Box>
+        </Box>
 
         {/* Ligne 2 : Navigation centrée horizontalement */}
         <Navigation />
