@@ -294,10 +294,7 @@ function MenuBurger() {
                             onClick={handleClose}
                             asChild
                             _hover={{
-                              bg: "blackAlpha.100",
-                              _dark: {
-                                bg: "whiteAlpha.100",
-                              },
+                              bg: "hover.bg",
                             }}
                           >
                             <ChakraLink
