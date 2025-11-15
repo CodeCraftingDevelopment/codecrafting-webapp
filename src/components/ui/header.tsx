@@ -68,7 +68,12 @@ function HeaderActions() {
       {isAuthenticated && session?.user ? (
         <Menu.Root positioning={{ placement: "bottom-start" }}>
           <Menu.Trigger asChild>
-            <Button variant="ghost" size="lg" px={3} _hover={{ bg: "hover.bg" }}>
+            <Button
+              variant="ghost"
+              size="lg"
+              px={3}
+              _hover={{ bg: "hover.bg" }}
+            >
               <Flex alignItems="center" gap={2}>
                 <FiUser />
                 <Text fontSize="sm" fontWeight="medium">
@@ -80,7 +85,12 @@ function HeaderActions() {
           <Menu.Positioner>
             <Menu.Content>
               <Menu.Item value="dashboard" asChild>
-                <ChakraLink as={NextLink} href="/dashboard" display="flex" _hover={{ bg: "hover.bg" }}>
+                <ChakraLink
+                  as={NextLink}
+                  href="/dashboard"
+                  display="flex"
+                  _hover={{ bg: "hover.bg" }}
+                >
                   <Flex alignItems="center" gap={2}>
                     <FiHome />
                     <Text>Dashboard</Text>
@@ -90,7 +100,12 @@ function HeaderActions() {
 
               {session.user.role === "admin" && (
                 <Menu.Item value="admin" asChild>
-                  <ChakraLink as={NextLink} href="/admin" display="flex" _hover={{ bg: "hover.bg" }}>
+                  <ChakraLink
+                    as={NextLink}
+                    href="/admin"
+                    display="flex"
+                    _hover={{ bg: "hover.bg" }}
+                  >
                     <Flex alignItems="center" gap={2}>
                       <FiShield />
                       <Text>Administration</Text>
@@ -101,7 +116,11 @@ function HeaderActions() {
 
               <Menu.Separator />
 
-              <Menu.Item value="logout" onClick={() => signOut()} _hover={{ bg: "hover.bg" }}>
+              <Menu.Item
+                value="logout"
+                onClick={() => signOut()}
+                _hover={{ bg: "hover.bg" }}
+              >
                 <Flex alignItems="center" gap={2}>
                   <FiLogOut />
                   <Text>Se déconnecter</Text>
