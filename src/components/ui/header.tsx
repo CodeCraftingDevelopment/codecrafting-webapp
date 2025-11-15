@@ -446,14 +446,15 @@ export default function Header() {
             letterSpacing="wider"
             color="#00bece"
             textShadow="0 0 15px rgba(0, 190, 206, 0.4)"
-                        _dark={{
+            _dark={{
               color: "#00bece",
-              textShadow: "0 0 20px rgba(0, 190, 206, 0.6)"
+              textShadow: "0 0 20px rgba(0, 190, 206, 0.6)",
             }}
           >
             CODE
             <Text as="span" fontWeight="normal" opacity={0.9}>
-              {" "}CRAFTING
+              {" "}
+              CRAFTING
             </Text>
           </Heading>
           <HeaderActions />
