@@ -435,7 +435,14 @@ export default function Header() {
       {/* Layout Desktop (md+) : Logo sur 2 lignes avec titre/icônes puis liens */}
       <Flex direction="column" gap={3} display={{ base: "none", md: "flex" }}>
         {/* Ligne 1 : Logo + Titre + Icônes avec layout responsive */}
-        <Box position="relative" display="grid" gridTemplateColumns="auto 1fr auto" alignItems="center" gap={4} minH="80px">
+        <Box
+          position="relative"
+          display="grid"
+          gridTemplateColumns="auto 1fr auto"
+          alignItems="center"
+          gap={4}
+          minH="80px"
+        >
           <Box justifySelf="start">
             <Logo />
           </Box>
