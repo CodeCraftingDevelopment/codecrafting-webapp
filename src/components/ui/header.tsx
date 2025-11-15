@@ -182,7 +182,11 @@ function MenuBurger() {
         onClick={() => setIsOpen(true)}
         h={28}
         w={28}
+        bg="transparent"
         _hover={{
+          bg: "hover.bg",
+        }}
+        _active={{
           bg: "hover.bg",
         }}
       >
@@ -370,6 +374,9 @@ function MenuBurger() {
                       aria-label="Basculer entre le mode clair et sombre"
                       variant="ghost"
                       size="lg"
+                      bg="transparent"
+                      _hover={{ bg: "hover.bg" }}
+                      _active={{ bg: "hover.bg" }}
                     />
                   </Flex>
                 </Box>
