@@ -76,7 +76,19 @@ export const authOptions: NextAuthOptions = {
 
         // Les utilisateurs OAuth n'ont pas de mot de passe
         if (!user.password) {
-          return null;
+          // Vérifier s'il s'agit bien d'un compte Google OAuth
+          const googleAccount = await prisma.account.findFirst({
+            where: { 
+              userId: user.id,
+              provider: "google"
+            }
+          });
+          
+          if (!googleAccount) {
+            return null; // Compte sans mot de passe mais pas Google OAuth
+          }
+          
+          return null; // Compte Google OAuth - utiliser connexion Google
         }
 
         // Vérification du mot de passe hashé avec bcrypt
@@ -131,6 +143,19 @@ export const authOptions: NextAuthOptions = {
           }
         }
         
+        // Vérifier si l'utilisateur existe déjà avec un mot de passe (compte email/mdp)
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email.toLowerCase() },
+          select: { password: true }
+        });
+        
+        if (existingUser?.password) {
+          if (isDebug) {
+            console.log(`Google sign-in rejected: email ${user.email} already has password account`);
+          }
+          return false;
+        }
+        
         if (isDebug) {
           console.log(`Google sign-in approved for: ${user.email}`);
         }
@@ -161,36 +186,25 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         
-        // Pour les utilisateurs Google, utiliser le mapping de rôle
+        // Pour les utilisateurs Google, utiliser le rôle depuis la base de données comme source de vérité
         if (account?.provider === "google" && user.email) {
-          const role = getGoogleUserRole(user.email);
-          token.role = role;
+          // Récupérer le rôle depuis la base de données
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { role: true }
+          });
+          
+          // Utiliser le rôle de la BDD, ou le mapping pour nouveaux utilisateurs
+          token.role = dbUser?.role.toLowerCase() || getGoogleUserRole(user.email);
           token.provider = "google";
           
           if (isDebug) {
             console.log("Google user auth:", { 
               userId: user.id, 
               email: user.email, 
-              assignedRole: role 
+              dbRole: dbUser?.role,
+              assignedRole: token.role 
             });
-          }
-          
-          // Mettre à jour le rôle dans la base de données SEULEMENT lors de la première connexion
-          if (trigger === "signIn") {
-            try {
-              await prisma.user.update({
-                where: { id: user.id },
-                data: { role: role.toUpperCase() as "ADMIN" | "MEMBER" },
-              });
-              if (isDebug) {
-                console.log("Updated user role in DB:", { userId: user.id, role });
-              }
-            } catch (error) {
-              // L'erreur n'est pas critique - le token a déjà le rôle correct
-              if (isDebug) {
-                console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
-              }
-            }
           }
         } else {
           // Pour les utilisateurs credentials, utiliser le rôle depuis la base de données
