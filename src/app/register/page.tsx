@@ -42,41 +42,41 @@ export default function RegisterPage() {
     if (!name.trim()) {
       return "Le nom est requis.";
     }
-    
+
     if (!email.trim()) {
       return "L'email est requis.";
     }
-    
+
     if (!password) {
       return "Le mot de passe est requis.";
     }
-    
+
     if (password.length < 6) {
       return "Le mot de passe doit contenir au moins 6 caractères.";
     }
-    
+
     if (password !== confirmPassword) {
       return "Les mots de passe ne correspondent pas.";
     }
-    
+
     // Validation email simple
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Veuillez entrer une adresse email valide.";
     }
-    
+
     return null;
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
       return;
     }
-    
+
     setIsSubmitting(true);
     setError(null);
 
@@ -97,7 +97,9 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Une erreur est survenue lors de l'inscription.");
+        setError(
+          data.error || "Une erreur est survenue lors de l'inscription.",
+        );
         return;
       }
 
@@ -109,7 +111,9 @@ export default function RegisterPage() {
       });
 
       if (result?.error) {
-        setError("Inscription réussie mais erreur lors de la connexion automatique. Veuillez vous connecter manuellement.");
+        setError(
+          "Inscription réussie mais erreur lors de la connexion automatique. Veuillez vous connecter manuellement.",
+        );
         return;
       }
 
@@ -139,7 +143,8 @@ export default function RegisterPage() {
             Inscription
           </Text>
           <Text fontSize={{ base: "md", md: "lg" }} color={helperText}>
-            Crée ton compte pour accéder à toutes les fonctionnalités de CodeCrafting.
+            Crée ton compte pour accéder à toutes les fonctionnalités de
+            CodeCrafting.
           </Text>
         </VStack>
 
@@ -218,7 +223,11 @@ export default function RegisterPage() {
                 </Field.Root>
 
                 <Field.Root>
-                  <Field.Label htmlFor="confirmPassword" fontWeight="medium" mb={1}>
+                  <Field.Label
+                    htmlFor="confirmPassword"
+                    fontWeight="medium"
+                    mb={1}
+                  >
                     Confirmer le mot de passe
                   </Field.Label>
                   <Input

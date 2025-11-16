@@ -30,16 +30,20 @@ export const mockUsers: MockUser[] = [
  * @param password Mot de passe de l'utilisateur
  * @returns L'utilisateur créé ou null si l'email existe déjà
  */
-export function addUser(name: string, email: string, password: string): MockUser | null {
+export function addUser(
+  name: string,
+  email: string,
+  password: string,
+): MockUser | null {
   // Vérifier si l'email existe déjà
-  const existingUser = mockUsers.find(user => 
-    user.email.toLowerCase() === email.toLowerCase()
+  const existingUser = mockUsers.find(
+    (user) => user.email.toLowerCase() === email.toLowerCase(),
   );
-  
+
   if (existingUser) {
     return null; // Email déjà utilisé
   }
-  
+
   // Créer le nouvel utilisateur
   const newUser: MockUser = {
     id: (mockUsers.length + 1).toString(),
@@ -48,9 +52,9 @@ export function addUser(name: string, email: string, password: string): MockUser
     password,
     role: "member", // Par défaut, les nouveaux inscrits sont "member"
   };
-  
+
   // Ajouter à la liste des utilisateurs
   mockUsers.push(newUser);
-  
+
   return newUser;
 }
