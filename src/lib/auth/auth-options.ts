@@ -2,9 +2,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 import { verifyPassword } from "@/lib/auth/password";
 import { prisma } from "@/lib/prisma";
-import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 
 /**
  * Normalise le rôle depuis la base de données vers le format attendu
@@ -88,16 +88,16 @@ export const authOptions: NextAuthOptions = {
         if (!user.password) {
           // Vérifier s'il s'agit bien d'un compte Google OAuth
           const googleAccount = await prisma.account.findFirst({
-            where: { 
+            where: {
               userId: user.id,
-              provider: "google"
-            }
+              provider: "google",
+            },
           });
-          
+
           if (!googleAccount) {
             return null; // Compte sans mot de passe mais pas Google OAuth
           }
-          
+
           return null; // Compte Google OAuth - utiliser connexion Google
         }
 
@@ -130,7 +130,7 @@ export const authOptions: NextAuthOptions = {
      */
     async signIn({ user, account }) {
       const isDebug = process.env.NEXTAUTH_DEBUG === "true";
-      
+
       // Valider que l'email est présent pour les connexions Google
       if (account?.provider === "google") {
         if (!user.email) {
@@ -139,38 +139,44 @@ export const authOptions: NextAuthOptions = {
           }
           return false;
         }
-        
+
         // Vérifier les domaines autorisés
-        const allowedDomains = process.env.GOOGLE_ALLOWED_DOMAINS?.split(",").map(domain => domain.trim().toLowerCase()).filter(Boolean);
-        
+        const allowedDomains = process.env.GOOGLE_ALLOWED_DOMAINS?.split(",")
+          .map((domain) => domain.trim().toLowerCase())
+          .filter(Boolean);
+
         if (allowedDomains && allowedDomains.length > 0) {
           const emailDomain = user.email.split("@")[1]?.toLowerCase();
           if (!emailDomain || !allowedDomains.includes(emailDomain)) {
             if (isDebug) {
-              console.log(`Google sign-in rejected: domain ${emailDomain} not in allowed domains [${allowedDomains.join(", ")}]`);
+              console.log(
+                `Google sign-in rejected: domain ${emailDomain} not in allowed domains [${allowedDomains.join(", ")}]`,
+              );
             }
             return false;
           }
         }
-        
+
         // Vérifier si l'utilisateur existe déjà avec un mot de passe (compte email/mdp)
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email.toLowerCase() },
-          select: { password: true }
+          select: { password: true },
         });
-        
+
         if (existingUser?.password) {
           if (isDebug) {
-            console.log(`Google sign-in rejected: email ${user.email} already has password account`);
+            console.log(
+              `Google sign-in rejected: email ${user.email} already has password account`,
+            );
           }
           return false;
         }
-        
+
         if (isDebug) {
           console.log(`Google sign-in approved for: ${user.email}`);
         }
       }
-      
+
       // Toutes les connexions autorisées sont validées
       return true;
     },
@@ -179,41 +185,43 @@ export const authOptions: NextAuthOptions = {
      * Callback JWT: appelé lors de la création/mise à jour du token JWT
      * Permet d'ajouter des données personnalisées (rôle) au token
      */
-    async jwt({ token, user, account, trigger, session }) {
+    async jwt({ token, user, account, trigger, session: _session }) {
       const isDebug = process.env.NEXTAUTH_DEBUG === "true";
-      
+
       if (isDebug) {
-        console.log("JWT Callback - Input:", { 
-          token: token?.email, 
-          user: user?.email, 
-          account: account?.provider, 
-          trigger 
+        console.log("JWT Callback - Input:", {
+          token: token?.email,
+          user: user?.email,
+          account: account?.provider,
+          trigger,
         });
       }
-      
+
       // Initialisation du token avec les données utilisateur (premier login)
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        
+
         // Pour les utilisateurs Google, utiliser le rôle depuis la base de données comme source de vérité
         if (account?.provider === "google" && user.email) {
           // Récupérer le rôle depuis la base de données
           const dbUser = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { role: true }
+            select: { role: true },
           });
-          
+
           // Utiliser le rôle de la BDD, ou le mapping pour nouveaux utilisateurs
-          token.role = dbUser?.role ? normalizeRole(dbUser.role) : getGoogleUserRole(user.email);
+          token.role = dbUser?.role
+            ? normalizeRole(dbUser.role)
+            : getGoogleUserRole(user.email);
           token.provider = "google";
-          
+
           if (isDebug) {
-            console.log("Google user auth:", { 
-              userId: user.id, 
-              email: user.email, 
+            console.log("Google user auth:", {
+              userId: user.id,
+              email: user.email,
               dbRole: dbUser?.role,
-              assignedRole: token.role 
+              assignedRole: token.role,
             });
           }
         } else {
@@ -222,19 +230,19 @@ export const authOptions: NextAuthOptions = {
           token.provider = "credentials";
         }
       }
-      
+
       // NOTE: Le fallback DB a été supprimé pour optimiser les performances
       // Le rôle est maintenant toujours stocké dans le token JWT
       // Si le rôle est manquant, c'est qu'il y a un problème de configuration
-      
+
       if (isDebug) {
-        console.log("JWT Callback - Output:", { 
-          email: token.email, 
-          role: token.role, 
-          provider: token.provider 
+        console.log("JWT Callback - Output:", {
+          email: token.email,
+          role: token.role,
+          provider: token.provider,
         });
       }
-      
+
       return token;
     },
 

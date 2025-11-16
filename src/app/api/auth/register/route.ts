@@ -1,21 +1,23 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { hashPassword, validatePasswordStrength } from "@/lib/auth/password";
-import { prisma } from "@/lib/prisma";
 import { registerRateLimiter } from "@/lib/auth/rate-limit";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting basé sur l'IP
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
-               request.headers.get("x-real-ip")?.trim() || 
-               "unknown";
-    
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip")?.trim() ||
+      "unknown";
+
     if (!registerRateLimiter.isAllowed(ip)) {
       const resetTime = registerRateLimiter.getResetTime(ip);
       return NextResponse.json(
-        { 
-          error: "Trop de tentatives d'inscription. Veuillez réessayer plus tard.",
-          resetTime: Math.ceil(resetTime / 1000) // en secondes
+        {
+          error:
+            "Trop de tentatives d'inscription. Veuillez réessayer plus tard.",
+          resetTime: Math.ceil(resetTime / 1000), // en secondes
         },
         { status: 429 },
       );
@@ -71,10 +73,12 @@ export async function POST(request: NextRequest) {
       // Vérifier si c'est un compte Google OAuth (sans mot de passe)
       if (!existingUser.password) {
         return NextResponse.json(
-          { 
-            error: "Cet email est déjà associé à un compte Google. Veuillez vous connecter avec Google.",
+          {
+            error:
+              "Cet email est déjà associé à un compte Google. Veuillez vous connecter avec Google.",
             isGoogleAccount: true,
-            suggestion: "Utilisez le bouton 'Se connecter avec Google' pour accéder à votre compte."
+            suggestion:
+              "Utilisez le bouton 'Se connecter avec Google' pour accéder à votre compte.",
           },
           { status: 409 },
         );

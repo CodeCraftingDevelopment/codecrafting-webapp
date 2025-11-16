@@ -13,17 +13,20 @@ export interface GoogleRoleMapping {
  */
 export const googleRoleMapping: GoogleRoleMapping = (() => {
   const mapping: GoogleRoleMapping = {};
-  
+
   // Récupérer les emails admin depuis les variables d'environnement
-  const adminEmails = process.env.GOOGLE_ADMIN_EMAILS?.split(",").map(email => email.trim().toLowerCase()).filter(Boolean) || [];
-  
+  const adminEmails =
+    process.env.GOOGLE_ADMIN_EMAILS?.split(",")
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean) || [];
+
   // Assigner le rôle admin aux emails spécifiés
-  adminEmails.forEach(email => {
+  adminEmails.forEach((email) => {
     if (email) {
       mapping[email] = "admin";
     }
   });
-  
+
   return mapping;
 })();
 
