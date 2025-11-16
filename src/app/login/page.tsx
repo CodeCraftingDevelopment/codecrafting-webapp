@@ -39,7 +39,6 @@ export default function LoginPage() {
     setIsSubmitting(true);
     setError(null);
 
-
     try {
       const result = await signIn("credentials", {
         email,
@@ -47,14 +46,13 @@ export default function LoginPage() {
         redirect: false,
       });
 
-
       if (result?.error) {
         setError("Email ou mot de passe invalide.");
         return;
       }
 
       router.push("/");
-    } catch (submissionError) {
+    } catch (_submissionError) {
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
@@ -67,7 +65,7 @@ export default function LoginPage() {
 
     try {
       await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
+    } catch (_error) {
       setError("Erreur lors de la connexion Google. Veuillez réessayer.");
       setIsGoogleSubmitting(false);
     }
