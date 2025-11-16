@@ -33,8 +33,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     // Provider Google pour l'authentification OAuth
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
 
     // Provider Credentials pour l'authentification par email/mot de passe
@@ -101,7 +101,8 @@ export const authOptions: NextAuthOptions = {
         // - Credentials: user.role est déjà défini
         // - Google: lookup via email avec fallback "member"
         const userRole =
-          (user as any).role || getGoogleUserRole(user.email || "");
+          (user as { role?: "admin" | "member" }).role ||
+          getGoogleUserRole(user.email || "");
         token.role = userRole;
       }
       return token;
