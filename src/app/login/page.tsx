@@ -196,7 +196,6 @@ export default function LoginPage() {
               size="lg"
               loading={isGoogleSubmitting}
               loadingText="Connexion Google en cours"
-              leftIcon={<FcGoogle size={20} />}
               _hover={{
                 bg: "gray.50",
                 borderColor: "gray.400",
@@ -211,6 +210,7 @@ export default function LoginPage() {
                 },
               }}
             >
+              <FcGoogle size={20} />
               Se connecter avec Google
             </Button>
 
