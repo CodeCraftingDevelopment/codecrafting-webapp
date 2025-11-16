@@ -21,9 +21,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 
-  // Stratégie de session: Database (recommandé avec adapter)
+  // Stratégie de session: JWT (requis pour CredentialsProvider)
   session: {
-    strategy: "database",
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 jours
   },
 
@@ -97,13 +97,25 @@ export const authOptions: NextAuthOptions = {
   // Callbacks pour personnaliser le comportement
   callbacks: {
     /**
-     * Callback Session: appelé lors de la récupération de la session
-     * Permet d'ajouter des données de la session à la session client
+     * Callback JWT: appelé lors de la création/mise à jour du token JWT
+     * Permet d'ajouter des données personnalisées (rôle) au token
      */
-    async session({ session, user }) {
-      if (session.user && user.id && user.role) {
-        session.user.id = user.id;
-        session.user.role = user.role as "admin" | "member";
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+
+    /**
+     * Callback Session: appelé lors de la récupération de la session
+     * Permet d'ajouter des données du token JWT à la session client
+     */
+    async session({ session, token }) {
+      if (session.user && token) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as "admin" | "member";
       }
       return session;
     },
