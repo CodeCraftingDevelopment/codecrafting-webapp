@@ -3,14 +3,20 @@ services:
     image: postgres:15-alpine
     container_name: codecrafting-postgres
     environment:
-      POSTGRES_DB: codecrafting
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB:-codecrafting}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-codecrafting}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
   nextjs:
     image: ghcr.io/codecraftingdevelopment/codecrafting-webapp:production
     container_name: codecrafting-webapp
@@ -19,8 +25,17 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
 
 volumes:
   postgres_data:

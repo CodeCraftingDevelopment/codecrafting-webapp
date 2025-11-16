@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Configuration
-GITHUB_TOKEN=""  # Remplacez par votre token GitHub
+# Le token GitHub doit être défini comme variable d'environnement sur le VPS
+# export GITHUB_TOKEN="votre_token_github"
+GITHUB_TOKEN="${GITHUB_TOKEN}"
 IMAGE_NAME="ghcr.io/codecraftingdevelopment/codecrafting-webapp:production"
 CONTAINER_NAME="codecrafting-webapp"
 
@@ -24,7 +26,12 @@ fi
 
 # Vérification du token
 if [ -z "$GITHUB_TOKEN" ]; then
-    error_exit "Le token GitHub n'est pas défini. Modifiez le script pour ajouter votre token."
+    error_exit "Le token GitHub n'est pas défini. Exportez la variable d'environnement GITHUB_TOKEN."
+fi
+
+# Vérification des variables d'environnement PostgreSQL
+if [ -z "$POSTGRES_PASSWORD" ]; then
+    error_exit "Le mot de passe PostgreSQL n'est pas défini. Exportez la variable d'environnement POSTGRES_PASSWORD."
 fi
 
 # Authentification avec uniquement le token
