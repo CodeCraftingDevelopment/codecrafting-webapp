@@ -1,10 +1,9 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/auth/password";
-import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Configuration NextAuth v4
@@ -13,7 +12,7 @@ import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 export const authOptions: NextAuthOptions = {
   // Adapter Prisma pour la persistance des sessions et comptes
   adapter: PrismaAdapter(prisma),
-  
+
   // Secret pour signer les tokens JWT (OBLIGATOIRE en production)
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -77,7 +76,7 @@ export const authOptions: NextAuthOptions = {
         // Vérification du mot de passe hashé avec bcrypt
         const isValidPassword = await verifyPassword(
           credentials.password,
-          user.password
+          user.password,
         );
 
         if (!isValidPassword) {

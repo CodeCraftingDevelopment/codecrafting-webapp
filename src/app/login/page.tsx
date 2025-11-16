@@ -39,6 +39,8 @@ export default function LoginPage() {
     setIsSubmitting(true);
     setError(null);
 
+    console.log("Tentative de connexion avec:", { email, password: "***" });
+
     try {
       const result = await signIn("credentials", {
         email,
@@ -46,11 +48,15 @@ export default function LoginPage() {
         redirect: false,
       });
 
+      console.log("Résultat signIn:", result);
+
       if (result?.error) {
+        console.log("Erreur de connexion:", result.error);
         setError("Email ou mot de passe invalide.");
         return;
       }
 
+      console.log("Connexion réussie, redirection vers /");
       router.push("/");
     } catch (submissionError) {
       console.error("Erreur lors de la soumission:", submissionError);
