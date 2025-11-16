@@ -1,4 +1,16 @@
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: codecrafting-postgres
+    environment:
+      POSTGRES_DB: codecrafting
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
   nextjs:
     image: ghcr.io/codecraftingdevelopment/codecrafting-webapp:production
     container_name: codecrafting-webapp
