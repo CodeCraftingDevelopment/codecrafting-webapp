@@ -15,7 +15,7 @@ export const googleRoleMapping: GoogleRoleMapping = {
   // Exemples - remplacez par les vrais emails
   "admin@codecrafting.fr": "admin",
   "christophe.pauliac@gmail.com": "admin",
-  
+
   // Les utilisateurs non listés auront le rôle "member" par défaut
 };
 

@@ -172,11 +172,19 @@ export default function LoginPage() {
 
             {/* Séparateur */}
             <VStack gap={2}>
-              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+              <Box
+                as="hr"
+                borderColor="gray.200"
+                _dark={{ borderColor: "gray.600" }}
+              />
               <Text fontSize="sm" color={mutedText}>
                 ou
               </Text>
-              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+              <Box
+                as="hr"
+                borderColor="gray.200"
+                _dark={{ borderColor: "gray.600" }}
+              />
             </VStack>
 
             {/* Bouton de connexion Google */}

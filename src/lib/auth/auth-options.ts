@@ -1,8 +1,8 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { mockUsers } from "@/lib/auth/mock-users";
 import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
+import { mockUsers } from "@/lib/auth/mock-users";
 
 /**
  * Recherche un utilisateur par email (insensible à la casse)
@@ -96,11 +96,12 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         // ID de l'utilisateur : utiliser user.id (Credentials) ou token.sub (Google) avec fallback UUID
         token.id = user.id || token.sub || crypto.randomUUID();
-        
+
         // Rôle de l'utilisateur :
         // - Credentials: user.role est déjà défini
         // - Google: lookup via email avec fallback "member"
-        const userRole = (user as any).role || getGoogleUserRole(user.email || "");
+        const userRole =
+          (user as any).role || getGoogleUserRole(user.email || "");
         token.role = userRole;
       }
       return token;
