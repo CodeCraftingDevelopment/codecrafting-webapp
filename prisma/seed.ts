@@ -4,7 +4,6 @@ import { hashPassword } from "../src/lib/auth/password";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Début du seeding de la base de données...");
 
   // Créer un admin
   const adminPassword = await hashPassword("Passw0rd!");
@@ -32,10 +31,6 @@ async function main() {
     },
   });
 
-  console.log("✅ Utilisateurs créés avec succès:");
-  console.log(`👤 Admin: ${admin.name} (${admin.email})`);
-  console.log(`👤 Member: ${member.name} (${member.email})`);
-  console.log("🎉 Seeding terminé !");
 }
 
 main()

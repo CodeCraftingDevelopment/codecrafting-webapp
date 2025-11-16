@@ -20,8 +20,6 @@ console.log(
   `1. Fichier .env.local: ${envExists ? "✅ Existe" : "❌ Manquant"}`,
 );
 
-console.log(`1. Fichier .env.local path: ${envPath}`);
-
 if (envExists) {
   try {
     const envContent = fs.readFileSync(envPath, "utf-8");
@@ -29,11 +27,6 @@ if (envExists) {
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter((line) => line && !line.startsWith("#"));
-
-    console.log("   Lignes détectées:");
-    lines.forEach((line, index) => {
-      console.log(`     [${index}] ${JSON.stringify(line)}`);
-    });
 
     console.log(`   Nombre de variables: ${lines.length}`);
 

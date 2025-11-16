@@ -1,4 +1,4 @@
-# Configuration NextAuth v4
+# 📚 Documentation Authentification CodeCrafting
 
 ## 📋 Variables d'environnement requises
 
@@ -11,6 +11,13 @@ NEXTAUTH_SECRET=votre_secret_ici
 
 # URL de l'application (optionnel en développement)
 NEXTAUTH_URL=http://localhost:3000
+
+# Base de données PostgreSQL
+DATABASE_URL="postgresql://postgres:password@localhost:5432/codecrafting?schema=public"
+
+# Optionnel - Google OAuth
+GOOGLE_CLIENT_ID=votre_google_client_id
+GOOGLE_CLIENT_SECRET=votre_google_client_secret
 ```
 
 ### Génération du secret
@@ -27,7 +34,7 @@ openssl rand -base64 32
 
 ## 🔐 Utilisateurs de test
 
-Les utilisateurs mockés sont définis dans `src/lib/auth/mock-users.ts`:
+Les utilisateurs sont créés automatiquement avec le script `prisma/seed.ts`:
 
 | Email | Mot de passe | Rôle |
 |-------|--------------|------|
@@ -40,9 +47,10 @@ Les utilisateurs mockés sont définis dans `src/lib/auth/mock-users.ts`:
 
 - **`src/lib/auth/auth-options.ts`**: Configuration NextAuth (providers, callbacks, session)
 - **`src/lib/auth/session.ts`**: Utilitaire pour récupérer la session côté serveur
-- **`src/lib/auth/mock-users.ts`**: Base de données mockée d'utilisateurs
+- **`src/lib/auth/password.ts`**: Utilitaires de hashage de mots de passe
 - **`src/app/api/auth/[...nextauth]/route.ts`**: Route API NextAuth (catch-all)
 - **`src/app/login/page.tsx`**: Page de connexion
+- **`src/app/register/page.tsx`**: Page d'inscription
 - **`src/types/next-auth.d.ts`**: Extensions TypeScript pour NextAuth
 
 ### Utilisation
@@ -141,47 +149,6 @@ export default async function AdminPage() {
 }
 ```
 
-## ⚠️ Points d'attention
-
-### Sécurité actuelle (développement uniquement)
-
-1. **Mots de passe en clair**: Les mots de passe ne sont pas hashés
-2. **Base de données mockée**: Les utilisateurs sont en dur dans le code
-3. **Pas de validation email**: Aucune vérification d'email
-
-### Migration vers la production
-
-Pour passer en production, il faudra:
-
-1. **Remplacer les mock users par une vraie base de données**
-   - Utiliser Prisma, MongoDB, PostgreSQL, etc.
-   - Ajouter un adapter NextAuth
-
-2. **Hasher les mots de passe**
-   ```bash
-   npm install bcryptjs
-   npm install -D @types/bcryptjs
-   ```
-   
-   ```ts
-   import bcrypt from "bcryptjs";
-   
-   // Lors de l'inscription
-   const hashedPassword = await bcrypt.hash(password, 10);
-   
-   // Lors de la connexion
-   const isValid = await bcrypt.compare(password, user.hashedPassword);
-   ```
-
-3. **Ajouter d'autres providers** (optionnel)
-   - Google OAuth
-   - GitHub OAuth
-   - Email magic links
-
-4. **Implémenter la récupération de mot de passe**
-
-5. **Ajouter la validation et vérification d'email**
-
 ## 📝 Processus d'inscription
 
 ### Flux d'inscription utilisateur
@@ -194,36 +161,85 @@ Pour passer en production, il faudra:
    - Confirmation du mot de passe
 3. **Validation client** : Le formulaire est validé côté client avant envoi
 4. **API d'inscription** : Envoi à `POST /api/auth/register`
-5. **Création utilisateur** : Ajout dans la base mockée avec rôle "member" par défaut
-6. **Connexion automatique** : Si l'inscription réussit, l'utilisateur est connecté automatiquement
-7. **Redirection** : Redirection vers la page d'accueil
+5. **Création utilisateur** : Ajout dans la base de données avec rôle "member" par défaut
+6. **Hashage du mot de passe** : Le mot de passe est hashé avec bcrypt
+7. **Connexion automatique** : Si l'inscription réussit, l'utilisateur est connecté automatiquement
+8. **Redirection** : Redirection vers la page d'accueil
 
 ### Fichiers d'inscription
 
 - **`src/app/register/page.tsx`** : Page d'inscription avec formulaire et validation
 - **`src/app/api/auth/register/route.ts`** : API route pour créer un nouvel utilisateur
-- **`src/lib/auth/mock-users.ts`** : Fonction `addUser()` pour ajouter un utilisateur
+- **`src/lib/auth/password.ts`** : Fonctions de hashage et validation
 
 ### Sécurité de l'inscription
 
 - Validation des entrées (email, longueur du mot de passe)
 - Vérification des doublons d'email
-- Mot de passe stocké en clair (⚠️ développement uniquement)
+- Mot de passe hashé avec bcrypt (12 rounds)
 - Rôle par défaut : "member"
 
-### Évolutions futures
+## 🧪 Tests d'authentification
 
-Pour la production, prévoir :
+### Checklist de test
 
-1. **Hashage des mots de passe** avec bcrypt
-2. **Vérification email** avec envoi de lien de confirmation
-3. **Rate limiting** pour éviter les abus
-4. **CAPTCHA** pour protéger contre les bots
-5. **Base de données réelle** avec adapter NextAuth
+#### Configuration initiale
+- [ ] Fichier `.env.local` créé avec `NEXTAUTH_SECRET`
+- [ ] Application démarre sans erreur (`npm run dev`)
+- [ ] Base de données PostgreSQL accessible
 
-## 📚 Documentation
+#### Page de connexion
+- [ ] La page `/login` s'affiche correctement
+- [ ] Connexion avec identifiants valides fonctionne
+- [ ] Connexion avec identifiants invalides affiche une erreur
+- [ ] Connexion Google fonctionnelle (si configuré)
+
+#### Header / Navigation
+- [ ] Utilisateur non connecté : icône utilisateur visible
+- [ ] Utilisateur connecté : nom affiché avec menu déroulant
+- [ ] Menu contient "Dashboard" pour tous les utilisateurs
+- [ ] Menu contient "Administration" uniquement pour les admins
+
+#### Pages protégées
+- [ ] `/dashboard` inaccessible sans connexion
+- [ ] `/admin` inaccessible sans connexion
+- [ ] `/admin` inaccessible pour les members
+- [ ] Déconnexion fonctionne correctement
+
+## 🚀 Déploiement et production
+
+### Points d'attention pour la production
+
+1. **Variables d'environnement sécurisées**
+   - `NEXTAUTH_SECRET` doit être un secret fort et unique
+   - `DATABASE_URL` doit utiliser SSL/TLS
+   - Ne jamais exposer les secrets dans le code
+
+2. **Base de données**
+   - Utiliser PostgreSQL en production
+   - Configurer les backups réguliers
+   - Activer les connexions SSL
+
+3. **Sécurité**
+   - Activer HTTPS
+   - Configurer les headers CSP
+   - Utiliser des cookies sécurisés
+
+### Migration vers la production
+
+Pour passer en production, s'assurer de :
+
+1. **Configuration complète** : toutes les variables d'environnement définies
+2. **Base de données** : PostgreSQL avec migrations appliquées
+3. **HTTPS** : certificat SSL configuré
+4. **Domaine** : `NEXTAUTH_URL` pointant vers le domaine de production
+5. **Providers OAuth** : IDs et secrets configurés si utilisés
+
+## 📚 Documentation complémentaire
 
 - [NextAuth.js v4 Documentation](https://next-auth.js.org/)
 - [Configuration Options](https://next-auth.js.org/configuration/options)
 - [Credentials Provider](https://next-auth.js.org/configuration/providers/credentials)
 - [Callbacks](https://next-auth.js.org/configuration/callbacks)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
