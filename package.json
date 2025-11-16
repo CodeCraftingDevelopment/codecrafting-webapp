@@ -17,7 +17,10 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "docker:dev": "docker-compose -f docker-compose-local.yml up -d",
+    "docker:down": "docker-compose -f docker-compose-local.yml down",
+    "docker:start": "powershell -ExecutionPolicy Bypass -File start-docker.ps1"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
