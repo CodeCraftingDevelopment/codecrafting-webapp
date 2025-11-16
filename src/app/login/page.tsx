@@ -14,6 +14,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { type FormEvent, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 const fadeInUp = keyframes`
   from {
@@ -195,6 +196,7 @@ export default function LoginPage() {
               size="lg"
               loading={isGoogleSubmitting}
               loadingText="Connexion Google en cours"
+              leftIcon={<FcGoogle size={20} />}
               _hover={{
                 bg: "gray.50",
                 borderColor: "gray.400",

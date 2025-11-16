@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { verifyPassword } from "@/lib/auth/password";
 import { prisma } from "@/lib/prisma";
+import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 
 /**
  * Configuration NextAuth v4
@@ -73,6 +74,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // Les utilisateurs OAuth n'ont pas de mot de passe
+        if (!user.password) {
+          return null;
+        }
+
         // Vérification du mot de passe hashé avec bcrypt
         const isValidPassword = await verifyPassword(
           credentials.password,
@@ -97,14 +103,65 @@ export const authOptions: NextAuthOptions = {
   // Callbacks pour personnaliser le comportement
   callbacks: {
     /**
+     * Callback signIn: appelé lors de la tentative de connexion
+     * Permet de valider la connexion - le rôle sera assigné dans jwt callback
+     */
+    async signIn({ user, account }) {
+      // Valider que l'email est présent pour les connexions Google
+      if (account?.provider === "google" && !user.email) {
+        return false;
+      }
+      
+      // Toutes les connexions sont autorisées
+      return true;
+    },
+
+    /**
      * Callback JWT: appelé lors de la création/mise à jour du token JWT
      * Permet d'ajouter des données personnalisées (rôle) au token
      */
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, trigger, session }) {
+      // Initialisation du token avec les données utilisateur
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.email = user.email;
+        
+        // Pour les utilisateurs Google, utiliser le mapping de rôle
+        if (account?.provider === "google" && user.email) {
+          const role = getGoogleUserRole(user.email);
+          token.role = role;
+          token.provider = "google";
+          
+          // Mettre à jour le rôle dans la base de données SEULEMENT lors de la première connexion
+          try {
+            await prisma.user.update({
+              where: { id: user.id },
+              data: { role: role.toUpperCase() as "ADMIN" | "MEMBER" },
+            });
+          } catch (error) {
+            // L'erreur n'est pas critique - le token a déjà le rôle correct
+            console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
+          }
+        } else {
+          // Pour les utilisateurs credentials, utiliser le rôle depuis la base de données
+          token.role = user.role;
+          token.provider = "credentials";
+        }
       }
+      
+      // Rafraîchissement du token : récupérer le rôle depuis la base de données
+      // si le provider n'est plus disponible (typique sur les refresh)
+      if (!token.role && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          select: { role: true },
+        });
+        
+        if (dbUser) {
+          token.role = dbUser.role.toLowerCase();
+        }
+      }
+      
       return token;
     },
 

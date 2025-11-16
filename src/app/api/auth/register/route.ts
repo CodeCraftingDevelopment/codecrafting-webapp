@@ -51,10 +51,23 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Cet email est déjà utilisé." },
-        { status: 409 },
-      );
+      // Vérifier si c'est un compte Google OAuth (sans mot de passe)
+      if (!existingUser.password) {
+        return NextResponse.json(
+          { 
+            error: "Cet email est déjà associé à un compte Google. Veuillez vous connecter avec Google.",
+            isGoogleAccount: true,
+            suggestion: "Utilisez le bouton 'Se connecter avec Google' pour accéder à votre compte."
+          },
+          { status: 409 },
+        );
+      } else {
+        // Compte avec mot de passe existant
+        return NextResponse.json(
+          { error: "Cet email est déjà utilisé." },
+          { status: 409 },
+        );
+      }
     }
 
     // Hasher le mot de passe avec bcrypt
