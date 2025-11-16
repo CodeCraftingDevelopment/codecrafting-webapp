@@ -6,6 +6,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
+RUN npx prisma generate
 RUN npm run build
 
 # Étape 2 : Image finale
