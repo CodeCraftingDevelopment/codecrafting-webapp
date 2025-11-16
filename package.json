@@ -8,6 +8,7 @@
     "start": "docker-compose -f docker-compose-local.yml up -d",
     "stop": "docker-compose -f docker-compose-local.yml down",
     "dev": "docker-compose -f docker-compose-local.yml up -d",
+    "predev:local": "npm run db:generate",
     "dev:local": "next dev --turbopack",
     "build": "next build --turbopack",
     "postbuild": "shx cp -r public .next/standalone/ && shx cp -r .next/static .next/standalone/.next/",
