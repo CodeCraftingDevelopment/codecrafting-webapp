@@ -20,4 +20,7 @@ services:
       - "3000:3000"
     restart: unless-stopped
 
+volumes:
+  postgres_data:
+
 
