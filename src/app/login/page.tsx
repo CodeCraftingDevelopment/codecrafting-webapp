@@ -121,45 +121,9 @@ export default function LoginPage() {
               </AlertRoot>
             )}
 
-            {/* Bouton de connexion Google */}
-            <Button
-              onClick={handleGoogleSignIn}
-              bg="white"
-              color="gray.700"
-              border="1px solid"
-              borderColor="gray.300"
-              size="lg"
-              loading={isGoogleSubmitting}
-              loadingText="Connexion Google en cours"
-              _hover={{
-                bg: "gray.50",
-                borderColor: "gray.400",
-              }}
-              _dark={{
-                bg: "gray.800",
-                color: "white",
-                borderColor: "gray.600",
-                _hover: {
-                  bg: "gray.700",
-                  borderColor: "gray.500",
-                },
-              }}
-            >
-              Se connecter avec Google
-            </Button>
-
-            {/* Séparateur */}
-            <VStack gap={2}>
-              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
-              <Text fontSize="sm" color={mutedText}>
-                ou
-              </Text>
-              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
-            </VStack>
-
             {/* Formulaire Credentials */}
             <form onSubmit={handleSubmit} noValidate>
-              <VStack gap={4} align="stretch">
+              <VStack gap={6} align="stretch">
                 <Field.Root>
                   <Field.Label htmlFor="email" fontWeight="medium" mb={1}>
                     Email
@@ -195,6 +159,7 @@ export default function LoginPage() {
                 bg="button.primary.bg"
                 color="button.primary.text"
                 size="lg"
+                mt={4}
                 loading={isSubmitting}
                 loadingText="Connexion en cours"
                 _hover={{
@@ -204,6 +169,42 @@ export default function LoginPage() {
                 Se connecter
               </Button>
             </form>
+
+            {/* Séparateur */}
+            <VStack gap={2}>
+              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+              <Text fontSize="sm" color={mutedText}>
+                ou
+              </Text>
+              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+            </VStack>
+
+            {/* Bouton de connexion Google */}
+            <Button
+              onClick={handleGoogleSignIn}
+              bg="white"
+              color="gray.700"
+              border="1px solid"
+              borderColor="gray.300"
+              size="lg"
+              loading={isGoogleSubmitting}
+              loadingText="Connexion Google en cours"
+              _hover={{
+                bg: "gray.50",
+                borderColor: "gray.400",
+              }}
+              _dark={{
+                bg: "gray.800",
+                color: "white",
+                borderColor: "gray.600",
+                _hover: {
+                  bg: "gray.700",
+                  borderColor: "gray.500",
+                },
+              }}
+            >
+              Se connecter avec Google
+            </Button>
 
             <VStack gap={2} textAlign="center">
               <Text fontSize="sm" color={mutedText}>
