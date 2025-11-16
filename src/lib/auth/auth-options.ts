@@ -1,20 +1,19 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+import { verifyPassword } from "@/lib/auth/password";
 import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
-import { mockUsers } from "@/lib/auth/mock-users";
-
-/**
- * Recherche un utilisateur par email (insensible à la casse)
- */
-const findUserByEmail = (email: string) =>
-  mockUsers.find((user) => user.email.toLowerCase() === email.toLowerCase());
 
 /**
  * Configuration NextAuth v4
  * Documentation: https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  // Adapter Prisma pour la persistance des sessions et comptes
+  adapter: PrismaAdapter(prisma),
+  
   // Secret pour signer les tokens JWT (OBLIGATOIRE en production)
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -23,9 +22,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 
-  // Stratégie de session: JWT (requis pour CredentialsProvider)
+  // Stratégie de session: Database (recommandé avec adapter)
   session: {
-    strategy: "jwt",
+    strategy: "database",
     maxAge: 30 * 24 * 60 * 60, // 30 jours
   },
 
@@ -65,21 +64,32 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Recherche de l'utilisateur
-        const user = findUserByEmail(credentials.email);
+        // Recherche de l'utilisateur dans PostgreSQL
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email.toLowerCase() },
+        });
 
-        // Vérification du mot de passe
-        // ⚠️ ATTENTION: En production, utiliser bcrypt.compare() ou similar
-        if (!user || user.password !== credentials.password) {
+        // Vérification si l'utilisateur existe
+        if (!user) {
           return null;
         }
 
-        // Retourne l'objet utilisateur (sera ajouté au JWT)
+        // Vérification du mot de passe hashé avec bcrypt
+        const isValidPassword = await verifyPassword(
+          credentials.password,
+          user.password
+        );
+
+        if (!isValidPassword) {
+          return null;
+        }
+
+        // Retourne l'objet utilisateur (sera ajouté à la session)
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role: user.role.toLowerCase() as "admin" | "member",
         };
       },
     }),
@@ -88,34 +98,13 @@ export const authOptions: NextAuthOptions = {
   // Callbacks pour personnaliser le comportement
   callbacks: {
     /**
-     * Callback JWT: appelé lors de la création/mise à jour du token
-     * Permet d'ajouter des données personnalisées au JWT
-     */
-    async jwt({ token, user }) {
-      // Lors de la première connexion, user est défini
-      if (user) {
-        // ID de l'utilisateur : utiliser user.id (Credentials) ou token.sub (Google) avec fallback UUID
-        token.id = user.id || token.sub || crypto.randomUUID();
-
-        // Rôle de l'utilisateur :
-        // - Credentials: user.role est déjà défini
-        // - Google: lookup via email avec fallback "member"
-        const userRole =
-          (user as { role?: "admin" | "member" }).role ||
-          getGoogleUserRole(user.email || "");
-        token.role = userRole;
-      }
-      return token;
-    },
-
-    /**
      * Callback Session: appelé lors de la récupération de la session
-     * Permet d'ajouter des données du JWT à la session
+     * Permet d'ajouter des données de la session à la session client
      */
-    async session({ session, token }) {
-      if (session.user && token.id && token.role) {
-        session.user.id = token.id;
-        session.user.role = token.role as "admin" | "member";
+    async session({ session, user }) {
+      if (session.user && user.id && user.role) {
+        session.user.id = user.id;
+        session.user.role = user.role as "admin" | "member";
       }
       return session;
     },

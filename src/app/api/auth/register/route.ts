@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { addUser } from "@/lib/auth/mock-users";
+import { prisma } from "@/lib/prisma";
+import { hashPassword, validatePasswordStrength } from "@/lib/auth/password";
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,31 +29,63 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (typeof password !== "string" || password.length < 6) {
+    if (typeof password !== "string" || password.length < 8) {
       return NextResponse.json(
-        { error: "Le mot de passe doit contenir au moins 6 caractères." },
+        { error: "Le mot de passe doit contenir au moins 8 caractères." },
         { status: 400 },
       );
     }
 
-    // Ajouter l'utilisateur
-    const newUser = addUser(name.trim(), email.trim().toLowerCase(), password);
+    // Validation avancée du mot de passe
+    const passwordValidation = validatePasswordStrength(password);
+    if (!passwordValidation.valid) {
+      return NextResponse.json(
+        { error: "Mot de passe faible", details: passwordValidation.errors },
+        { status: 400 },
+      );
+    }
 
-    if (!newUser) {
+    // Vérifier si l'utilisateur existe déjà dans PostgreSQL
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.trim().toLowerCase() },
+    });
+
+    if (existingUser) {
       return NextResponse.json(
         { error: "Cet email est déjà utilisé." },
         { status: 409 },
       );
     }
 
+    // Hasher le mot de passe avec bcrypt
+    const hashedPassword = await hashPassword(password);
+
+    // Créer l'utilisateur dans PostgreSQL
+    const user = await prisma.user.create({
+      data: {
+        email: email.trim().toLowerCase(),
+        name: name.trim(),
+        password: hashedPassword,
+        role: "MEMBER",
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+
     // Retourner l'utilisateur créé (sans le mot de passe)
     return NextResponse.json({
       message: "Inscription réussie !",
       user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role.toLowerCase(),
+        createdAt: user.createdAt,
       },
     });
   } catch (error) {
