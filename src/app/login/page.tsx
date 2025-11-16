@@ -32,6 +32,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,6 +57,19 @@ export default function LoginPage() {
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleSubmitting(true);
+    setError(null);
+
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (error) {
+      console.error("Erreur lors de la connexion Google:", error);
+      setError("Erreur lors de la connexion Google. Veuillez réessayer.");
+      setIsGoogleSubmitting(false);
     }
   };
 
@@ -100,14 +114,51 @@ export default function LoginPage() {
           transition="all 0.3s ease"
           _hover={{ transform: "translateY(-2px)", boxShadow: "3xl" }}
         >
-          <form onSubmit={handleSubmit} noValidate>
-            <VStack gap={6} align="stretch">
-              {error && (
-                <AlertRoot status="error" borderRadius="md">
-                  <AlertDescription>{error}</AlertDescription>
-                </AlertRoot>
-              )}
+          <VStack gap={6} align="stretch">
+            {error && (
+              <AlertRoot status="error" borderRadius="md">
+                <AlertDescription>{error}</AlertDescription>
+              </AlertRoot>
+            )}
 
+            {/* Bouton de connexion Google */}
+            <Button
+              onClick={handleGoogleSignIn}
+              bg="white"
+              color="gray.700"
+              border="1px solid"
+              borderColor="gray.300"
+              size="lg"
+              loading={isGoogleSubmitting}
+              loadingText="Connexion Google en cours"
+              _hover={{
+                bg: "gray.50",
+                borderColor: "gray.400",
+              }}
+              _dark={{
+                bg: "gray.800",
+                color: "white",
+                borderColor: "gray.600",
+                _hover: {
+                  bg: "gray.700",
+                  borderColor: "gray.500",
+                },
+              }}
+            >
+              Se connecter avec Google
+            </Button>
+
+            {/* Séparateur */}
+            <VStack gap={2}>
+              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+              <Text fontSize="sm" color={mutedText}>
+                ou
+              </Text>
+              <Box as="hr" borderColor="gray.200" _dark={{ borderColor: "gray.600" }} />
+            </VStack>
+
+            {/* Formulaire Credentials */}
+            <form onSubmit={handleSubmit} noValidate>
               <VStack gap={4} align="stretch">
                 <Field.Root>
                   <Field.Label htmlFor="email" fontWeight="medium" mb={1}>
@@ -152,23 +203,23 @@ export default function LoginPage() {
               >
                 Se connecter
               </Button>
+            </form>
 
-              <VStack gap={2} textAlign="center">
-                <Text fontSize="sm" color={mutedText}>
-                  Pas encore de compte ? Contacte-nous pour activer ton accès.
-                </Text>
-                <ChakraLink
-                  as={NextLink}
-                  href="/"
-                  color="blue.500"
-                  _hover={{ color: "blue.600" }}
-                  _dark={{ color: "blue.300", _hover: { color: "blue.200" } }}
-                >
-                  Retour à l&apos;accueil
-                </ChakraLink>
-              </VStack>
+            <VStack gap={2} textAlign="center">
+              <Text fontSize="sm" color={mutedText}>
+                Pas encore de compte ? Contacte-nous pour activer ton accès.
+              </Text>
+              <ChakraLink
+                as={NextLink}
+                href="/"
+                color="blue.500"
+                _hover={{ color: "blue.600" }}
+                _dark={{ color: "blue.300", _hover: { color: "blue.200" } }}
+              >
+                Retour à l&apos;accueil
+              </ChakraLink>
             </VStack>
-          </form>
+          </VStack>
         </Box>
       </VStack>
     </Container>

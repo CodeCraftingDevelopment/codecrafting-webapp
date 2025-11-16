@@ -1,6 +1,8 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { mockUsers } from "@/lib/auth/mock-users";
+import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 
 /**
  * Recherche un utilisateur par email (insensible à la casse)
@@ -29,6 +31,13 @@ export const authOptions: NextAuthOptions = {
 
   // Providers d'authentification
   providers: [
+    // Provider Google pour l'authentification OAuth
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+
+    // Provider Credentials pour l'authentification par email/mot de passe
     CredentialsProvider({
       // Nom affiché sur la page de connexion
       name: "Email et mot de passe",
@@ -85,8 +94,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       // Lors de la première connexion, user est défini
       if (user) {
-        token.id = user.id;
-        token.role = (user as { role: "admin" | "member" }).role;
+        // ID de l'utilisateur : utiliser user.id (Credentials) ou token.sub (Google) avec fallback UUID
+        token.id = user.id || token.sub || crypto.randomUUID();
+        
+        // Rôle de l'utilisateur :
+        // - Credentials: user.role est déjà défini
+        // - Google: lookup via email avec fallback "member"
+        const userRole = (user as any).role || getGoogleUserRole(user.email || "");
+        token.role = userRole;
       }
       return token;
     },
@@ -96,8 +111,8 @@ export const authOptions: NextAuthOptions = {
      * Permet d'ajouter des données du JWT à la session
      */
     async session({ session, token }) {
-      if (session.user && token.sub && token.role) {
-        session.user.id = token.sub;
+      if (session.user && token.id && token.role) {
+        session.user.id = token.id;
         session.user.role = token.role as "admin" | "member";
       }
       return session;
