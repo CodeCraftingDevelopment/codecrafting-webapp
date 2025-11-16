@@ -7,6 +7,16 @@ import { prisma } from "@/lib/prisma";
 import { getGoogleUserRole } from "@/lib/auth/google-role-mapping";
 
 /**
+ * Normalise le rôle depuis la base de données vers le format attendu
+ * @param role Rôle depuis l'enum Prisma (ADMIN | MEMBER)
+ * @returns Rôle normalisé ("admin" | "member")
+ */
+const normalizeRole = (role: string): "admin" | "member" => {
+  const normalized = role.toLowerCase();
+  return normalized === "admin" ? "admin" : "member";
+};
+
+/**
  * Configuration NextAuth v4
  * Documentation: https://next-auth.js.org/configuration/options
  */
@@ -106,7 +116,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role.toLowerCase() as "admin" | "member",
+          role: normalizeRole(user.role),
         };
       },
     }),
@@ -195,7 +205,7 @@ export const authOptions: NextAuthOptions = {
           });
           
           // Utiliser le rôle de la BDD, ou le mapping pour nouveaux utilisateurs
-          token.role = dbUser?.role.toLowerCase() || getGoogleUserRole(user.email);
+          token.role = dbUser?.role ? normalizeRole(dbUser.role) : getGoogleUserRole(user.email);
           token.provider = "google";
           
           if (isDebug) {
