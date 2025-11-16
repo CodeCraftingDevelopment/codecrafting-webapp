@@ -121,6 +121,13 @@ export const authOptions: NextAuthOptions = {
      * Permet d'ajouter des données personnalisées (rôle) au token
      */
     async jwt({ token, user, account, trigger, session }) {
+      console.log("JWT Callback - Input:", { 
+        token: token?.email, 
+        user: user?.email, 
+        account: account?.provider, 
+        trigger 
+      });
+      
       // Initialisation du token avec les données utilisateur
       if (user) {
         token.id = user.id;
@@ -132,15 +139,24 @@ export const authOptions: NextAuthOptions = {
           token.role = role;
           token.provider = "google";
           
+          console.log("Google user auth:", { 
+            userId: user.id, 
+            email: user.email, 
+            assignedRole: role 
+          });
+          
           // Mettre à jour le rôle dans la base de données SEULEMENT lors de la première connexion
-          try {
-            await prisma.user.update({
-              where: { id: user.id },
-              data: { role: role.toUpperCase() as "ADMIN" | "MEMBER" },
-            });
-          } catch (error) {
-            // L'erreur n'est pas critique - le token a déjà le rôle correct
-            console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
+          if (trigger === "signIn") {
+            try {
+              await prisma.user.update({
+                where: { id: user.id },
+                data: { role: role.toUpperCase() as "ADMIN" | "MEMBER" },
+              });
+              console.log("Updated user role in DB:", { userId: user.id, role });
+            } catch (error) {
+              // L'erreur n'est pas critique - le token a déjà le rôle correct
+              console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
+            }
           }
         } else {
           // Pour les utilisateurs credentials, utiliser le rôle depuis la base de données
@@ -161,6 +177,12 @@ export const authOptions: NextAuthOptions = {
           token.role = dbUser.role.toLowerCase();
         }
       }
+      
+      console.log("JWT Callback - Output:", { 
+        email: token.email, 
+        role: token.role, 
+        provider: token.provider 
+      });
       
       return token;
     },

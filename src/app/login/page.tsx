@@ -47,12 +47,18 @@ export default function LoginPage() {
         redirect: false,
       });
 
+      console.log("Credentials login result:", result);
+
       if (result?.error) {
         setError("Email ou mot de passe invalide.");
         return;
       }
 
-      router.push("/");
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        setError("Une erreur est survenue lors de la connexion.");
+      }
     } catch (_submissionError) {
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
     } finally {
@@ -65,6 +71,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
+      // Google OAuth nécessite une redirection complète, pas AJAX
       await signIn("google", { callbackUrl: "/" });
     } catch (_error) {
       setError("Erreur lors de la connexion Google. Veuillez réessayer.");
