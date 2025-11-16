@@ -36,6 +36,7 @@ export default function Home() {
         fontSize={{ base: "xl", md: "2xl" }}
         textAlign="center"
         mb={3}
+        color="text.title"
       >
         Assistance informatique et solutions digitales sur mesure pour
         particuliers et petites structures.

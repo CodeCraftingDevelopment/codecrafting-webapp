@@ -132,6 +132,12 @@ const config = defineConfig({
               _dark: "{colors.neutral.900}",
             },
           },
+          title: {
+            value: {
+              base: "{colors.primary.600}",
+              _dark: "{colors.primary.400}",
+            },
+          },
         },
 
         // Background

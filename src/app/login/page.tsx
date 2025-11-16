@@ -92,6 +92,7 @@ export default function LoginPage() {
             fontWeight="bold"
             fontSize={{ base: "xl", md: "2xl" }}
             textAlign="center"
+            color="text.title"
           >
             Connexion
           </Text>

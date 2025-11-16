@@ -28,8 +28,7 @@ export default function AboutPage() {
     <Container maxW="6xl" py={{ base: 16, md: 24 }}>
       <Text
         fontSize={{ base: "lg", md: "xl" }}
-        color="gray.600"
-        _dark={{ color: "gray.300" }}
+        color="text.title"
         textAlign="center"
         maxW="3xl"
         mx="auto"
