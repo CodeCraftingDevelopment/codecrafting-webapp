@@ -47,12 +47,12 @@ cp env.example .env.local
 [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 ```
 
-### 4. Démarrer avec Docker (recommandé)
+### 4. Démarrer avec Docker (méthode recommandée)
 ```bash
-npm run docker:start
+npm run start
 ```
 
-### 5. Alternative : Démarrage local
+### 5. Alternative : Développement local sans Docker
 ```bash
 # Démarrer PostgreSQL uniquement
 docker-compose -f docker-compose-local.yml up -d postgres
@@ -61,8 +61,8 @@ docker-compose -f docker-compose-local.yml up -d postgres
 npm run db:push
 npm run db:seed
 
-# Démarrer l'application
-npm run dev
+# Démarrer l'application localement
+npm run dev:local
 ```
 
 ## 🌐 Accès à l'application
@@ -82,13 +82,18 @@ Après le seeding, vous pouvez vous connecter avec :
 
 ## 📚 Scripts disponibles
 
-### Développement
+### Développement (Docker par défaut)
 ```bash
-npm run dev          # Démarrer le serveur de développement
-npm run build        # Construire pour la production
-npm run start        # Démarrer le serveur de production
-npm run lint         # Vérifier la qualité du code avec Biome
-npm run format       # Formater le code avec Biome
+npm run start          # Démarrer l'environnement Docker complet
+npm run dev            # Démarrer avec Docker (alias de start)
+npm run stop           # Arrêter les services Docker
+npm run logs           # Voir les logs des conteneurs
+npm run shell          # Accéder au shell du conteneur Next.js
+npm run dev:local      # Développement local sans Docker
+npm run build          # Construire pour la production
+npm run start:prod     # Démarrer le serveur de production
+npm run lint           # Vérifier la qualité du code avec Biome
+npm run format         # Formater le code avec Biome
 ```
 
 ### Base de données
@@ -103,9 +108,10 @@ npm run db:reset     # Réinitialiser la base de données
 
 ### Docker
 ```bash
-npm run docker:start # Démarrer l'environnement Docker complet
-npm run docker:dev   # Démarrer les services Docker
-npm run docker:down  # Arrêter les services Docker
+npm run start         # Démarrer l'environnement Docker complet
+npm run stop          # Arrêter les services Docker
+npm run logs          # Voir les logs en temps réel
+npm run shell         # Shell dans le conteneur Next.js
 ```
 
 ## 🏗️ Architecture du projet

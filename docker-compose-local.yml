@@ -15,7 +15,7 @@ services:
   nextjs:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileDev
     container_name: codecrafting-webapp
     ports:
       - "3000:3000"
@@ -24,6 +24,10 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
 
 volumes:
   postgres_data:
