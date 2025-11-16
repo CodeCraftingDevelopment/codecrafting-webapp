@@ -21,25 +21,87 @@ const fadeInUp = keyframes`
     transform: translateY(30px);
   }
   to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const helperText = "text.secondary";
   const mutedText = "text.muted";
 
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+
+  const validateForm = (): string | null => {
+    if (!name.trim()) {
+      return "Le nom est requis.";
+    }
+    
+    if (!email.trim()) {
+      return "L'email est requis.";
+    }
+    
+    if (!password) {
+      return "Le mot de passe est requis.";
+    }
+    
+    if (password.length < 6) {
+      return "Le mot de passe doit contenir au moins 6 caractères.";
+    }
+    
+    if (password !== confirmPassword) {
+      return "Les mots de passe ne correspondent pas.";
+    }
+    
+    // Validation email simple
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Veuillez entrer une adresse email valide.";
+    }
+    
+    return null;
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    
     setIsSubmitting(true);
     setError(null);
 
     try {
+      // Appel à l'API d'inscription
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Une erreur est survenue lors de l'inscription.");
+        return;
+      }
+
+      // Inscription réussie, on connecte automatiquement l'utilisateur
       const result = await signIn("credentials", {
         email,
         password,
@@ -47,7 +109,7 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError("Email ou mot de passe invalide.");
+        setError("Inscription réussie mais erreur lors de la connexion automatique. Veuillez vous connecter manuellement.");
         return;
       }
 
@@ -57,19 +119,6 @@ export default function LoginPage() {
       setError("Une erreur inattendue est survenue. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    setIsGoogleSubmitting(true);
-    setError(null);
-
-    try {
-      await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
-      console.error("Erreur lors de la connexion Google:", error);
-      setError("Erreur lors de la connexion Google. Veuillez réessayer.");
-      setIsGoogleSubmitting(false);
     }
   };
 
@@ -87,10 +136,10 @@ export default function LoginPage() {
             fontSize={{ base: "xl", md: "2xl" }}
             textAlign="center"
           >
-            Connexion
+            Inscription
           </Text>
           <Text fontSize={{ base: "md", md: "lg" }} color={helperText}>
-            Accède à ton espace en renseignant ton email et ton mot de passe.
+            Crée ton compte pour accéder à toutes les fonctionnalités de CodeCrafting.
           </Text>
         </VStack>
 
@@ -121,9 +170,23 @@ export default function LoginPage() {
               </AlertRoot>
             )}
 
-            {/* Formulaire Credentials */}
             <form onSubmit={handleSubmit} noValidate>
               <VStack gap={6} align="stretch">
+                <Field.Root>
+                  <Field.Label htmlFor="name" fontWeight="medium" mb={1}>
+                    Nom
+                  </Field.Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Jean Dupont"
+                    autoComplete="name"
+                    required
+                  />
+                </Field.Root>
+
                 <Field.Root>
                   <Field.Label htmlFor="email" fontWeight="medium" mb={1}>
                     Email
@@ -133,11 +196,12 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    placeholder="tu@exemple.com"
+                    placeholder="jean@exemple.com"
                     autoComplete="email"
                     required
                   />
                 </Field.Root>
+
                 <Field.Root>
                   <Field.Label htmlFor="password" fontWeight="medium" mb={1}>
                     Mot de passe
@@ -148,7 +212,22 @@ export default function LoginPage() {
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder="********"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
+                    required
+                  />
+                </Field.Root>
+
+                <Field.Root>
+                  <Field.Label htmlFor="confirmPassword" fontWeight="medium" mb={1}>
+                    Confirmer le mot de passe
+                  </Field.Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    placeholder="********"
+                    autoComplete="new-password"
                     required
                   />
                 </Field.Root>
@@ -161,71 +240,27 @@ export default function LoginPage() {
                 size="lg"
                 mt={4}
                 loading={isSubmitting}
-                loadingText="Connexion en cours"
+                loadingText="Inscription en cours"
                 _hover={{
                   bg: "button.primary.hover",
                 }}
               >
-                Se connecter
+                S'inscrire
               </Button>
             </form>
 
-            {/* Séparateur */}
-            <VStack gap={2}>
-              <Box
-                as="hr"
-                borderColor="gray.200"
-                _dark={{ borderColor: "gray.600" }}
-              />
-              <Text fontSize="sm" color={mutedText}>
-                ou
-              </Text>
-              <Box
-                as="hr"
-                borderColor="gray.200"
-                _dark={{ borderColor: "gray.600" }}
-              />
-            </VStack>
-
-            {/* Bouton de connexion Google */}
-            <Button
-              onClick={handleGoogleSignIn}
-              bg="white"
-              color="gray.700"
-              border="1px solid"
-              borderColor="gray.300"
-              size="lg"
-              loading={isGoogleSubmitting}
-              loadingText="Connexion Google en cours"
-              _hover={{
-                bg: "gray.50",
-                borderColor: "gray.400",
-              }}
-              _dark={{
-                bg: "gray.800",
-                color: "white",
-                borderColor: "gray.600",
-                _hover: {
-                  bg: "gray.700",
-                  borderColor: "gray.500",
-                },
-              }}
-            >
-              Se connecter avec Google
-            </Button>
-
             <VStack gap={2} textAlign="center">
               <Text fontSize="sm" color={mutedText}>
-                Pas encore de compte ?
+                Déjà un compte ?
               </Text>
               <ChakraLink
                 as={NextLink}
-                href="/register"
+                href="/login"
                 color="blue.500"
                 _hover={{ color: "blue.600" }}
                 _dark={{ color: "blue.300", _hover: { color: "blue.200" } }}
               >
-                Créer un compte
+                Se connecter
               </ChakraLink>
             </VStack>
           </VStack>

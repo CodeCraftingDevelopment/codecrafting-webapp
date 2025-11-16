@@ -182,6 +182,45 @@ Pour passer en production, il faudra:
 
 5. **Ajouter la validation et vérification d'email**
 
+## 📝 Processus d'inscription
+
+### Flux d'inscription utilisateur
+
+1. **Accès à l'inscription** : L'utilisateur clique sur "S'inscrire" dans le header ou visite `/register`
+2. **Formulaire d'inscription** : L'utilisateur remplit le formulaire avec :
+   - Nom (minimum 2 caractères)
+   - Email (format valide)
+   - Mot de passe (minimum 6 caractères)
+   - Confirmation du mot de passe
+3. **Validation client** : Le formulaire est validé côté client avant envoi
+4. **API d'inscription** : Envoi à `POST /api/auth/register`
+5. **Création utilisateur** : Ajout dans la base mockée avec rôle "member" par défaut
+6. **Connexion automatique** : Si l'inscription réussit, l'utilisateur est connecté automatiquement
+7. **Redirection** : Redirection vers la page d'accueil
+
+### Fichiers d'inscription
+
+- **`src/app/register/page.tsx`** : Page d'inscription avec formulaire et validation
+- **`src/app/api/auth/register/route.ts`** : API route pour créer un nouvel utilisateur
+- **`src/lib/auth/mock-users.ts`** : Fonction `addUser()` pour ajouter un utilisateur
+
+### Sécurité de l'inscription
+
+- Validation des entrées (email, longueur du mot de passe)
+- Vérification des doublons d'email
+- Mot de passe stocké en clair (⚠️ développement uniquement)
+- Rôle par défaut : "member"
+
+### Évolutions futures
+
+Pour la production, prévoir :
+
+1. **Hashage des mots de passe** avec bcrypt
+2. **Vérification email** avec envoi de lien de confirmation
+3. **Rate limiting** pour éviter les abus
+4. **CAPTCHA** pour protéger contre les bots
+5. **Base de données réelle** avec adapter NextAuth
+
 ## 📚 Documentation
 
 - [NextAuth.js v4 Documentation](https://next-auth.js.org/)

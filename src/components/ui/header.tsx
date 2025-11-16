@@ -130,15 +130,28 @@ function HeaderActions() {
           </Menu.Positioner>
         </Menu.Root>
       ) : (
-        <IconButton
-          aria-label="Se connecter"
-          variant="ghost"
-          size="xl"
-          onClick={() => signIn(undefined, { callbackUrl: "/" })}
-          _hover={{ bg: "hover.bg" }}
-        >
-          <FiUser />
-        </IconButton>
+        <Flex gap={2}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => signIn(undefined, { callbackUrl: "/" })}
+            _hover={{ bg: "hover.bg" }}
+          >
+            Se connecter
+          </Button>
+          <Button
+            asChild
+            variant="solid"
+            size="sm"
+            bg="button.primary.bg"
+            color="button.primary.text"
+            _hover={{ bg: "button.primary.hover" }}
+          >
+            <ChakraLink as={NextLink} href="/register">
+              S'inscrire
+            </ChakraLink>
+          </Button>
+        </Flex>
       )}
       <ColorModeButton
         aria-label="Basculer entre le mode clair et sombre"
@@ -359,22 +372,44 @@ function MenuBurger() {
                         </Button>
                       </>
                     ) : (
-                      <Button
-                        variant="ghost"
-                        justifyContent="flex-start"
-                        onClick={() => {
-                          handleClose();
-                          signIn(undefined, { callbackUrl: "/" });
-                        }}
-                        _hover={{
-                          bg: "hover.bg",
-                        }}
-                      >
-                        <Flex alignItems="center" gap={2}>
-                          <FiUser />
-                          <Text>Se connecter</Text>
-                        </Flex>
-                      </Button>
+                      <>
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          onClick={() => {
+                            handleClose();
+                            signIn(undefined, { callbackUrl: "/" });
+                          }}
+                          _hover={{
+                            bg: "hover.bg",
+                          }}
+                        >
+                          <Flex alignItems="center" gap={2}>
+                            <FiUser />
+                            <Text>Se connecter</Text>
+                          </Flex>
+                        </Button>
+                        <Button
+                          variant="solid"
+                          justifyContent="flex-start"
+                          bg="button.primary.bg"
+                          color="button.primary.text"
+                          _hover={{ bg: "button.primary.hover" }}
+                          onClick={handleClose}
+                          asChild
+                        >
+                          <ChakraLink
+                            as={NextLink}
+                            href="/register"
+                            display="flex"
+                          >
+                            <Flex alignItems="center" gap={2}>
+                              <FiUser />
+                              <Text>S'inscrire</Text>
+                            </Flex>
+                          </ChakraLink>
+                        </Button>
+                      </>
                     )}
                   </VStack>
                 </Box>
