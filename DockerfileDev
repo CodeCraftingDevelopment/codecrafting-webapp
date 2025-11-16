@@ -10,6 +10,12 @@ COPY package*.json ./
 # Installe les dépendances (avec cache)
 RUN npm install
 
+# Copie le dossier prisma pour la génération
+COPY prisma ./prisma
+
+# Génère le client Prisma
+RUN npx prisma generate
+
 # Copie le reste du code source
 COPY . .
 
@@ -20,4 +26,4 @@ ENV NODE_ENV=development
 EXPOSE 3000
 
 # Commande de démarrage avec hot reload
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev:local"]
