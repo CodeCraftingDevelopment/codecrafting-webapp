@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
   // Stratégie de session: JWT (requis pour CredentialsProvider)
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 jours
+    maxAge: 7 * 24 * 60 * 60, // 7 jours (réduit de 30 jours pour la sécurité)
   },
 
   // Providers d'authentification
@@ -107,12 +107,36 @@ export const authOptions: NextAuthOptions = {
      * Permet de valider la connexion - le rôle sera assigné dans jwt callback
      */
     async signIn({ user, account }) {
+      const isDebug = process.env.NEXTAUTH_DEBUG === "true";
+      
       // Valider que l'email est présent pour les connexions Google
-      if (account?.provider === "google" && !user.email) {
-        return false;
+      if (account?.provider === "google") {
+        if (!user.email) {
+          if (isDebug) {
+            console.log("Google sign-in rejected: no email provided");
+          }
+          return false;
+        }
+        
+        // Vérifier les domaines autorisés
+        const allowedDomains = process.env.GOOGLE_ALLOWED_DOMAINS?.split(",").map(domain => domain.trim().toLowerCase()).filter(Boolean);
+        
+        if (allowedDomains && allowedDomains.length > 0) {
+          const emailDomain = user.email.split("@")[1]?.toLowerCase();
+          if (!emailDomain || !allowedDomains.includes(emailDomain)) {
+            if (isDebug) {
+              console.log(`Google sign-in rejected: domain ${emailDomain} not in allowed domains [${allowedDomains.join(", ")}]`);
+            }
+            return false;
+          }
+        }
+        
+        if (isDebug) {
+          console.log(`Google sign-in approved for: ${user.email}`);
+        }
       }
       
-      // Toutes les connexions sont autorisées
+      // Toutes les connexions autorisées sont validées
       return true;
     },
 
@@ -121,14 +145,18 @@ export const authOptions: NextAuthOptions = {
      * Permet d'ajouter des données personnalisées (rôle) au token
      */
     async jwt({ token, user, account, trigger, session }) {
-      console.log("JWT Callback - Input:", { 
-        token: token?.email, 
-        user: user?.email, 
-        account: account?.provider, 
-        trigger 
-      });
+      const isDebug = process.env.NEXTAUTH_DEBUG === "true";
       
-      // Initialisation du token avec les données utilisateur
+      if (isDebug) {
+        console.log("JWT Callback - Input:", { 
+          token: token?.email, 
+          user: user?.email, 
+          account: account?.provider, 
+          trigger 
+        });
+      }
+      
+      // Initialisation du token avec les données utilisateur (premier login)
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -139,11 +167,13 @@ export const authOptions: NextAuthOptions = {
           token.role = role;
           token.provider = "google";
           
-          console.log("Google user auth:", { 
-            userId: user.id, 
-            email: user.email, 
-            assignedRole: role 
-          });
+          if (isDebug) {
+            console.log("Google user auth:", { 
+              userId: user.id, 
+              email: user.email, 
+              assignedRole: role 
+            });
+          }
           
           // Mettre à jour le rôle dans la base de données SEULEMENT lors de la première connexion
           if (trigger === "signIn") {
@@ -152,10 +182,14 @@ export const authOptions: NextAuthOptions = {
                 where: { id: user.id },
                 data: { role: role.toUpperCase() as "ADMIN" | "MEMBER" },
               });
-              console.log("Updated user role in DB:", { userId: user.id, role });
+              if (isDebug) {
+                console.log("Updated user role in DB:", { userId: user.id, role });
+              }
             } catch (error) {
               // L'erreur n'est pas critique - le token a déjà le rôle correct
-              console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
+              if (isDebug) {
+                console.warn("Impossible de mettre à jour le rôle utilisateur:", error);
+              }
             }
           }
         } else {
@@ -165,24 +199,17 @@ export const authOptions: NextAuthOptions = {
         }
       }
       
-      // Rafraîchissement du token : récupérer le rôle depuis la base de données
-      // si le provider n'est plus disponible (typique sur les refresh)
-      if (!token.role && token.email) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: token.email },
-          select: { role: true },
-        });
-        
-        if (dbUser) {
-          token.role = dbUser.role.toLowerCase();
-        }
-      }
+      // NOTE: Le fallback DB a été supprimé pour optimiser les performances
+      // Le rôle est maintenant toujours stocké dans le token JWT
+      // Si le rôle est manquant, c'est qu'il y a un problème de configuration
       
-      console.log("JWT Callback - Output:", { 
-        email: token.email, 
-        role: token.role, 
-        provider: token.provider 
-      });
+      if (isDebug) {
+        console.log("JWT Callback - Output:", { 
+          email: token.email, 
+          role: token.role, 
+          provider: token.provider 
+        });
+      }
       
       return token;
     },

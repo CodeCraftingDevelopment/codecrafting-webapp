@@ -1,9 +1,26 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { hashPassword, validatePasswordStrength } from "@/lib/auth/password";
 import { prisma } from "@/lib/prisma";
+import { registerRateLimiter } from "@/lib/auth/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting basé sur l'IP
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+               request.headers.get("x-real-ip")?.trim() || 
+               "unknown";
+    
+    if (!registerRateLimiter.isAllowed(ip)) {
+      const resetTime = registerRateLimiter.getResetTime(ip);
+      return NextResponse.json(
+        { 
+          error: "Trop de tentatives d'inscription. Veuillez réessayer plus tard.",
+          resetTime: Math.ceil(resetTime / 1000) // en secondes
+        },
+        { status: 429 },
+      );
+    }
+
     const { name, email, password } = await request.json();
 
     // Validation des données reçues

@@ -9,15 +9,23 @@ export interface GoogleRoleMapping {
 
 /**
  * Configuration des rôles pour les utilisateurs Google
- * Ajoutez ici les emails des utilisateurs qui doivent avoir des rôles spécifiques
+ * Récupérée depuis les variables d'environnement pour plus de sécurité
  */
-export const googleRoleMapping: GoogleRoleMapping = {
-  // Exemples - remplacez par les vrais emails
-  "admin@codecrafting.fr": "admin",
-  "christophe.pauliac@gmail.com": "admin",
-
-  // Les utilisateurs non listés auront le rôle "member" par défaut
-};
+export const googleRoleMapping: GoogleRoleMapping = (() => {
+  const mapping: GoogleRoleMapping = {};
+  
+  // Récupérer les emails admin depuis les variables d'environnement
+  const adminEmails = process.env.GOOGLE_ADMIN_EMAILS?.split(",").map(email => email.trim().toLowerCase()).filter(Boolean) || [];
+  
+  // Assigner le rôle admin aux emails spécifiés
+  adminEmails.forEach(email => {
+    if (email) {
+      mapping[email] = "admin";
+    }
+  });
+  
+  return mapping;
+})();
 
 /**
  * Récupère le rôle d'un utilisateur Google basé sur son email
